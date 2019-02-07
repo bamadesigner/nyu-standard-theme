@@ -31,7 +31,16 @@
 	<arg name="extensions" value="php,css,scss/css"/>
 
 	<!-- Check all files in this directory and the directories below it. -->
-	<file>./dev/</file>
+	<file>.</file>
+
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<!--
+	#############################################################################
+	USE THE WordPress-Coding-Standards RULESET
+	#############################################################################
+	-->
 
 	<rule ref="WordPress"/>
 	<rule ref="WordPress-Core" />
@@ -48,17 +57,18 @@
 		 Multiple valid text domains can be provided as a comma-delimited list. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="wprig"/>
+			<property name="text_domain" type="array" value="wp-rig"/>
 		</properties>
 	</rule>
 
 	<!-- Allow for theme specific exceptions to the file name rules based
-		 on the theme hierarchy. -->
+		 on the theme hierarchy and ensure PSR-4 autoloading compatibility. -->
 	<rule ref="WordPress.Files.FileName">
 		<properties>
 			<property name="strict_class_file_names" value="false" />
 			<property name="is_theme" value="true"/>
 		</properties>
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 	</rule>
 
 	<!-- Set the minimum supported WP version. This is used by several sniffs.
@@ -78,11 +88,8 @@
 	</rule>
 
 	<!-- Include sniffs for PHP cross-version compatibility. -->
-	<config name="testVersion" value="5.2-99.0"/>
+	<config name="testVersion" value="7.0-99.0"/>
 	<rule ref="PHPCompatibility"/>
-
-	<exclude-pattern>*/node_modules/*</exclude-pattern>
-	<exclude-pattern>*/vendor/*</exclude-pattern>
 
 	<!--
 	#############################################################################
@@ -90,35 +97,7 @@
 	#############################################################################
 	-->
 
-
-	<config name="testVersion" value="5.2-99.0"/>
-	<rule ref="PHPCompatibility">
-		<!-- Whitelist PHP native classes, interfaces, functions and constants which
-			 are back-filled by WP.
-			 Based on:
-			 * /wp-includes/compat.php
-			 * /wp-includes/random_compat/random.php
-		-->
-		<exclude name="PHPCompatibility.PHP.NewClasses.errorFound"/>
-		<exclude name="PHPCompatibility.PHP.NewClasses.typeerrorFound"/>
-
-		<exclude name="PHPCompatibility.PHP.NewConstants.json_pretty_printFound"/>
-		<exclude name="PHPCompatibility.PHP.NewConstants.php_version_idFound"/>
-
-		<exclude name="PHPCompatibility.PHP.NewFunctions.hash_equalsFound"/>
-		<exclude name="PHPCompatibility.PHP.NewFunctions.json_last_error_msgFound"/>
-		<exclude name="PHPCompatibility.PHP.NewFunctions.random_intFound"/>
-		<exclude name="PHPCompatibility.PHP.NewFunctions.random_bytesFound"/>
-		<exclude name="PHPCompatibility.PHP.NewFunctions.array_replace_recursiveFound"/>
-
-		<exclude name="PHPCompatibility.PHP.NewInterfaces.jsonserializableFound"/>
-	</rule>
-
-	<!-- Whitelist the WP Core mysql_to_rfc3339() function. -->
-	<rule ref="PHPCompatibility.PHP.RemovedExtensions">
-		<properties>
-			<property name="functionWhitelist" type="array" value="mysql_to_rfc3339"/>
-		</properties>
-	</rule>
+	<config name="testVersion" value="7.0-99.0"/>
+	<rule ref="PHPCompatibility" />
 
 </ruleset>
