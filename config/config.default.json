@@ -21,6 +21,9 @@
       "preserveCSSVars": false
     }
   },
+  "components": {
+    "ignore": []
+  },
   "export": {
     "compress": true
   }
