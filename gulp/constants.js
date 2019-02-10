@@ -106,6 +106,13 @@ let paths = {
 	}
 };
 
+// Ignore PHP components defined in config.
+if ( config.components && config.components.ignore ) {
+	for ( var i = 0; i < config.components.ignore.length; i++ ) {
+		paths.php.src.push( `!${rootPath}/inc/${config.components.ignore[i]}/**/*.*` );
+	}
+}
+
 // Override paths for production
 if( isProd ){
 	paths.php.dest = `${prodThemePath}/`;
