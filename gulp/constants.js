@@ -83,10 +83,6 @@ let paths = {
 		src: `${assetsDir}/images/src/**/*.{jpg,JPG,png,svg,gif,GIF}`,
 		dest: `${assetsDir}/images/`
 	},
-	screenshot: {
-		src: `${rootPath}/screenshot.png`,
-		dest: `${rootPath}/`
-	},
 	languages: {
 		src: [
 			`${rootPath}/**/*.php`,
@@ -97,14 +93,15 @@ let paths = {
 		dest: `${rootPath}/languages/${nameFieldDefaults.slug}.pot`
 	},
 	export: {
-		src: [
-			`${rootPath}/style.css`,
-			`${rootPath}/readme.txt`,
-			`${rootPath}/LICENSE`,
-		],
+		src: [],
 		dest: `${prodThemePath}/`
 	}
 };
+
+// Add rootPath to filesToCopy and additionalFilesToCopy
+for ( let filePath of config.export.filesToCopy.concat( config.export.additionalFilesToCopy ) ) {
+	paths.export.src.push(`${rootPath}/${filePath}`);
+}
 
 // Ignore PHP components defined in config.
 if ( config.components && config.components.ignore ) {
@@ -119,7 +116,6 @@ if( isProd ){
 	paths.styles.dest = `${prodAssetsDir}/css/`;
 	paths.scripts.dest = `${prodAssetsDir}/js/`;
 	paths.images.dest = `${prodAssetsDir}/images/`;
-	paths.screenshot.dest = `${prodThemePath}/`;
 	paths.languages = {
 		src: `${prodThemePath}/**/*.php`,
 		dest: `${prodThemePath}/languages/${config.theme.slug}.pot`
