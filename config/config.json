@@ -1,1 +1,27 @@
-{}
+{
+	"theme": {
+		"slug": "nyu-standard",
+		"name": "NYU Standard",
+		"author": "NYU",
+		"PHPNamespace": "NYU\\NYU_Standard"
+	},
+	"dev": {
+		"browserSync": {
+			"live": true,
+			"proxyURL": "localnyu.edu",
+			"bypassPort": "8181",
+			"https": false
+		},
+		"debug": {
+			"styles": true,
+			"scripts": true,
+			"phpcs": true
+		},
+		"styles": {
+			"preserveCSSVars": false
+		}
+	},
+	"export": {
+		"compress": false
+	}
+}
