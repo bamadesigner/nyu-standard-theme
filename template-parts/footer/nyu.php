@@ -9,6 +9,11 @@ namespace WP_Rig\WP_Rig;
 
 ?>
 <footer id="colophon" class="site-footer">
+	<?php
+
+	get_sidebar( 'footer' );
+
+	?>
 	<div class="site-info">
 		<ul class="site-footer-menu">
 			<li>New York University</li>
