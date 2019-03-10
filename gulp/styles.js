@@ -4,13 +4,20 @@
 // External dependencies
 import {src, dest} from 'gulp';
 import postcssPresetEnv from 'postcss-preset-env';
+import AtImport from 'postcss-import';
 import postcssCustomProperties from 'postcss-custom-properties';
 import postcssCustomMedia from 'postcss-custom-media';
 import pump from 'pump';
 
 // Internal dependencies
 import {rootPath, paths, gulpPlugins, isProd} from './constants';
-import {getThemeConfig, getStringReplacementTasks, logError} from './utils';
+import {
+	getThemeConfig,
+	getStringReplacementTasks,
+	logError,
+	configValueDefined,
+	appendBaseToFilePathArray
+} from './utils';
 import {server} from './browserSync';
 
 /**
@@ -20,12 +27,36 @@ export default function styles(done) {
 	// get a fresh copy of the config
 	const config = getThemeConfig(true);
 
+	let postcssCustomPropertiesOptions = {
+		'preserve': (
+			configValueDefined('config.dev.styles.preserve') ?
+			config.dev.styles.preserve :
+			true
+		)
+	};
+
+	if( configValueDefined('config.dev.styles.customProperties') ) {
+		postcssCustomPropertiesOptions.importFrom = appendBaseToFilePathArray(config.dev.styles.customProperties, paths.styles.srcDir);
+	}
+
+	let postcssCustomMediaOptions = {
+		'preserve': (
+			configValueDefined('config.dev.styles.postCSSPreserve') ?
+			config.dev.styles.preserve :
+			true
+		)
+	};
+	
+	if( configValueDefined('config.dev.styles.customMedia') ) {
+		postcssCustomMediaOptions.importFrom = appendBaseToFilePathArray(config.dev.styles.customMedia, paths.styles.srcDir);
+	}
+
 	const beforeReplacement = [
-		src(paths.styles.src, {sourcemaps: !isProd}),
+		src( paths.styles.srcWithIgnored, {sourcemaps: !isProd} ),
 		logError('CSS'),
 		gulpPlugins.newer({
 			dest: paths.styles.dest,
-			extra: [paths.config.themeConfig, paths.styles.cssCustomProperties, paths.styles.cssCustomMedia]
+			extra: [paths.config.themeConfig]
 		}),
 		gulpPlugins.phpcs({
 			bin: `${rootPath}/vendor/bin/phpcs`,
@@ -35,14 +66,9 @@ export default function styles(done) {
 		// Log all problems that were found.
 		gulpPlugins.phpcs.reporter('log'),
 		gulpPlugins.postcss([
-			postcssCustomProperties({
-				'preserve': config.dev.styles.preserveCSSVars,
-				'importFrom': paths.styles.cssCustomProperties,
-			}),
-			postcssCustomMedia({
-				'preserve': config.dev.styles.preserveCSSVars,
-				'importFrom': paths.styles.cssCustomMedia,
-			}),
+			AtImport(),
+			postcssCustomProperties(postcssCustomPropertiesOptions),
+			postcssCustomMedia(postcssCustomMediaOptions),
 			postcssPresetEnv({
 				stage: 3
 			})
