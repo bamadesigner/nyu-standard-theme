@@ -12,6 +12,7 @@
 !/assets/images/
 /assets/images/*
 !/assets/images/src/
+!/assets/fonts/
 !/languages/
 !gulp/
 !style.css
