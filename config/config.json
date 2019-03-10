@@ -8,7 +8,7 @@
 	"dev": {
 		"browserSync": {
 			"live": true,
-			"proxyURL": "localnyu.edu",
+			"proxyURL": "localwpdev.nyu.edu",
 			"bypassPort": "8181",
 			"https": false
 		},
