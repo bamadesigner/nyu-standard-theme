@@ -20,6 +20,7 @@
 	font-size: var(--font-size-regular);
 	/* stylelint-enable */
 	line-height: var(--global-font-line-height);
+	font-weight: var(--global-font-weight);
 }
 
 .editor-post-title__block .editor-post-title__input,

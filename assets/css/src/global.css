@@ -119,6 +119,7 @@ textarea {
 	font-family: var(--global-font-family);
 	font-size: var(--font-size-regular);
 	line-height: var(--global-font-line-height);
+	font-weight: var(--global-font-weight);
 }
 /* stylelint-enable */
 

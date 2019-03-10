@@ -8,8 +8,9 @@
 :root {
 	--global-font-color: #333;
 	--global-font-family: "Gotham", sans-serif;
-	--global-font-size: 20;
-	--global-font-line-height: 1.4;
+	--global-font-size: 19;
+	--global-font-line-height: 2.3;
+	--global-font-weight: 300;
 	--highlight-font-family: "Gotham", sans-serif;
 	--content-width: 45rem;
 	--dropdown-symbol-width: 0.7em;
