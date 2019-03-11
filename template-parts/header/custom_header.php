@@ -7,6 +7,11 @@
 
 namespace WP_Rig\WP_Rig;
 
+/*
+ * @TODO:
+ * - Do we need this file?
+ */
+
 if ( ! has_header_image() ) {
 	return;
 }
