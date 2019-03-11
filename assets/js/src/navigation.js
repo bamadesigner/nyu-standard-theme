@@ -160,6 +160,8 @@ function initEachNavToggleSmall( nav ) {
 
 	menuTOGGLE.addEventListener( 'click', function() {
 		nav.classList.toggle( 'nav--toggled-on' );
+		nav.parentNode.parentNode.classList.toggle( 'nav--toggled-on' );
+		document.body.classList.toggle( 'nav-' + nav.id + '--toggled-on' );
 		this.setAttribute( 'aria-expanded', 'false' === this.getAttribute( 'aria-expanded' ) ? 'true' : 'false' );
 	}, false );
 }
