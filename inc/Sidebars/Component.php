@@ -30,6 +30,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const PRIMARY_SIDEBAR_SLUG = 'sidebar-1';
 	const FOOTER_SIDEBAR_SLUG = 'footer';
 
+	/**
+	 * Determins if the primary sidebar
+	 * has been declared for usage.
+	 *
+	 * @var bool
+	 */
 	private $has_primary_sidebar = false;
 
 	/**
@@ -79,7 +85,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Will return true if the primary
 	 * sidebar has been declared.
-	 * 
+	 *
 	 * @return bool True if the primary sidebar has been declared.
 	 */
 	public function has_primary_sidebar() {

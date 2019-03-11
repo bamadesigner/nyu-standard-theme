@@ -56,7 +56,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
-	 * 
+	 * Prints the markup for the site hero.
 	 */
 	public function display_hero() {
 		?>
