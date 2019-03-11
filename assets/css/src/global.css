@@ -533,10 +533,6 @@ select {
 		transform: translateY(-50%) rotate(45deg);
 	}
 
-	.nav--toggle-sub.nav--toggle-white .dropdown-symbol {
-		border-color: #fff;
-	}
-
 	.nav--toggle-sub ul ul .dropdown,
 	.nav--toggle-sub ul ul .dropdown-toggle {
 		top: 40%;
@@ -545,6 +541,10 @@ select {
 
 	.nav--toggle-sub ul ul .dropdown-symbol {
 		transform: rotate(-45deg);
+	}
+
+	.nav--toggle-sub.nav--toggle-white .menu > li > .dropdown-toggle .dropdown-symbol {
+		border-color: #fff;
 	}
 
 	.nav--toggle-sub .dropdown-toggle:hover,
