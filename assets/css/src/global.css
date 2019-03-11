@@ -656,6 +656,21 @@ select {
 	}
 }
 
+.site-hero {
+	max-height: 400px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.site-hero img {
+	display: block;
+	flex-shrink: 0;
+	min-width: 100%;
+	min-height: 100%
+}
+
 /*--------------------------------------------------------------
 # Content navigation
 --------------------------------------------------------------*/

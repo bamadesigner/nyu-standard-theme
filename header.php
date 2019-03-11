@@ -36,3 +36,4 @@ namespace WP_Rig\WP_Rig;
 	<?php
 
 	get_template_part( 'template-parts/header/nyu' );
+	get_template_part( 'template-parts/header/hero' );
