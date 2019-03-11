@@ -32,6 +32,8 @@
 	--color-link-visited: #333;
 	--color-link-active: #00a0d2;
 
+	--color-footer-bg: #220336;
+
 	/* Custom editor font sizes */
 	--font-size-small: calc(16 / var(--global-font-size) * 1rem);
 	--font-size-regular: calc(var(--global-font-size) / 16 * 1rem);
