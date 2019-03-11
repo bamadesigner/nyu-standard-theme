@@ -70,9 +70,7 @@ namespace WP_Rig\WP_Rig;
 				>
 					<?php esc_html_e( 'Menu', 'wp-rig' ); ?>
 				</button>
-				<div class="primary-menu-container">
-					<?php wp_rig()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) ); ?>
-				</div>
+				<?php wp_rig()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) ); ?>
 			</nav>
 			<?php
 		endif;
