@@ -5,7 +5,6 @@
    # Custom media
    # Custom properties
    # Normalize
-   # Footer
 # Accessibility
 # Layout
 # Typography
@@ -15,6 +14,7 @@
 # Header
   # Main navigation menu
 # Content navigation
+# Footer
 # Infinite scroll
 --------------------------------------------------------------*/
 
@@ -25,7 +25,6 @@
 @import "custom-media.css";
 @import "custom-properties.css";
 @import "reset.css";
-@import "footer.css";
 
 /*--------------------------------------------------------------
 # Accessibility
@@ -774,6 +773,52 @@ select {
 
 .pagination .current {
 	border-color: var(--global-font-color);
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+
+.site-footer {
+	background: var(--color-footer-bg);
+	margin: 1em 0 0;
+	padding: 2em 0;
+	font-family: var(--highlight-font-family);
+	color: #fff;
+}
+
+.site-footer *,
+.site-footer a {
+	color: inherit;
+}
+
+.site-info {
+	text-align: center;
+}
+
+.site-footer-menu {
+	display: inline-block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.site-footer-menu li {
+	display: inline-block;
+	margin: 0;
+}
+
+.site-footer-menu li:not(:first-child):before {
+	content: '\007C';
+	padding: 0 0.4rem 0 0;
+}
+
+@media (--footer-query) {
+	.footer-sidebar {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-gap: 2rem;
+	}
 }
 
 /*--------------------------------------------------------------
