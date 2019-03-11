@@ -13,17 +13,6 @@ namespace WP_Rig\WP_Rig;
  *  - Make sure works with AMP?
  */
 
-if ( wp_rig()->is_secondary_nav_menu_active() ) :
-	?>
-	<nav id="navigation-secondary" class="secondary-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Secondary menu', 'wp-rig' ); ?>">
-		<button class="menu-toggle" aria-label="<?php esc_attr_e( 'Open menu', 'wp-rig' ); ?>" aria-controls="secondary-menu" aria-expanded="false">
-			<?php esc_html_e( 'Menu', 'wp-rig' ); ?>
-		</button>
-		<?php wp_rig()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) ); ?>
-	</nav>
-	<?php
-endif;
-
 ?>
 <header id="masthead" class="site-header">
 	<div class="site-inner">
@@ -91,3 +80,15 @@ endif;
 		?>
 	</div>
 </header>
+<?php
+
+if ( wp_rig()->is_secondary_nav_menu_active() ) :
+	?>
+	<nav id="navigation-secondary" class="secondary-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Secondary menu', 'wp-rig' ); ?>">
+		<button class="menu-toggle" aria-label="<?php esc_attr_e( 'Open menu', 'wp-rig' ); ?>" aria-controls="secondary-menu" aria-expanded="false">
+			<?php esc_html_e( 'Menu', 'wp-rig' ); ?>
+		</button>
+		<?php wp_rig()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) ); ?>
+	</nav>
+	<?php
+endif;
