@@ -15,7 +15,7 @@ namespace WP_Rig\WP_Rig;
 
 	get_template_part( 'template-parts/content/entry_meta', get_post_type() );
 
-	if ( ! is_search() ) {
+	if ( is_archive() && ! is_search() ) {
 		get_template_part( 'template-parts/content/entry_thumbnail', get_post_type() );
 	}
 	?>
