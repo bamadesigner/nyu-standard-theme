@@ -30,6 +30,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const PRIMARY_SIDEBAR_SLUG = 'sidebar-1';
 	const FOOTER_SIDEBAR_SLUG = 'footer';
 
+	private $has_primary_sidebar = false;
+
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
@@ -56,11 +58,32 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function template_tags() : array {
 		return array(
+			'declare_primary_sidebar'   => array( $this, 'declare_primary_sidebar' ),
+			'has_primary_sidebar'       => array( $this, 'has_primary_sidebar' ),
 			'is_primary_sidebar_active' => array( $this, 'is_primary_sidebar_active' ),
 			'display_primary_sidebar'   => array( $this, 'display_primary_sidebar' ),
 			'is_footer_sidebar_active'  => array( $this, 'is_footer_sidebar_active' ),
 			'display_footer_sidebar'    => array( $this, 'display_footer_sidebar' ),
 		);
+	}
+
+	/**
+	 * Allows templates to declare they're
+	 * going to use the primary sidebar so the
+	 * rest of the layout can be notified.
+	 */
+	public function declare_primary_sidebar() {
+		$this->has_primary_sidebar = true;
+	}
+
+	/**
+	 * Will return true if the primary
+	 * sidebar has been declared.
+	 * 
+	 * @return bool True if the primary sidebar has been declared.
+	 */
+	public function has_primary_sidebar() {
+		return apply_filters( 'wp_rig_has_primary_sidebar', $this->has_primary_sidebar );
 	}
 
 	/**
@@ -100,12 +123,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return array Filtered body classes.
 	 */
 	public function filter_body_classes( array $classes ) : array {
-		if ( $this->is_primary_sidebar_active() ) {
-			global $template;
-
-			if ( ! in_array( basename( $template ), array( 'front-page.php', '404.php', '500.php', 'offline.php' ) ) ) {
-				$classes[] = 'has-sidebar';
-			}
+		if ( $this->has_primary_sidebar() && $this->is_primary_sidebar_active() ) {
+			$classes[] = 'has-sidebar';
 		}
 
 		return $classes;
