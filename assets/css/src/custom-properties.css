@@ -15,6 +15,9 @@
 	--content-width: 45rem;
 	--dropdown-symbol-width: 0.7em;
 
+	/* NYU colors */
+	--nyu-primary: #58068c;
+
 	/* Custom editor colors */
 	--color-theme-primary: #e36d60;
 	--color-theme-secondary: #41848f;

@@ -403,7 +403,8 @@ select {
 --------------------------------------------------------------*/
 
 .site-header {
-	padding-bottom: 1em;
+	background: var(--nyu-primary);
+	color: #fff;
 }
 
 .header-image {
