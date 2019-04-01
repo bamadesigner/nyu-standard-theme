@@ -19,6 +19,13 @@
 		}
 	},
 	"export": {
-		"compress": false
+		"compress": false,
+		"filesToCopy": [
+			"LICENSE",
+			"readme.txt",
+			"style.css",
+			"screenshot.png",
+			"assets/fonts/**/*.otf"
+		]
 	}
 }
