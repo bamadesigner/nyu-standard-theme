@@ -24,7 +24,7 @@ import {server} from './browserSync';
 /**
 * CSS via PostCSS + CSSNext (includes Autoprefixer by default).
 */
-export default function styles(done) {
+export default function editorStyles(done) {
 	const config = getThemeConfig();
 
 	const postcssPlugins = [
@@ -43,7 +43,8 @@ export default function styles(done) {
 				config.dev.styles.stage :
 				3
 			),
-			preserve: true,
+			// Preserve must always be false for the editor
+			preserve: false,
 			features: (
 				configValueDefined('config.dev.styles.features') ?
 				config.dev.styles.features :
@@ -68,8 +69,8 @@ export default function styles(done) {
 	);
 
 	const beforeReplacement = [
-		src( paths.styles.src, {sourcemaps: !isProd} ),
-		logError('CSS'),
+		src( paths.styles.editorSrc, {sourcemaps: !isProd} ),
+		logError('Editor CSS'),
 		gulpPlugins.newer({
 			dest: paths.styles.dest,
 			extra: [paths.config.themeConfig]
@@ -89,7 +90,7 @@ export default function styles(done) {
 			suffix: '.min'
 		}),
 		server.stream({match: "**/*.css"}),
-		dest(paths.styles.dest, {sourcemaps: !isProd}),
+		dest(paths.styles.editorDest, {sourcemaps: !isProd}),
 	];
 
 	pump(

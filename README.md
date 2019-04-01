@@ -40,7 +40,7 @@ WP Rig requires the following dependencies. Full installation instructions are p
 2. Configure theme settings, including the theme slug and name.
     - View `./config/config.default.json` for the default settings.
     - Place custom theme settings in `./config/config.json` to override default settings.
-3. In command line, run `npm install` to install necessary node and Composer dependencies.
+3. In command line, run `npm run rig-init` to install necessary node and Composer dependencies.
 4. In command line, run `npm run dev` to process source files, build the development theme, and watch files for subsequent changes.
 	- `npm run build` can be used to process the source files and build the development theme without watching files afterwards.
 5. In WordPress admin, activate the WP Rig development theme.
@@ -68,7 +68,11 @@ Before first run, visit the [BrowserSync wiki page](https://github.com/wprig/wpr
 `npm run build` processes source files one-time. It does not watch for changes nor start the BrowserSync server.
 
 #### `translate` process
-`npm run translate` generates a `.pot` file for the theme to enable translation. The translation file will be stored in `./languages/`.
+The translation process generates a `.pot` file for the theme in the `./languages/` directory.
+
+The translation process will run automatically during production builds unless the `export:generatePotFile` configuration value in `./config/config.json` is set to `false`.
+
+The translation process can also be run manaually with `npm run translate`. However, unless `NODE_ENV` is defined as `production` the `.pot` file will be generated against the source files, not the production files.
 
 #### `production bundle` process
 `npm run bundle` generates a production ready theme as a new theme directory and, optionally, a `.zip` archive. This builds all source files, optimizes the built files for production, does a string replacement and runs translations. Non-essential files from the `wp-rig` development theme are not copied to the production theme.

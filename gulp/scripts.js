@@ -13,11 +13,10 @@ import {getThemeConfig, getStringReplacementTasks, logError} from './utils';
  * JavaScript via Babel, ESlint, and uglify.
  */
 export default function scripts(done) {
-	// Get a fresh copy of the config
-	const config = getThemeConfig(true);
+	const config = getThemeConfig();
 
 	const beforeReplacement = [
-		src(paths.scripts.srcWithIgnored, {sourcemaps: !isProd}),
+		src(paths.scripts.src, {sourcemaps: !isProd}),
 		logError('JavaScript'),
 		gulpPlugins.newer({
 			dest: paths.scripts.dest,
