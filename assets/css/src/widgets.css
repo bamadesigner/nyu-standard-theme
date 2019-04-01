@@ -11,6 +11,8 @@
 .widget {
 	margin-top: 0;
 	margin-bottom: 1.5em;
+	padding: 0 0 1em 0;
+	border-bottom: 5px solid var(--nyu-primary);
 }
 
 .widget-area .widget {
