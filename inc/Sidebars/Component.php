@@ -129,7 +129,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return array Filtered body classes.
 	 */
 	public function filter_body_classes( array $classes ) : array {
-		if ( $this->has_primary_sidebar() && $this->is_primary_sidebar_active() ) {
+		if ( $this->is_primary_sidebar_active() ) {
 			$classes[] = 'has-sidebar';
 		}
 
@@ -142,7 +142,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool True if the primary sidebar is active, false otherwise.
 	 */
 	public function is_primary_sidebar_active() : bool {
-		return (bool) is_active_sidebar( static::PRIMARY_SIDEBAR_SLUG );
+		return $this->has_primary_sidebar() && (bool) is_active_sidebar( static::PRIMARY_SIDEBAR_SLUG );
 	}
 
 	/**
