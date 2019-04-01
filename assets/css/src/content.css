@@ -31,14 +31,15 @@
 	margin-bottom: 1rem;
 }
 
-.entry-meta,
-.entry-footer {
+.entry-meta {
 	font-family: var(--highlight-font-family);
-	font-size: 80%;
+	margin: 1em 0;
 }
 
-.entry-meta {
-	margin: 1em 0;
+.entry-meta .posted-by,
+.entry-meta .posted-on {
+	display: block;
+	line-height: 2;
 }
 
 /* Hides the update date and time. */
@@ -100,14 +101,16 @@
 	margin-bottom: 1.5em;
 }
 
-.entry-footer span {
-	margin-right: 1em;
-}
-
 .entry-footer {
 	clear: both;
+	font-family: var(--highlight-font-family);
+	font-size: 80%;
 	padding: 1.5em 1.5rem 3em;
 	border-top: 1px solid #111;
+}
+
+.entry-footer span {
+	margin-right: 1em;
 }
 
 .entry-footer .entry-taxonomies .term-links {
