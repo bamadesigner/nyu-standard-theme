@@ -45,4 +45,8 @@
 	--font-size-regular: calc(var(--global-font-size) / 16 * 1rem);
 	--font-size-large: calc(36 / var(--global-font-size) * 1rem);
 	--font-size-larger: calc(48 / var(--global-font-size) * 1rem);
+
+	/* NYU custom layout */
+	--grid-side-margin: calc((100% - var(--content-width)) / 8);
+	--grid-side-margin-small: 2rem;
 }

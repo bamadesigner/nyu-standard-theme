@@ -8,13 +8,25 @@
 --------------------------------------------------------------*/
 
 .primary-sidebar {
-	padding: 1.5rem;
+	padding: 1rem 0;
 	font-family: var(--highlight-font-family);
+	border-top: 5px solid var(--nyu-primary);
+}
+
+.primary-sidebar .widget {
+	padding: 0 var(--grid-side-margin-small) 1em;
+	border-bottom: 5px solid var(--nyu-primary);
 }
 
 @media (--sidebar-query) {
 
 	.primary-sidebar {
 		padding: 0;
+		border: 0;
+	}
+
+	.primary-sidebar .widget {
+		padding-left: 0;
+		padding-right: 0;
 	}
 }

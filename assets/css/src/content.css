@@ -67,7 +67,6 @@
 .page-header,
 .entry-header,
 .entry-footer,
-.site-info,
 .post-navigation,
 .page-navigation,
 .comments-area {
@@ -82,7 +81,6 @@
 	.page-header,
 	.entry-header,
 	.entry-footer,
-	.site-info,
 	.post-navigation,
 	.page-navigation,
 	.comments-area {
@@ -105,7 +103,7 @@
 	clear: both;
 	font-family: var(--highlight-font-family);
 	font-size: 80%;
-	padding: 1.5em 1.5rem 3em;
+	padding: 1.5em 0 3em;
 	border-top: 1px solid #111;
 }
 
@@ -116,6 +114,10 @@
 .entry-footer .entry-taxonomies .term-links {
 	display: block;
 	font-size: 1.5em;
+}
+
+.page .entry-footer {
+	border-top: 0;
 }
 
 @media (--content-query) {
