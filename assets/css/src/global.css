@@ -115,7 +115,7 @@
 
 	.has-sidebar .site {
 		display: grid;
-		grid-template-columns: var(--grid-side-margin) 3fr var(--grid-side-margin-small) 1fr var(--grid-side-margin);
+		grid-template-columns: var(--grid-side-margin) 3fr var(--grid-gap) 1fr var(--grid-side-margin);
 		grid-template-areas:
 			"header header header header header"
 			"hero hero hero hero hero"
@@ -182,6 +182,12 @@ h6 {
 	line-height: 1.4;
 	margin-top: 1em;
 	margin-bottom: 1em;
+}
+
+.entry-header h2.entry-title {
+	font-size: 2rem;
+	line-height: 1.4;
+	margin: 0 0 1rem 0;
 }
 
 dfn,
@@ -741,11 +747,17 @@ select {
 .site-main .posts-navigation,
 .site-main .post-navigation,
 .site-main .pagination {
-	border-bottom: 1px solid #111;
 	margin: 0 auto 2em;
 	overflow: hidden;
-	padding: 0 0 2em;
 	font-family: var(--highlight-font-family);
+}
+
+.single .site-main .comment-navigation,
+.single .site-main .posts-navigation,
+.single .site-main .post-navigation,
+.single .site-main .pagination {
+	border-top: 1px solid #111;
+	padding: 2rem 0 0;
 }
 
 @media (--content-query) {
@@ -908,7 +920,7 @@ select {
 	.footer-sidebar {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		grid-gap: var(--grid-side-margin-small);
+		grid-gap: var(--grid-gap);
 		margin-left: var(--grid-side-margin);
 		margin-right: var(--grid-side-margin);
 	}

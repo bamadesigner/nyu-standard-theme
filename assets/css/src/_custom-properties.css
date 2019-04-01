@@ -49,4 +49,9 @@
 	/* NYU custom layout */
 	--grid-side-margin: calc((100% - var(--content-width)) / 8);
 	--grid-side-margin-small: 2rem;
+	--grid-gap: 3rem;
+
+	--highlight-border-width: 5px;
+	--highlight-border-style: solid;
+	--highlight-border-color: var(--nyu-primary);
 }
