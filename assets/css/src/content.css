@@ -59,7 +59,6 @@
 .page-content > *,
 .entry-content > *,
 .entry-summary > * {
-	display: block;
 	margin-right: auto;
 	margin-left: auto;
 	padding-right: 1.5rem;
@@ -101,9 +100,14 @@
 	}
 }
 
+/* Align .more-link with the content. */
+.entry-content > .more-link {
+	display: block;
+}
+
 .page-links {
 	clear: both;
-	margin: 0 0 1.5em;
+	margin-bottom: 1.5em;
 }
 
 .entry-footer span {
