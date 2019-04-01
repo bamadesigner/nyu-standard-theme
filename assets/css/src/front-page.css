@@ -9,14 +9,8 @@
 
 @media (--sidebar-query) {
 
-	.site {
-		margin: 0 1em;
-		display: grid;
-		grid-template-columns: 1fr;
-	}
-
 	.site-main {
-		margin: 2rem 1rem 0;
+		margin: 2rem 0 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
 		grid-auto-flow: dense;
@@ -25,15 +19,18 @@
 
 	.post {
 		margin-bottom: 0;
-		padding: 0 2rem;
+		padding: 2rem;
 		border: 1px solid hsl(0, 0%, 50%);
 	}
 
 	.post:first-of-type {
 		grid-column: span 2;
 		margin: 0;
-		padding: 0;
+	}
 
+	.post .entry-header,
+	.post .entry-header .entry-title {
+		margin-top: 0;
 	}
 
 	.wp-block-image.alignleft,
@@ -57,5 +54,4 @@
 		border-top: 1px solid #111;
 		border-bottom: none;
 	}
-
 }
