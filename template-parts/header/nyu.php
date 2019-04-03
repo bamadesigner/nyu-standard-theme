@@ -15,7 +15,7 @@ namespace WP_Rig\WP_Rig;
 
 ?>
 <header id="masthead" class="site-header">
-	<div class="site-inner">
+	<div class="site-header-container">
 		<div class="site-branding">
 			<?php
 
@@ -68,25 +68,26 @@ namespace WP_Rig\WP_Rig;
 					}
 					?>
 				>
-					<?php esc_html_e( 'Menu', 'wp-rig' ); ?>
+					<div class="menu-toggle-icon">
+						<div class="menu-toggle-bar"></div>
+						<div class="menu-toggle-bar"></div>
+						<div class="menu-toggle-bar"></div>
+					</div>
 				</button>
 				<?php wp_rig()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) ); ?>
 			</nav>
 			<?php
 		endif;
 
+		if ( wp_rig()->is_secondary_nav_menu_active() ) :
+			?>
+			<nav id="navigation-secondary" class="secondary-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Secondary menu', 'wp-rig' ); ?>">
+				<?php wp_rig()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) ); ?>
+			</nav>
+			<?php
+		endif;
+		
+
 		?>
 	</div>
 </header>
-<?php
-
-if ( wp_rig()->is_secondary_nav_menu_active() ) :
-	?>
-	<nav id="navigation-secondary" class="secondary-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Secondary menu', 'wp-rig' ); ?>">
-		<button class="menu-toggle" aria-label="<?php esc_attr_e( 'Open menu', 'wp-rig' ); ?>" aria-controls="secondary-menu" aria-expanded="false">
-			<?php esc_html_e( 'Menu', 'wp-rig' ); ?>
-		</button>
-		<?php wp_rig()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) ); ?>
-	</nav>
-	<?php
-endif;
