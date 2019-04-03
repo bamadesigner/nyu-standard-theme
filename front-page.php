@@ -13,17 +13,38 @@ wp_rig()->declare_primary_sidebar();
 
 get_header();
 
-wp_rig()->print_styles( 'wp-rig-content', 'wp-rig-front-page' );
+// @TODO how to enable magazine?
+$use_magazine = wp_rig()->use_magazine_layout();
+
+if ( $use_magazine ) {
+	wp_rig()->print_styles( 'wp-rig-content', 'wp-rig-magazine' );
+} else {
+	wp_rig()->print_styles( 'wp-rig-content' );
+}
+
+if ( $use_magazine ) {
+	wp_rig()->display_magazine();
+}
 
 ?>
 	<main id="primary" class="site-main">
 		<?php
+
+		if ( $use_magazine ) {
+			?>
+			<h2><?php esc_html_e( 'Latest posts', 'wp-rig' ); ?></h2>
+			<?php
+		}
+
+		wp_rig()->set_entry_title_header( 3 );
 
 		while ( have_posts() ) {
 			the_post();
 
 			get_template_part( 'template-parts/content/entry', get_post_type() );
 		}
+
+		wp_rig()->reset_entry_title_header();
 
 		get_template_part( 'template-parts/content/pagination' );
 		?>

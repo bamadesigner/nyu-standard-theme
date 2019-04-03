@@ -60,6 +60,17 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	protected $google_fonts;
 
 	/**
+	 * Determines which header, e.g. <h2>,
+	 * to use for post archives.
+	 * 
+	 * Uses <h2> by default but allows for
+	 * the level to be changed by using
+	 * wp_rig()->set_entry_title_header().
+	 */
+	private $default_entry_title_header = 2;
+	protected $entry_title_header = 2;
+
+	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
@@ -88,7 +99,41 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function template_tags() : array {
 		return array(
 			'print_styles' => array( $this, 'print_styles' ),
+			'entry_title_header' => array( $this, 'entry_title_header' ),
+			'set_entry_title_header' => array( $this, 'set_entry_title_header' ),
+			'reset_entry_title_header' => array( $this, 'reset_entry_title_header' ),
 		);
+	}
+
+	/**
+	 * Returns the entry title header level.
+	 *
+	 * @return int
+	 */
+	public function entry_title_header() {
+		return $this->entry_title_header;
+	}
+
+	/**
+	 * Allows you to set/change the header level
+	 * before running a template.
+	 * 
+	 * @param int $header
+	 * @return  void
+	 */
+	public function set_entry_title_header( int $header ) {
+		if ( $header ) {
+			$this->entry_title_header = $header;
+		}
+	}
+
+	/**
+	 * Resets the entry title header to the default.
+	 *
+	 * @return  void
+	 */
+	public function reset_entry_title_header() {
+		$this->set_entry_title_header( $this->default_entry_title_header );
 	}
 
 	/**
@@ -303,11 +348,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					return wp_rig()->is_primary_sidebar_active();
 				},
 			),
-			'wp-rig-front-page' => array(
-				'file' => 'front-page.min.css',
+			'wp-rig-magazine' => array(
+				'file' => 'magazine.min.css',
 				'preload_callback' => function() {
 					global $template;
-					return 'front-page.php' === basename( $template );
+					return 'front-page.php' === basename( $template ); // @TODO see if magazine is enabled.
 				},
 			),
 		);

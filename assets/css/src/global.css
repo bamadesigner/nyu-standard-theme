@@ -118,6 +118,7 @@
 		grid-template-columns: var(--grid-side-margin) 3fr var(--grid-gap) 1fr var(--grid-side-margin);
 		grid-template-areas:
 			"header header header header header"
+			". magazine magazine magazine ."
 			"hero hero hero hero hero"
 			". main . sidebar ."
 			"footer footer footer footer footer";
@@ -126,6 +127,10 @@
 
 	.has-sidebar .site-hero {
 		grid-area: hero;
+	}
+
+	.has-sidebar .site-magazine {
+		grid-area: magazine;
 	}
 
 	.has-sidebar .site-header {

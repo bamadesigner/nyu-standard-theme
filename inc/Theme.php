@@ -152,6 +152,7 @@ class Theme {
 			new Customizer\Component(),
 			new Styles\Component(),
 			new Hero\Component(),
+			new Magazine\Component(),
 		);
 
 		if ( defined( 'JETPACK__VERSION' ) ) {
