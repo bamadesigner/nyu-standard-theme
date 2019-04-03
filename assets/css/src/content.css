@@ -1,10 +1,10 @@
 /*--------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------
-# Post and page content
-	# Imports
-	# Alignments
+# Imports
 	# Blocks
+# Post and page content
+	# Alignments
 	# Custom block colors
 	# Custom font sizes
 	# Media
@@ -15,11 +15,17 @@
 /*--------------------------------------------------------------
 # Imports
 --------------------------------------------------------------*/
-@import "_custom-media.css";
+@import "_blocks.css";
 
 /*--------------------------------------------------------------
 # Post and page content
 --------------------------------------------------------------*/
+
+/* Custom rule  for sticky posts:
+.sticky {
+
+}
+*/
 
 .entry {
 	margin-bottom: 2rem;
@@ -91,6 +97,28 @@
 	}
 }
 
+.entry-content ul,
+.entry-content ol {
+	padding-right: 2.5em;
+	padding-left: 2.5em;
+}
+
+.entry-content ul ul,
+.entry-content ol ol {
+	margin-right: 0;
+	margin-left: 0;
+	padding-right: 1.5em;
+	padding-left: 1.5em;
+}
+
+@media (--content-query) {
+
+	.entry-content pre {
+		padding: 1.5em;
+	}
+
+}
+
 /* Align .more-link with the content. */
 .entry-content > .more-link {
 	display: block;
@@ -129,6 +157,7 @@
 		padding-right: 0;
 		padding-left: 0;
 	}
+
 }
 
 /*--------------------------------------------------------------
@@ -149,6 +178,15 @@
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.alignwide {
+	max-width: calc(50% + var(--content-width) / 2);
+}
+
+.alignfull {
+	max-width: 100%;
+	padding: 0;
 }
 
 @media (--content-query) {
@@ -230,20 +268,6 @@
 	border-left-color: var(--color-quote-citation);
 }
 
-.entry-content ul,
-.entry-content ol {
-	padding-right: 2.5em;
-	padding-left: 2.5em;
-}
-
-.entry-content ul ul,
-.entry-content ol ol {
-	margin-right: 0;
-	margin-left: 0;
-	padding-right: 1.5em;
-	padding-left: 1.5em;
-}
-
 .alignwide {
 	max-width: calc(50% + var(--content-width) / 2);
 }
@@ -267,14 +291,6 @@
 .wp-block-cover .wp-block-cover-text,
 .wp-block-cover p {
 	margin-top: 0;
-}
-
-@media (--content-query) {
-
-	.entry-content pre {
-		padding: 1.5em;
-	}
-
 }
 
 /* Columns Block */
@@ -633,4 +649,5 @@ object {
 	.entry-content > .mejs-container {
 		max-width: var(--content-width);
 	}
+
 }
