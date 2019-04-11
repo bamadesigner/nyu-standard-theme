@@ -614,6 +614,12 @@ select {
 		width: 100%;
 		height: var(--nav-secondary-height);
 		padding: 0 var(--grid-side-margin);
+		font-size: 1rem;
+	}
+
+	.secondary-navigation a {
+		display: block;
+		line-height: var(--nav-secondary-height);
 	}
 
 	.main-navigation ul li {
