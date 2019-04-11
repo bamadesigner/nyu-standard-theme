@@ -8,8 +8,8 @@
 :root {
 	--global-font-color: #333;
 	--global-font-family: Gotham, sans-serif;
-	--global-font-size: 19;
-	--global-font-line-height: 2.3;
+	--global-font-size: 17;
+	--global-font-line-height: 1.8;
 	--global-font-weight: 400;
 	--highlight-font-family: Gotham, sans-serif;
 	--content-width: 45rem;
