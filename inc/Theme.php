@@ -152,10 +152,6 @@ class Theme {
 			new Magazine\Component(),
 		);
 
-		if ( defined( 'JETPACK__VERSION' ) ) {
-			$components[] = new Jetpack\Component();
-		}
-
 		return $components;
 	}
 }

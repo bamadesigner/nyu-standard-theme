@@ -61,11 +61,6 @@ class Component implements Component_Interface {
 			return;
 		}
 
-		// If the Jetpack Lazy-Images module is active, return early.
-		if ( ! apply_filters( 'lazyload_is_enabled', true ) ) {
-			return;
-		}
-
 		add_action( 'wp_head', array( $this, 'action_add_lazyload_filters' ), PHP_INT_MAX );
 		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_lazyload_assets' ) );
 
