@@ -141,7 +141,6 @@ class Theme {
 			new Accessibility\Component(),
 			new Image_Sizes\Component(),
 			new Lazyload\Component(),
-			new AMP\Component(),
 			new Comments\Component(),
 			new Nav_Menus\Component(),
 			new Sidebars\Component(),

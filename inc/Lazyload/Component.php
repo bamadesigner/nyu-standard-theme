@@ -66,11 +66,6 @@ class Component implements Component_Interface {
 			return;
 		}
 
-		// If the AMP plugin is active, return early.
-		if ( wp_rig()->is_amp() ) {
-			return;
-		}
-
 		add_action( 'wp_head', array( $this, 'action_add_lazyload_filters' ), PHP_INT_MAX );
 		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_lazyload_assets' ) );
 

@@ -10,7 +10,6 @@ namespace WP_Rig\WP_Rig;
 /*
  * @TODO:
  *  - Optimize printing menus.
- *  - Make sure works with AMP?
  */
 
 ?>
@@ -35,39 +34,8 @@ namespace WP_Rig\WP_Rig;
 
 		if ( wp_rig()->is_primary_nav_menu_active() ) :
 			?>
-			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small nav--toggle-white" aria-label="<?php esc_attr_e( 'Main menu', 'wp-rig' ); ?>"
-				<?php
-				if ( wp_rig()->is_amp() ) {
-
-					?>
-					[class]=" siteNavigationMenu.expanded ? 'main-navigation nav--toggle-sub nav--toggle-small nav--toggle-white nav--toggled-on' : 'main-navigation nav--toggle-sub nav--toggle-small nav--toggle-white' "
-					<?php
-				}
-				?>
-			>
-				<?php
-				if ( wp_rig()->is_amp() ) {
-					?>
-					<amp-state id="siteNavigationMenu">
-						<script type="application/json">
-							{
-								"expanded": false
-							}
-						</script>
-					</amp-state>
-					<?php
-				}
-				?>
-				<button class="menu-toggle" aria-label="<?php esc_attr_e( 'Open menu', 'wp-rig' ); ?>" aria-controls="primary-menu" aria-expanded="false"
-					<?php
-					if ( wp_rig()->is_amp() ) {
-						?>
-						on="tap:AMP.setState( { siteNavigationMenu: { expanded: ! siteNavigationMenu.expanded } } )"
-						[aria-expanded]="siteNavigationMenu.expanded ? 'true' : 'false'"
-						<?php
-					}
-					?>
-				>
+			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small nav--toggle-white" aria-label="<?php esc_attr_e( 'Main menu', 'wp-rig' ); ?>">
+				<button class="menu-toggle" aria-label="<?php esc_attr_e( 'Open menu', 'wp-rig' ); ?>" aria-controls="primary-menu" aria-expanded="false">
 					<div class="menu-toggle-icon">
 						<div class="menu-toggle-bar"></div>
 						<div class="menu-toggle-bar"></div>

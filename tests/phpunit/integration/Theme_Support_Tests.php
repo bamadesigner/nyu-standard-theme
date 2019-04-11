@@ -67,9 +67,6 @@ class Theme_Support_Tests extends Integration_Test_Case {
 			[
 				'editor-font-sizes',
 			],
-			[
-				'amp',
-			],
 		];
 	}
 
