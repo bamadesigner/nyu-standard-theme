@@ -613,7 +613,7 @@ select {
 		top: 0;
 		width: 100%;
 		height: var(--nav-secondary-height);
-		padding: 0.5rem var(--grid-side-margin);
+		padding: 0 var(--grid-side-margin);
 	}
 
 	.main-navigation ul li {
@@ -654,6 +654,10 @@ select {
 
 	body.has-nav-secondary {
 		padding-top: var(--nav-secondary-height);
+	}
+
+	body.has-nav-secondary.admin-bar .secondary-navigation {
+		top: var(--wp-admin-bar-height);
 	}
 
 	/* stylelint-disable */
