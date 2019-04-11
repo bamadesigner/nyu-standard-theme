@@ -32,7 +32,6 @@ class Component implements Component_Interface {
 	 */
 	public function initialize() {
 		add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_content_image_sizes_attr' ), 10, 2 );
-		add_filter( 'get_header_image_tag', array( $this, 'filter_header_image_tag' ), 10, 3 );
 		add_filter( 'wp_get_attachment_image_attributes', array( $this, 'filter_post_thumbnail_sizes_attr' ), 10, 3 );
 	}
 
@@ -56,22 +55,6 @@ class Component implements Component_Interface {
 		}
 
 		return $sizes;
-	}
-
-	/**
-	 * Filters the `sizes` value in the header image markup.
-	 *
-	 * @param string $html   The HTML image tag markup being filtered.
-	 * @param object $header The custom header object returned by 'get_custom_header()'.
-	 * @param array  $attr   Array of the attributes for the image tag.
-	 * @return string The filtered header image HTML.
-	 */
-	public function filter_header_image_tag( string $html, $header, array $attr ) : string {
-		if ( isset( $attr['sizes'] ) ) {
-			$html = str_replace( $attr['sizes'], '100vw', $html );
-		}
-
-		return $html;
 	}
 
 	/**
