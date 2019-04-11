@@ -247,7 +247,7 @@ select {
 	font-family: var(--highlight-font-family);
 	font-size: 38px;
 	font-weight: 700;
-	line-height: 1.2;
+	line-height: 1;
 	color: inherit;
 }
 
@@ -323,7 +323,7 @@ select {
 .site-header {
 	background: var(--nyu-primary);
 	color: #fff;
-	padding: 1rem 0;
+	padding: 1em 0;
 }
 
 .site-header .site-header-container {
@@ -424,7 +424,7 @@ select {
 @media (--wide-menu-query) {
 
 	.site-header {
-		padding: 2rem 0;
+		padding: 2.25em 0;
 	}
 
 	.site-header .site-header-container .main-navigation {
@@ -604,6 +604,8 @@ select {
 
 	.main-navigation {
 		flex: 1;
+		font-size: 1.15em;
+		line-height: 1;
 	}
 
 	.secondary-navigation {
@@ -614,7 +616,7 @@ select {
 		width: 100%;
 		height: var(--nav-secondary-height);
 		padding: 0 var(--grid-side-margin);
-		font-size: 1rem;
+		font-size: 0.95em;
 	}
 
 	.secondary-navigation a {
