@@ -13,7 +13,6 @@ wp_rig()->declare_primary_sidebar();
 
 get_header();
 
-// @TODO how to enable magazine?
 $use_magazine = wp_rig()->use_magazine_layout();
 
 if ( $use_magazine ) {

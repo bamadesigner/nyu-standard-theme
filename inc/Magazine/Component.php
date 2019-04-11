@@ -10,6 +10,7 @@ namespace WP_Rig\WP_Rig\Magazine;
 use WP_Rig\WP_Rig\Component_Interface;
 use WP_Rig\WP_Rig\Templating_Component_Interface;
 use WP_Query;
+use WP_Customize_Manager;
 
 /**
  * Class for managing Magazine support.
@@ -17,6 +18,10 @@ use WP_Query;
 class Component implements Component_Interface, Templating_Component_Interface {
 
 	private $index = 0;
+
+	const THEME_MOD_NAME = 'front_page_layout';
+	const THEME_MOD_MAG = 'magazine';
+	const THEME_MOD_DEFAULT = 'default';
 
 	/**
 	 * Gets the unique identifier for the theme component.
@@ -30,7 +35,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
-	public function initialize() {}
+	public function initialize() {
+		add_action( 'customize_register', array( $this, 'action_customize_register_magazine' ) );
+	}
 
 	/**
 	 * Gets template tags to expose as methods on the Template_Tags class instance, accessible through `wp_rig()`.
@@ -49,12 +56,49 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Determines whether we want to display the magazine layout.
 	 *
-	 * @TODO: Need to setup in customizer?
-	 *
 	 * @return bool Whether we want to display the magazine layout.
 	 */
 	public function use_magazine_layout() : bool {
-		return true;
+		return ( self::THEME_MOD_MAG === get_theme_mod( self::THEME_MOD_NAME ) );
+	}
+
+	/**
+	 * Adds a setting and control for using the magazine layout.
+	 *
+	 * @param WP_Customize_Manager $wp_customize Customizer manager instance.
+	 */
+	public function action_customize_register_magazine( WP_Customize_Manager $wp_customize ) {
+
+		$layout_choices = array(
+			self::THEME_MOD_MAG => __( 'Magazine layout', 'wp-rig' ),
+			self::THEME_MOD_DEFAULT  => __( 'Default layout', 'wp-rig' ),
+		);
+
+		$wp_customize->add_setting(
+			self::THEME_MOD_NAME,
+			array(
+				'default'    => self::THEME_MOD_DEFAULT,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $input ) use ( $layout_choices ) : string {
+					if ( array_key_exists( $input, $layout_choices ) ) {
+						return $input;
+					}
+					return '';
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::THEME_MOD_NAME,
+			array(
+				'label'   => __( 'Homepage layout', 'wp-rig' ),
+				'section' => 'static_front_page',
+				'type'    => 'radio',
+				'description' => __( 'Which layout do you want to use on the home page to display your posts?', 'wp-rig' ),
+				'choices' => $layout_choices,
+			)
+		);
 	}
 
 	/**
