@@ -47,9 +47,6 @@ class Theme_Support_Tests extends Integration_Test_Case {
 				'html5',
 			],
 			[
-				'custom-background',
-			],
-			[
 				'customize-selective-refresh-widgets',
 			],
 			[
