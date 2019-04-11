@@ -9,8 +9,21 @@
 }
 
 .primary-sidebar .widget {
+	margin: 1.5em 0;
 	padding: 0 var(--grid-side-margin-small) 1em;
 	border-bottom: var(--highlight-border-width) var(--highlight-border-style) var(--nyu-primary);
+}
+
+.primary-sidebar .widget.widget_search form {
+	margin: 2em 0 1.2em;
+}
+
+.primary-sidebar .widget.widget_media_image img {
+	margin-bottom: 1em;
+}
+
+.primary-sidebar .widget:first-child {
+	margin-top: 2.5em;
 }
 
 @media (--sidebar-query) {
