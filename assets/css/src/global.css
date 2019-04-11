@@ -857,6 +857,19 @@ select {
 	padding-bottom: 0;
 }
 
+.footer-sidebar .widget.widget_calendar thead {
+	color: inherit;
+}
+
+.footer-sidebar .widget.widget_calendar td {
+	background: transparent;
+	border: 1px solid #fff;
+}
+
+.footer-sidebar .widget.widget_calendar td.pad {
+	background: transparent;
+}
+
 @media (--footer-query) {
 
 	.site-info {
