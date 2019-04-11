@@ -612,7 +612,7 @@ select {
 		left: 0;
 		top: 0;
 		width: 100%;
-		height: 60px;
+		height: var(--nav-secondary-height);
 		padding: 0.5rem var(--grid-side-margin);
 	}
 
@@ -645,7 +645,7 @@ select {
 	.secondary-navigation .menu {
 		display: flex;
 		align-items: center;
-		height: 60px;
+		height: var(--nav-secondary-height);
 	}
 
 	.secondary-navigation li.menu-item--has-toggle a {
@@ -653,7 +653,7 @@ select {
 	}
 
 	body.has-nav-secondary {
-		padding-top: 60px;
+		padding-top: var(--nav-secondary-height);
 	}
 
 	/* stylelint-disable */

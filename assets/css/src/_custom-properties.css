@@ -51,6 +51,8 @@
 	--grid-side-margin-small: 2rem;
 	--grid-gap: 3rem;
 
+	--nav-secondary-height: 60px;
+
 	--highlight-border-width: 5px;
 	--highlight-border-style: solid;
 	--highlight-border-color: var(--nyu-primary);
