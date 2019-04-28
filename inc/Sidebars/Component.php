@@ -15,6 +15,7 @@ use function register_sidebar;
 use function esc_html__;
 use function is_active_sidebar;
 use function dynamic_sidebar;
+use WP_Customize_Manager;
 
 /**
  * Class for managing sidebars.
@@ -29,6 +30,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 	const PRIMARY_SIDEBAR_SLUG = 'sidebar-1';
 	const FOOTER_SIDEBAR_SLUG = 'footer';
+
+	const FRONT_PAGE_LAYOUT_NAME = 'front_page_layout';
+	const FRONT_PAGE_DEFAULT_VALUE = 'sidebar_none';
+
+	private $layout_choices,
+		$layout_has_sidebar,
+		$front_page_layout;
 
 	/**
 	 * Determins if the primary sidebar
@@ -51,6 +59,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
+
+		$this->layout_choices = array(
+			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
+			'sidebar_left' => __( 'Primary Sidebar, Content', 'wp-rig' ),
+			'sidebar_none' => __( 'Full width content', 'wp-rig' ),
+		);
+
+		$this->layout_has_sidebar = array( 'sidebar_right', 'sidebar_left' );
+
+		add_action( 'customize_register', array( $this, 'action_customize_register_site_layout' ) );
 		add_action( 'widgets_init', array( $this, 'action_register_sidebars' ) );
 		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
 	}
@@ -64,13 +82,62 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function template_tags() : array {
 		return array(
-			'declare_primary_sidebar'   => array( $this, 'declare_primary_sidebar' ),
-			'has_primary_sidebar'       => array( $this, 'has_primary_sidebar' ),
-			'is_primary_sidebar_active' => array( $this, 'is_primary_sidebar_active' ),
-			'display_primary_sidebar'   => array( $this, 'display_primary_sidebar' ),
-			'is_footer_sidebar_active'  => array( $this, 'is_footer_sidebar_active' ),
-			'display_footer_sidebar'    => array( $this, 'display_footer_sidebar' ),
+			'get_front_page_layout'      => array( $this, 'get_front_page_layout' ),
+			'front_page_has_sidebar'     => array( $this, 'front_page_has_sidebar' ),
+			'is_front_page_sidebar_left' => array( $this, 'is_front_page_sidebar_left' ),
+			'manage_front_page_layout'   => array( $this, 'manage_front_page_layout' ),
+			'declare_primary_sidebar'    => array( $this, 'declare_primary_sidebar' ),
+			'has_primary_sidebar'        => array( $this, 'has_primary_sidebar' ),
+			'is_primary_sidebar_active'  => array( $this, 'is_primary_sidebar_active' ),
+			'display_primary_sidebar'    => array( $this, 'display_primary_sidebar' ),
+			'is_footer_sidebar_active'   => array( $this, 'is_footer_sidebar_active' ),
+			'display_footer_sidebar'     => array( $this, 'display_footer_sidebar' ),
 		);
+	}
+
+	/**
+	 * Returns string identifier for front page layout.
+	 *
+	 * @return string
+	 */
+	public function get_front_page_layout() : string {
+		if ( isset( $this->front_page_layout ) ) {
+			return $this->front_page_layout;
+		}
+		$layout = get_theme_mod( self::FRONT_PAGE_LAYOUT_NAME );
+		if ( ! array_key_exists( $layout, $this->layout_choices ) ) {
+			$layout = self::FRONT_PAGE_DEFAULT_VALUE;
+		}
+		$this->front_page_layout = $layout;
+		return $this->front_page_layout;
+	}
+
+	/**
+	 * Returns true if the front page layout has a sidebar.
+	 *
+	 * @return bool
+	 */
+	public function front_page_has_sidebar() : bool {
+		$layout = $this->get_front_page_layout();
+		return in_array( $layout, $this->layout_has_sidebar );
+	}
+
+	/**
+	 * Returns true if front page sidebar is set to be on the left.
+	 *
+	 * @return bool
+	 */
+	public function is_front_page_sidebar_left() : bool {
+		return ( 'sidebar_left' === $this->get_front_page_layout() );
+	}
+
+	/**
+	 * Takes care of any actions needed to setup/manage the front page layout.
+	 */
+	public function manage_front_page_layout() {
+		if ( $this->front_page_has_sidebar() ) {
+			$this->declare_primary_sidebar();
+		}
 	}
 
 	/**
@@ -131,8 +198,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function filter_body_classes( array $classes ) : array {
 		if ( $this->is_primary_sidebar_active() ) {
 			$classes[] = 'has-sidebar';
-		}
 
+			if ( is_front_page() ) {
+				if ( $this->is_front_page_sidebar_left() ) {
+					$classes[] = 'has-sidebar--left';
+				} else {
+					$classes[] = 'has-sidebar--right';
+				}
+			}
+		}
 		return $classes;
 	}
 
@@ -166,5 +240,42 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function display_footer_sidebar() {
 		dynamic_sidebar( static::FOOTER_SIDEBAR_SLUG );
+	}
+
+	/**
+	 * Adds a setting and control for setting the site layout.
+	 *
+	 * @param WP_Customize_Manager $wp_customize Customizer manager instance.
+	 */
+	public function action_customize_register_site_layout( WP_Customize_Manager $wp_customize ) {
+
+		$layout_choices = $this->layout_choices;
+
+		//  Homepage layout
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_LAYOUT_NAME,
+			array(
+				'default'    => self::FRONT_PAGE_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $input ) use ( $layout_choices ) : string {
+					if ( array_key_exists( $input, $layout_choices ) ) {
+						return $input;
+					}
+					return '';
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::FRONT_PAGE_LAYOUT_NAME,
+			array(
+				'label'   => __( 'Homepage layout', 'wp-rig' ),
+				'section' => 'static_front_page',
+				'type'    => 'radio',
+				'description' => __( 'Which layout do you want to use on your homepage?', 'wp-rig' ),
+				'choices' => $layout_choices,
+			)
+		);
 	}
 }

@@ -9,7 +9,7 @@
 
 namespace WP_Rig\WP_Rig;
 
-wp_rig()->declare_primary_sidebar();
+wp_rig()->manage_front_page_layout();
 
 get_header();
 
