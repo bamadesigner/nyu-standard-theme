@@ -22,7 +22,7 @@
 
 @media (--content-full-query) {
 
-	.site-magazine {
+	body:not(.has-sidebar) .site-magazine {
 		margin-left: var(--grid-side-margin);
 		margin-right: var(--grid-side-margin);
 	}
