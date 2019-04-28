@@ -29,7 +29,7 @@ if ( $use_magazine ) {
 	<main id="primary" class="site-main">
 		<?php
 
-		if ( $use_magazine ) {
+		if ( $use_magazine && is_home() ) {
 			?>
 			<h2><?php esc_html_e( 'Latest posts', 'wp-rig' ); ?></h2>
 			<?php
