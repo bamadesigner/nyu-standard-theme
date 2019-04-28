@@ -19,9 +19,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 	private $index = 0;
 
-	const THEME_MOD_NAME = 'front_page_layout';
-	const THEME_MOD_MAG = 'magazine';
-	const THEME_MOD_DEFAULT = 'default';
+	const FPL_NAME = 'front_page_layout';
+	const FPL_MAG_VALUE = 'magazine';
+	const FPL_DEFAULT_VALUE = 'default';
 
 	/**
 	 * Gets the unique identifier for the theme component.
@@ -59,7 +59,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool Whether we want to display the magazine layout.
 	 */
 	public function use_magazine_layout() : bool {
-		return ( self::THEME_MOD_MAG === get_theme_mod( self::THEME_MOD_NAME ) );
+		return ( self::FPL_MAG_VALUE === get_theme_mod( self::FPL_NAME ) );
 	}
 
 	/**
@@ -70,14 +70,14 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function action_customize_register_magazine( WP_Customize_Manager $wp_customize ) {
 
 		$layout_choices = array(
-			self::THEME_MOD_MAG => __( 'Magazine layout', 'wp-rig' ),
-			self::THEME_MOD_DEFAULT  => __( 'Default layout', 'wp-rig' ),
+			self::FPL_MAG_VALUE => __( 'Magazine layout', 'wp-rig' ),
+			self::FPL_DEFAULT_VALUE  => __( 'Default layout', 'wp-rig' ),
 		);
 
 		$wp_customize->add_setting(
-			self::THEME_MOD_NAME,
+			self::FPL_NAME,
 			array(
-				'default'    => self::THEME_MOD_DEFAULT,
+				'default'    => self::FPL_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $input ) use ( $layout_choices ) : string {
@@ -90,7 +90,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		);
 
 		$wp_customize->add_control(
-			self::THEME_MOD_NAME,
+			self::FPL_NAME,
 			array(
 				'label'   => __( 'Homepage layout', 'wp-rig' ),
 				'section' => 'static_front_page',
