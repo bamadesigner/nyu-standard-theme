@@ -19,9 +19,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 	private $index = 0;
 
-	const FPL_NAME = 'front_page_layout';
-	const FPL_MAG_VALUE = 'magazine';
-	const FPL_DEFAULT_VALUE = 'default';
+	const FP_MAG_NAME = 'show_front_page_magazine';
+	const FP_MAG_DEFAULT = false;
 
 	/**
 	 * Gets the unique identifier for the theme component.
@@ -59,7 +58,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool Whether we want to display the magazine layout.
 	 */
 	public function use_magazine_layout() : bool {
-		return ( self::FPL_MAG_VALUE === get_theme_mod( self::FPL_NAME ) );
+		return (bool) get_theme_mod( self::FP_MAG_NAME );
 	}
 
 	/**
@@ -69,34 +68,25 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function action_customize_register_magazine( WP_Customize_Manager $wp_customize ) {
 
-		$layout_choices = array(
-			self::FPL_MAG_VALUE => __( 'Magazine layout', 'wp-rig' ),
-			self::FPL_DEFAULT_VALUE  => __( 'Default layout', 'wp-rig' ),
-		);
-
 		$wp_customize->add_setting(
-			self::FPL_NAME,
+			self::FP_MAG_NAME,
 			array(
-				'default'    => self::FPL_DEFAULT_VALUE,
+				'default'    => self::FP_MAG_DEFAULT,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
-				'sanitize_callback' => function ( $input ) use ( $layout_choices ) : string {
-					if ( array_key_exists( $input, $layout_choices ) ) {
-						return $input;
-					}
-					return '';
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
 			)
 		);
 
 		$wp_customize->add_control(
-			self::FPL_NAME,
+			self::FP_MAG_NAME,
 			array(
-				'label'   => __( 'Homepage layout', 'wp-rig' ),
+				'label'   => __( 'Display "Magazine" on homepage', 'wp-rig' ),
 				'section' => 'static_front_page',
-				'type'    => 'radio',
-				'description' => __( 'Which layout do you want to use on the home page to display your posts?', 'wp-rig' ),
-				'choices' => $layout_choices,
+				'type'    => 'checkbox',
+				'description' => __( 'Do you want to display the "Magazine" layout of recent posts on your homepage?', 'wp-rig' ),
 			)
 		);
 	}
