@@ -73,6 +73,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	private $post_layout_choices;
 
+	/**
+	 * Holds the post types allowed to select their individual layout.
+	 *
+	 * @var array
+	 */
+	private $post_layout_post_types;
 
 	/**
 	 * Holds the layout choices that have a sidebar.
@@ -187,6 +193,26 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'site'          => __( 'Use site layout', 'wp-rig' ),
 		);
 		return $this->post_layout_choices;
+	}
+
+	/**
+	 * Get the post types allowed for selecting a layout.
+	 *
+	 * @return array
+	 */
+	public function get_post_layout_post_types() : array {
+		if ( isset( $this->post_layout_post_types ) ) {
+			return $this->post_layout_post_types;
+		}
+
+		$this->post_layout_post_types = get_post_types(
+			array(
+				'show_ui' => true,
+				'public'  => true,
+			)
+		);
+
+		return $this->post_layout_post_types;
 	}
 
 	/**
