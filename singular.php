@@ -12,7 +12,7 @@
 
 namespace WP_Rig\WP_Rig;
 
-wp_rig()->manage_site_layout();
+wp_rig()->manage_layout();
 
 get_header();
 

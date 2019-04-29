@@ -9,7 +9,7 @@
 
 namespace WP_Rig\WP_Rig;
 
-wp_rig()->manage_front_page_layout();
+wp_rig()->manage_layout();
 
 get_header();
 

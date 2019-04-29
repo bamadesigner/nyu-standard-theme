@@ -38,6 +38,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const FRONT_PAGE_LAYOUT_DEFAULT_VALUE = 'site';
 	const FRONT_PAGE_LAYOUT_VALUE_USE_SITE = 'site';
 
+	const POST_LAYOUT_NAME = 'post_layout';
+	const POST_LAYOUT_DEFAULT_VALUE = 'site';
+	const POST_LAYOUT_VALUE_USE_SITE = 'site';
+
 	/**
 	 * Holds the selected identifier for the global site layout.
 	 *
@@ -88,6 +92,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	private $layout_choices_with_sidebar;
 
 	/**
+	 * Holds the layout for the current view.
+	 *
+	 * @var string
+	 */
+	private $current_layout;
+
+	/**
 	 * Determines if the primary sidebar
 	 * has been declared for usage.
 	 *
@@ -125,20 +136,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function template_tags() : array {
 		return array(
-			'get_site_layout'            => array( $this, 'get_site_layout' ),
-			'site_layout_has_sidebar'    => array( $this, 'site_layout_has_sidebar' ),
-			'is_site_sidebar_left'       => array( $this, 'is_site_sidebar_left' ),
-			'get_front_page_layout'      => array( $this, 'get_front_page_layout' ),
-			'front_page_has_sidebar'     => array( $this, 'front_page_has_sidebar' ),
-			'is_front_page_sidebar_left' => array( $this, 'is_front_page_sidebar_left' ),
-			'manage_site_layout'         => array( $this, 'manage_site_layout' ),
-			'manage_front_page_layout'   => array( $this, 'manage_front_page_layout' ),
-			'declare_primary_sidebar'    => array( $this, 'declare_primary_sidebar' ),
-			'has_primary_sidebar'        => array( $this, 'has_primary_sidebar' ),
-			'is_primary_sidebar_active'  => array( $this, 'is_primary_sidebar_active' ),
-			'display_primary_sidebar'    => array( $this, 'display_primary_sidebar' ),
-			'is_footer_sidebar_active'   => array( $this, 'is_footer_sidebar_active' ),
-			'display_footer_sidebar'     => array( $this, 'display_footer_sidebar' ),
+			'get_site_layout'           => array( $this, 'get_site_layout' ),
+			'get_front_page_layout'     => array( $this, 'get_front_page_layout' ),
+			'manage_layout'             => array( $this, 'manage_layout' ),
+			'declare_primary_sidebar'   => array( $this, 'declare_primary_sidebar' ),
+			'has_primary_sidebar'       => array( $this, 'has_primary_sidebar' ),
+			'is_primary_sidebar_active' => array( $this, 'is_primary_sidebar_active' ),
+			'display_primary_sidebar'   => array( $this, 'display_primary_sidebar' ),
+			'is_footer_sidebar_active'  => array( $this, 'is_footer_sidebar_active' ),
+			'display_footer_sidebar'    => array( $this, 'display_footer_sidebar' ),
 		);
 	}
 
@@ -263,24 +269,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
-	 * Returns true if the site layout has a sidebar.
-	 *
-	 * @return bool
-	 */
-	public function site_layout_has_sidebar() : bool {
-		return $this->layout_has_sidebar( $this->get_site_layout() );
-	}
-
-	/**
-	 * Returns true if site sidebar is set to be on the left.
-	 *
-	 * @return bool
-	 */
-	public function is_site_sidebar_left() : bool {
-		return ( 'sidebar_left' === $this->get_site_layout() );
-	}
-
-	/**
 	 * Returns string identifier for front page layout.
 	 *
 	 * @return string
@@ -305,39 +293,79 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
-	 * Returns true if the front page layout has a sidebar.
+	 * Returns string identifier for the layout setting for a particular post.
 	 *
-	 * @return bool
+	 * @param WP_Post $post the post object.
+	 * @return string
 	 */
-	public function front_page_has_sidebar() : bool {
-		return $this->layout_has_sidebar( $this->get_front_page_layout() );
+	public function get_post_layout_setting( WP_Post $post ) : string {
+
+		$layout = $post->__get( self::POST_LAYOUT_NAME );
+
+		if ( ! array_key_exists( $layout, $this->get_post_layout_choices() ) ) {
+			$layout = self::POST_LAYOUT_DEFAULT_VALUE;
+		}
+
+		return $layout;
 	}
 
 	/**
-	 * Returns true if front page sidebar is set to be on the left.
+	 * Returns string identifier for the layout for a particular post.
 	 *
-	 * @return bool
+	 * @param WP_Post $post the post object.
+	 * @return string
 	 */
-	public function is_front_page_sidebar_left() : bool {
-		return ( 'sidebar_left' === $this->get_front_page_layout() );
+	public function get_post_layout( WP_Post $post ) : string {
+
+		$layout = $post->__get( self::POST_LAYOUT_NAME );
+
+		if ( ! array_key_exists( $layout, $this->get_post_layout_choices() ) ) {
+			$layout = self::POST_LAYOUT_DEFAULT_VALUE;
+		}
+
+		// Get site layout setting.
+		if ( self::POST_LAYOUT_VALUE_USE_SITE == $layout ) {
+			$layout = $this->get_site_layout();
+		}
+
+		return $layout;
 	}
 
 	/**
 	 * Takes care of any actions needed to setup/manage the site layout.
 	 */
-	public function manage_site_layout() {
-		if ( $this->site_layout_has_sidebar() ) {
+	public function manage_layout() {
+		if ( is_front_page() ) {
+			$layout = $this->get_front_page_layout();
+		} else if ( is_singular() ) {
+			$layout = $this->get_post_layout( get_post() );
+		} else {
+			$layout = $this->get_site_layout();
+		}
+
+		$this->declare_layout( $layout );
+
+		if ( $this->layout_has_sidebar( $layout ) ) {
 			$this->declare_primary_sidebar();
 		}
 	}
 
 	/**
-	 * Takes care of any actions needed to setup/manage the front page layout.
+	 * Declare the layout for the current view.
+	 *
+	 * @param string $layout The layout identifier.
 	 */
-	public function manage_front_page_layout() {
-		if ( $this->front_page_has_sidebar() ) {
-			$this->declare_primary_sidebar();
-		}
+	private function declare_layout( string $layout ) {
+		$this->current_layout = $layout;
+	}
+
+	/**
+	 * Returns the set layout for the current view.
+	 *
+	 * @return string
+	 */
+	public function get_layout() {
+		return $this->current_layout;
 	}
 
 	/**
@@ -397,20 +425,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function filter_body_classes( array $classes ) : array {
 		if ( $this->is_primary_sidebar_active() ) {
+
 			$classes[] = 'has-sidebar';
 
-			if ( is_front_page() ) {
-				if ( $this->is_front_page_sidebar_left() ) {
-					$classes[] = 'has-sidebar--left';
-				} else {
-					$classes[] = 'has-sidebar--right';
-				}
+			if ( $this->layout_has_sidebar_left( $this->get_layout() ) ) {
+				$classes[] = 'has-sidebar--left';
 			} else {
-				if ( $this->is_site_sidebar_left() ) {
-					$classes[] = 'has-sidebar--left';
-				} else {
-					$classes[] = 'has-sidebar--right';
-				}
+				$classes[] = 'has-sidebar--right';
 			}
 		}
 		return $classes;
