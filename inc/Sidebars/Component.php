@@ -37,7 +37,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const FRONT_PAGE_LAYOUT_NAME = 'front_page_layout';
 	const FRONT_PAGE_DEFAULT_VALUE = 'sidebar_none';
 
-	private $layout_choices,
+	private $site_layout_choices,
+		$front_page_layout_choices,
 		$layout_choices_with_sidebar,
 		$site_layout,
 		$front_page_layout;
@@ -63,12 +64,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-
-		$this->layout_choices = array(
-			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
-			'sidebar_left' => __( 'Primary Sidebar, Content', 'wp-rig' ),
-			'sidebar_none' => __( 'Full width content', 'wp-rig' ),
-		);
 
 		$this->layout_choices_with_sidebar = array( 'sidebar_right', 'sidebar_left' );
 
@@ -104,6 +99,40 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Return array of site layout choices.
+	 *
+	 * @return array
+	 */
+	public function get_site_layout_choices() : array {
+		if ( isset( $this->site_layout_choices ) ) {
+			return $this->site_layout_choices;
+		}
+		$this->site_layout_choices = array(
+			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
+			'sidebar_left'  => __( 'Primary Sidebar, Content', 'wp-rig' ),
+			'sidebar_none'  => __( 'Full width content', 'wp-rig' ),
+		);
+		return $this->site_layout_choices;
+	}
+
+	/**
+	 * Return array of front page layout choices.
+	 *
+	 * @return array
+	 */
+	public function get_front_page_layout_choices() : array {
+		if ( isset( $this->front_page_layout_choices ) ) {
+			return $this->front_page_layout_choices;
+		}
+		$this->front_page_layout_choices = array(
+			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
+			'sidebar_left'  => __( 'Primary Sidebar, Content', 'wp-rig' ),
+			'sidebar_none'  => __( 'Full width content', 'wp-rig' ),
+		);
+		return $this->front_page_layout_choices;
+	}
+
+	/**
 	 * Returns true if layout is a choice with a sidebar.
 	 *
 	 * @param string - $layout The layout identifer.
@@ -123,7 +152,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return $this->site_layout;
 		}
 		$layout = get_theme_mod( self::SITE_LAYOUT_NAME );
-		if ( ! array_key_exists( $layout, $this->layout_choices ) ) {
+		if ( ! array_key_exists( $layout, $this->get_site_layout_choices() ) ) {
 			$layout = self::SITE_LAYOUT_DEFAULT_VALUE;
 		}
 		$this->site_layout = $layout;
@@ -158,7 +187,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return $this->front_page_layout;
 		}
 		$layout = get_theme_mod( self::FRONT_PAGE_LAYOUT_NAME );
-		if ( ! array_key_exists( $layout, $this->layout_choices ) ) {
+		if ( ! array_key_exists( $layout, $this->get_front_page_layout_choices() ) ) {
 			$layout = self::FRONT_PAGE_DEFAULT_VALUE;
 		}
 		$this->front_page_layout = $layout;
@@ -316,7 +345,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function action_customize_register_site_layout( WP_Customize_Manager $wp_customize ) {
 
-		$layout_choices = $this->layout_choices;
+		$site_layout_choices = $this->get_site_layout_choices();
+		$front_page_layout_choices = $this->get_front_page_layout_choices();
 
 		$wp_customize->add_section(
 			'site_layout',
@@ -333,8 +363,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'default'    => self::SITE_LAYOUT_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
-				'sanitize_callback' => function ( $input ) use ( $layout_choices ) : string {
-					if ( array_key_exists( $input, $layout_choices ) ) {
+				'sanitize_callback' => function ( $input ) use ( $site_layout_choices ) : string {
+					if ( array_key_exists( $input, $site_layout_choices ) ) {
 						return $input;
 					}
 					return '';
@@ -349,7 +379,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'section' => 'site_layout',
 				'type'    => 'radio',
 				'description' => __( 'Which layout do you want to use for your site?', 'wp-rig' ),
-				'choices' => $layout_choices,
+				'choices' => $site_layout_choices,
 			)
 		);
 
@@ -360,8 +390,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'default'    => self::FRONT_PAGE_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
-				'sanitize_callback' => function ( $input ) use ( $layout_choices ) : string {
-					if ( array_key_exists( $input, $layout_choices ) ) {
+				'sanitize_callback' => function ( $input ) use ( $front_page_layout_choices ) : string {
+					if ( array_key_exists( $input, $front_page_layout_choices ) ) {
 						return $input;
 					}
 					return '';
@@ -376,7 +406,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'section' => 'static_front_page',
 				'type'    => 'radio',
 				'description' => __( 'Which layout do you want to use on your homepage?', 'wp-rig' ),
-				'choices' => $layout_choices,
+				'choices' => $front_page_layout_choices,
 			)
 		);
 	}
