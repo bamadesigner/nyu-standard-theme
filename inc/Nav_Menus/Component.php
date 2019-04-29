@@ -30,6 +30,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const SECONDARY_NAV_MENU_SLUG = 'secondary';
 
 	const PRIMARY_NAV_MENU_DEPTH = 3;
+	const SECONDARY_NAV_MENU_DEPTH = 3;
 
 	/**
 	 * Gets the unique identifier for the theme component.
@@ -173,6 +174,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$args['container'] = 'ul';
 		}
 
+		$args['depth'] = static::SECONDARY_NAV_MENU_DEPTH;
 		$args['theme_location'] = static::SECONDARY_NAV_MENU_SLUG;
 
 		wp_nav_menu( $args );
