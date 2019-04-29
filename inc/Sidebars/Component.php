@@ -38,14 +38,44 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const FRONT_PAGE_LAYOUT_DEFAULT_VALUE = 'site';
 	const FRONT_PAGE_LAYOUT_VALUE_USE_SITE = 'site';
 
-	private $site_layout_choices,
-		$front_page_layout_choices,
-		$layout_choices_with_sidebar,
-		$site_layout,
-		$front_page_layout;
+	/**
+	 * Holds the selected identifier for the global site layout.
+	 *
+	 * @var string
+	 */
+	private $site_layout;
 
 	/**
-	 * Determins if the primary sidebar
+	 * Choices for the global site layout.
+	 *
+	 * @var array
+	 */
+	private $site_layout_choices;
+
+	/**
+	 * Holds the selected identifier for the front page layouts.
+	 *
+	 * @var string
+	 */
+	private $front_page_layout;
+
+	/**
+	 * Choices for the front page layout.
+	 *
+	 * @var array
+	 */
+	private $front_page_layout_choices;
+
+
+	/**
+	 * Holds the layout choices that have a sidebar.
+	 *
+	 * @var array
+	 */
+	private $layout_choices_with_sidebar;
+
+	/**
+	 * Determines if the primary sidebar
 	 * has been declared for usage.
 	 *
 	 * @var bool
