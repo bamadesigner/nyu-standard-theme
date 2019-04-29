@@ -37,7 +37,8 @@ h6 {
 	margin-bottom: 1em;
 }
 
-.entry-header h2.entry-title {
+.entry-header h2.entry-title,
+.entry-header h3.entry-title {
 	font-size: 2rem;
 	line-height: 1.4;
 	margin: 0 0 1rem 0;

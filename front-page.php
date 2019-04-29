@@ -15,6 +15,8 @@ get_header();
 
 $use_magazine = wp_rig()->use_magazine_layout();
 
+$main_class = 'site-main';
+
 if ( $use_magazine ) {
 	wp_rig()->print_styles( 'wp-rig-content', 'wp-rig-magazine' );
 } else {
@@ -23,15 +25,16 @@ if ( $use_magazine ) {
 
 if ( $use_magazine ) {
 	wp_rig()->display_magazine();
+	$main_class .= ' site-main--magazine';
 }
 
 ?>
-	<main id="primary" class="site-main">
+	<main id="primary" class="<?php echo $main_class; ?>">
 		<?php
 
 		if ( $use_magazine && is_home() ) {
 			?>
-			<h2><?php esc_html_e( 'Latest posts', 'wp-rig' ); ?></h2>
+			<h2 class="home-title--latest"><?php esc_html_e( 'Latest posts', 'wp-rig' ); ?></h2>
 			<?php
 
 			wp_rig()->set_entry_title_header( 3 );

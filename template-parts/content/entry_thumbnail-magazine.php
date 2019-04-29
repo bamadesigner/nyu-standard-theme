@@ -11,23 +11,13 @@ if ( post_password_required() || ! post_type_supports( 'post', 'thumbnail' ) || 
 	return;
 }
 
+$thumb_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'wp-rig-magazine', true );
+$thumb_url = array_shift( $thumb_url );
+
+if ( empty( $thumb_url ) ) {
+	return;
+}
+
 ?>
-<div class="post-thumbnail">
-	<a class="post-thumbnail--link" href="<?php the_permalink(); ?>" aria-hidden="true">
-		<?php
-
-		the_post_thumbnail(
-			'wp-rig-magazine',
-			array(
-				'alt' => the_title_attribute(
-					array(
-						'echo' => false,
-					)
-				),
-			)
-		);
-
-		?>
-	</a><!-- .post-thumbnail -->
-</div>
+<div class="post-thumbnail" aria-hidden="true" style="background-image:url('<?php echo esc_attr( $thumb_url ); ?>');"></div>
 <?php

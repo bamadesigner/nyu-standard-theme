@@ -13,7 +13,9 @@ $time_string = '';
 
 // Show date only when the post type is 'post' or has an archive.
 if ( 'post' === $post_type_obj->name || $post_type_obj->has_archive ) {
+
 	$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+
 	if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
 		$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
 	}
@@ -45,7 +47,7 @@ if ( post_type_supports( $post_type_obj->name, 'author' ) ) {
 	if ( ! empty( $author_string ) ) {
 		?>
 		<span class="posted-by screen-reader-text">
-			<?php echo $author_string; ?>
+			<?php echo $author_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span>
 		<?php
 	}
@@ -53,7 +55,7 @@ if ( post_type_supports( $post_type_obj->name, 'author' ) ) {
 	if ( ! empty( $time_string ) ) {
 		?>
 		<span class="posted-on">
-			<?php echo $time_string; ?>
+			<?php echo $time_string; // phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span>
 		<?php
 	}
