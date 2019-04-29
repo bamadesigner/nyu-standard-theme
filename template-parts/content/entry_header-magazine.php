@@ -16,7 +16,5 @@ namespace WP_Rig\WP_Rig;
 
 	get_template_part( 'template-parts/content/entry_meta', 'magazine' );
 
-	get_template_part( 'template-parts/content/entry_thumbnail', get_post_type() );
-
 	?>
 </header><!-- .entry-header -->
