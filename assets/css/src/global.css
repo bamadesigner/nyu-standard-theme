@@ -534,6 +534,7 @@ select {
 		margin-left: 0;
 		box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 		z-index: 1;
+		padding: 0.5em 0
 	}
 
 	.nav--toggle-sub .dropdown,
@@ -555,7 +556,7 @@ select {
 		overflow: visible;
 	}
 
-	.nav--toggle-sub .dropdown-symbol {
+	.nav--toggle-sub .dropdown-toggle .dropdown-symbol {
 		display: block;
 		background: transparent;
 		position: absolute;
@@ -571,15 +572,11 @@ select {
 	.nav--toggle-sub ul ul .dropdown,
 	.nav--toggle-sub ul ul .dropdown-toggle {
 		top: 40%;
-		right: 0.2em;
+		right: 0.5em;
 	}
 
-	.nav--toggle-sub ul ul .dropdown-symbol {
+	.nav--toggle-sub ul ul .dropdown-toggle .dropdown-symbol {
 		transform: rotate(-45deg);
-	}
-
-	.nav--toggle-sub.nav--toggle-white .menu > li > .dropdown-toggle .dropdown-symbol {
-		border-color: #fff;
 	}
 
 	.nav--toggle-sub .dropdown-toggle:hover,
@@ -592,6 +589,22 @@ select {
 	.nav--toggle-sub li.menu-item--has-toggle {
 		position: relative;
 		padding-right: var(--dropdown-symbol-width);
+	}
+
+	.nav--toggle-sub ul ul li.menu-item-has-children,
+	.nav--toggle-sub ul ul li.menu-item--has-toggle {
+		transition: all 200ms ease-out;
+		padding-right: 0;
+	}
+
+	.nav--toggle-sub ul ul li.menu-item-has-children:hover,
+	.nav--toggle-sub ul ul li.menu-item-has-children:focus,
+	.nav--toggle-sub ul ul li.menu-item-has-children:focus-within,
+	.nav--toggle-sub ul ul li.menu-item--has-toggle:hover,
+	.nav--toggle-sub ul ul li.menu-item--has-toggle:focus,
+	.nav--toggle-sub ul ul li.menu-item--has-toggle:focus-within,
+	.nav--toggle-sub ul ul li.menu-item--toggled-on {
+		border-left: 5px solid #c0c0c0;
 	}
 
 	/*
@@ -608,9 +621,6 @@ select {
 	.nav--toggle-sub li:not(.menu-item--has-toggle):focus-within > ul {
 		display: block;
 	}
-}
-
-@media (--wide-menu-query) {
 
 	.main-navigation {
 		flex: 1;
@@ -634,16 +644,16 @@ select {
 		line-height: var(--nav-secondary-height);
 	}
 
-	.main-navigation ul li {
+	.main-navigation > ul > li {
 		margin: 0 0 0 0.5em;
+	}
+
+	.main-navigation > ul > li > .dropdown-toggle .dropdown-symbol {
+		border-color: #fff;
 	}
 
 	.secondary-navigation .menu li {
 		margin: 0 1.5rem 0 0;
-	}
-
-	.main-navigation ul li:first-child {
-		margin-left: 0;
 	}
 
 	.main-navigation ul li a {
@@ -658,6 +668,8 @@ select {
 	.main-navigation ul ul li a {
 		width: 218px;
 		background: none;
+		padding: 0.5em 0 0.5em 0;
+		border-bottom: 2px solid #c0c0c0;
 	}
 
 	.secondary-navigation .menu {
@@ -680,8 +692,8 @@ select {
 
 	/* stylelint-disable */
 	.main-navigation ul ul li {
-		padding-left: 0;
-		margin-left: 0;
+		padding-left: 0.5em;
+		padding-right: 0;
 	}
 	/* stylelint-enable */
 
@@ -689,6 +701,7 @@ select {
 		top: 0;
 		left: 100%;
 		min-height: 100%;
+		font-style: italic;
 	}
 
 	.main-navigation .menu {

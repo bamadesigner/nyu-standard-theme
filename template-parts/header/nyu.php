@@ -34,7 +34,7 @@ namespace WP_Rig\WP_Rig;
 
 		if ( wp_rig()->is_primary_nav_menu_active() ) :
 			?>
-			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small nav--toggle-white" aria-label="<?php esc_attr_e( 'Main menu', 'wp-rig' ); ?>">
+			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'wp-rig' ); ?>">
 				<button class="menu-toggle" aria-label="<?php esc_attr_e( 'Open menu', 'wp-rig' ); ?>" aria-controls="primary-menu" aria-expanded="false">
 					<div class="menu-toggle-icon">
 						<div class="menu-toggle-bar"></div>
@@ -54,7 +54,6 @@ namespace WP_Rig\WP_Rig;
 			</nav>
 			<?php
 		endif;
-		
 
 		?>
 	</div>
