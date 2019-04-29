@@ -46,7 +46,7 @@ if ( post_type_supports( $post_type_obj->name, 'author' ) ) {
 	if ( ! empty( $author_string ) ) {
 		?>
 		<span class="posted-by">
-			<?php echo $author_string; ?>
+			<?php echo $author_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span>
 		<?php
 	}
@@ -54,7 +54,7 @@ if ( post_type_supports( $post_type_obj->name, 'author' ) ) {
 	if ( ! empty( $time_string ) ) {
 		?>
 		<span class="posted-on">
-			<?php echo $time_string; ?>
+			<?php echo $time_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span>
 		<?php
 	}
