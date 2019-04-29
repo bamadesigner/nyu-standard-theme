@@ -15,6 +15,7 @@ use function register_sidebar;
 use function esc_html__;
 use function is_active_sidebar;
 use function dynamic_sidebar;
+use WP_Post;
 use WP_Customize_Manager;
 
 /**
@@ -41,6 +42,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const POST_LAYOUT_NAME = 'post_layout';
 	const POST_LAYOUT_DEFAULT_VALUE = 'site';
 	const POST_LAYOUT_VALUE_USE_SITE = 'site';
+
+	const POST_LAYOUT_MB_NAME = 'wp_rig_post_layout';
+	const POST_LAYOUT_MB_NONCE = 'custom_nonce';
+	const POST_LAYOUT_MB_NONCE_ACTION = 'custom_nonce_action';
 
 	/**
 	 * Holds the selected identifier for the global site layout.
@@ -121,6 +126,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function initialize() {
 
 		$this->layout_choices_with_sidebar = array( 'sidebar_right', 'sidebar_left' );
+
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
+		add_action( 'save_post', array( $this, 'save_meta_box_theme_options' ), 10, 2 );
 
 		add_action( 'customize_register', array( $this, 'action_customize_register_site_layout' ) );
 		add_action( 'widgets_init', array( $this, 'action_register_sidebars' ) );
@@ -538,5 +546,120 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'choices' => $front_page_layout_choices,
 			)
 		);
+	}
+
+	/**
+	 * Adds the meta boxes for our theme options.
+	 *
+	 * @param string  $post_type The post type.
+	 * @param WP_Post $post The post object.
+	 */
+	public function add_meta_boxes( string $post_type, WP_Post $post ) {
+
+		if ( ! $this->is_post_layout_post_type( $post_type ) ) {
+			return;
+		}
+
+		// Make sure we have layout choices.
+		$post_layout_choices = $this->get_post_layout_choices();
+		if ( empty( $post_layout_choices ) ) {
+			return;
+		}
+
+		add_meta_box(
+			'wp-rig-layout',
+			__( 'Theme Options', 'wp-rig' ),
+			array( $this, 'print_meta_box_theme_options' ),
+			$post_type,
+			'side',
+			'default',
+			array(
+				'post_layout_choices' => $post_layout_choices,
+			)
+		);
+	}
+
+	/**
+	 * Prints the meta box for our theme options.
+	 *
+	 * @param WP_Post $post The post object.
+	 * @param array   $metabox The meta box information.
+	 */
+	public function print_meta_box_theme_options( WP_Post $post, array $metabox ) {
+		if ( ! empty( $metabox['args'] ) ) {
+			$args = $metabox['args'];
+		} else {
+			$args = array();
+		}
+
+		if ( ! empty( $args['post_layout_choices'] ) ) {
+			$post_layout_choices = $args['post_layout_choices'];
+		} else {
+			$post_layout_choices = array();
+		}
+
+		$selected_layout = $this->get_post_layout_setting( $post );
+
+		// Ensures security when we save the post meta.
+		wp_nonce_field( self::POST_LAYOUT_MB_NONCE_ACTION, self::POST_LAYOUT_MB_NONCE );
+
+		?>
+		<label for="wp-rig-post-layout" class="components-base-control__label" style="display:block;width:100%;margin-bottom:5px;"><?php esc_html_e( 'Layout for this page?', 'wp-rig' ); ?></label>
+		<select id="wp-rig-post-layout" name="<?php echo esc_attr( self::POST_LAYOUT_MB_NAME ); ?>" class="components-select-control__input" style="width:100%;">
+			<?php
+
+			foreach ( $post_layout_choices as $value => $label ) :
+				?>
+				<option value="<?php echo esc_attr( $value ); ?>"<?php selected( $selected_layout == $value ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php
+			endforeach;
+
+			?>
+		</select>
+		<?php
+	}
+
+	/**
+	 * Manages saving the theme options meta box.
+	 *
+	 * @TODO:
+	 * - Check if user has permissions to save data?
+	 *
+	 * @param int     $post_id The post ID.
+	 * @param WP_Post $post The post object.
+	 */
+	public function save_meta_box_theme_options( $post_id, $post ) {
+
+		if ( empty( $_POST[ self::POST_LAYOUT_MB_NONCE ] ) ) {
+			return;
+		}
+
+		// Check if nonce is valid.
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ self::POST_LAYOUT_MB_NONCE ] ) ), self::POST_LAYOUT_MB_NONCE_ACTION ) ) {
+			return;
+		}
+
+		// Check if not an autosave.
+		if ( wp_is_post_autosave( $post_id ) ) {
+			return;
+		}
+
+		// Check if not a revision.
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( empty( $_POST[ self::POST_LAYOUT_MB_NAME ] ) ) {
+			$layout = null;
+		} else {
+			$layout = sanitize_text_field( wp_unslash( $_POST[ self::POST_LAYOUT_MB_NAME ] ) );
+		}
+
+		if ( ! array_key_exists( $layout, $this->get_post_layout_choices() ) ) {
+			$layout = self::POST_LAYOUT_DEFAULT_VALUE;
+		}
+
+		update_post_meta( $post_id, self::POST_LAYOUT_NAME, $layout );
+
 	}
 }
