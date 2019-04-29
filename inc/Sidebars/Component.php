@@ -38,7 +38,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const FRONT_PAGE_DEFAULT_VALUE = 'sidebar_none';
 
 	private $layout_choices,
-		$layout_has_sidebar,
+		$layout_choices_with_sidebar,
 		$site_layout,
 		$front_page_layout;
 
@@ -70,7 +70,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'sidebar_none' => __( 'Full width content', 'wp-rig' ),
 		);
 
-		$this->layout_has_sidebar = array( 'sidebar_right', 'sidebar_left' );
+		$this->layout_choices_with_sidebar = array( 'sidebar_right', 'sidebar_left' );
 
 		add_action( 'customize_register', array( $this, 'action_customize_register_site_layout' ) );
 		add_action( 'widgets_init', array( $this, 'action_register_sidebars' ) );
@@ -104,6 +104,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Returns true if layout is a choice with a sidebar.
+	 *
+	 * @param string - $layout The layout identifer.
+	 * @return bool
+	 */
+	private function layout_has_sidebar( string $layout ) : bool {
+		return in_array( $layout, $this->layout_choices_with_sidebar );
+	}
+
+	/**
 	 * Returns string identifier for site layout.
 	 *
 	 * @return string
@@ -126,8 +136,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool
 	 */
 	public function site_layout_has_sidebar() : bool {
-		$layout = $this->get_site_layout();
-		return in_array( $layout, $this->layout_has_sidebar );
+		return $this->layout_has_sidebar( $this->get_site_layout() );
 	}
 
 	/**
@@ -162,8 +171,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool
 	 */
 	public function front_page_has_sidebar() : bool {
-		$layout = $this->get_front_page_layout();
-		return in_array( $layout, $this->layout_has_sidebar );
+		return $this->layout_has_sidebar( $this->get_front_page_layout() );
 	}
 
 	/**
