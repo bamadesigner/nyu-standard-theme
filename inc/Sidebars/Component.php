@@ -35,7 +35,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const SITE_LAYOUT_DEFAULT_VALUE = 'sidebar_none';
 
 	const FRONT_PAGE_LAYOUT_NAME = 'front_page_layout';
-	const FRONT_PAGE_DEFAULT_VALUE = 'sidebar_none';
+	const FRONT_PAGE_DEFAULT_VALUE = 'site';
+	const FRONT_PAGE_VALUE_USE_SITE = 'site';
 
 	private $site_layout_choices,
 		$front_page_layout_choices,
@@ -128,6 +129,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
 			'sidebar_left'  => __( 'Primary Sidebar, Content', 'wp-rig' ),
 			'sidebar_none'  => __( 'Full width content', 'wp-rig' ),
+			'site'          => __( 'Use site layout', 'wp-rig' ),
 		);
 		return $this->front_page_layout_choices;
 	}
@@ -186,10 +188,17 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->front_page_layout ) ) {
 			return $this->front_page_layout;
 		}
+
 		$layout = get_theme_mod( self::FRONT_PAGE_LAYOUT_NAME );
 		if ( ! array_key_exists( $layout, $this->get_front_page_layout_choices() ) ) {
 			$layout = self::FRONT_PAGE_DEFAULT_VALUE;
 		}
+
+		// Get site layout setting.
+		if ( self::FRONT_PAGE_VALUE_USE_SITE == $layout ) {
+			$layout = $this->get_site_layout();
+		}
+
 		$this->front_page_layout = $layout;
 		return $this->front_page_layout;
 	}
