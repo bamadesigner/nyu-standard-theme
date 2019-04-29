@@ -228,11 +228,21 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Returns true if layout is a choice with a sidebar.
 	 *
-	 * @param string - $layout The layout identifer.
+	 * @param string $layout The layout identifer.
 	 * @return bool
 	 */
 	private function layout_has_sidebar( string $layout ) : bool {
 		return in_array( $layout, $this->layout_choices_with_sidebar );
+	}
+
+	/**
+	 * Returns true if layout has a left sidebar.
+	 *
+	 * @param string $layout The layout.
+	 * @return bool
+	 */
+	private function layout_has_sidebar_left( string $layout ) : bool {
+		return ( 'sidebar_left' === $layout );
 	}
 
 	/**
