@@ -14,7 +14,7 @@
 
 namespace WP_Rig\WP_Rig;
 
-wp_rig()->declare_primary_sidebar();
+wp_rig()->manage_site_layout();
 
 get_header();
 

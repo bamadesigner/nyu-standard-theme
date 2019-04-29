@@ -31,11 +31,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const PRIMARY_SIDEBAR_SLUG = 'sidebar-1';
 	const FOOTER_SIDEBAR_SLUG = 'footer';
 
+	const SITE_LAYOUT_NAME = 'site_layout';
+	const SITE_LAYOUT_DEFAULT_VALUE = 'sidebar_none';
+
 	const FRONT_PAGE_LAYOUT_NAME = 'front_page_layout';
 	const FRONT_PAGE_DEFAULT_VALUE = 'sidebar_none';
 
 	private $layout_choices,
 		$layout_has_sidebar,
+		$site_layout,
 		$front_page_layout;
 
 	/**
@@ -82,9 +86,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function template_tags() : array {
 		return array(
+			'get_site_layout'            => array( $this, 'get_site_layout' ),
+			'site_layout_has_sidebar'    => array( $this, 'site_layout_has_sidebar' ),
+			'is_site_sidebar_left'       => array( $this, 'is_site_sidebar_left' ),
 			'get_front_page_layout'      => array( $this, 'get_front_page_layout' ),
 			'front_page_has_sidebar'     => array( $this, 'front_page_has_sidebar' ),
 			'is_front_page_sidebar_left' => array( $this, 'is_front_page_sidebar_left' ),
+			'manage_site_layout'         => array( $this, 'manage_site_layout' ),
 			'manage_front_page_layout'   => array( $this, 'manage_front_page_layout' ),
 			'declare_primary_sidebar'    => array( $this, 'declare_primary_sidebar' ),
 			'has_primary_sidebar'        => array( $this, 'has_primary_sidebar' ),
@@ -93,6 +101,42 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'is_footer_sidebar_active'   => array( $this, 'is_footer_sidebar_active' ),
 			'display_footer_sidebar'     => array( $this, 'display_footer_sidebar' ),
 		);
+	}
+
+	/**
+	 * Returns string identifier for site layout.
+	 *
+	 * @return string
+	 */
+	public function get_site_layout() : string {
+		if ( isset( $this->site_layout ) ) {
+			return $this->site_layout;
+		}
+		$layout = get_theme_mod( self::SITE_LAYOUT_NAME );
+		if ( ! array_key_exists( $layout, $this->layout_choices ) ) {
+			$layout = self::SITE_LAYOUT_DEFAULT_VALUE;
+		}
+		$this->site_layout = $layout;
+		return $this->site_layout;
+	}
+
+	/**
+	 * Returns true if the site layout has a sidebar.
+	 *
+	 * @return bool
+	 */
+	public function site_layout_has_sidebar() : bool {
+		$layout = $this->get_site_layout();
+		return in_array( $layout, $this->layout_has_sidebar );
+	}
+
+	/**
+	 * Returns true if site sidebar is set to be on the left.
+	 *
+	 * @return bool
+	 */
+	public function is_site_sidebar_left() : bool {
+		return ( 'sidebar_left' === $this->get_site_layout() );
 	}
 
 	/**
@@ -129,6 +173,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function is_front_page_sidebar_left() : bool {
 		return ( 'sidebar_left' === $this->get_front_page_layout() );
+	}
+
+	/**
+	 * Takes care of any actions needed to setup/manage the site layout.
+	 */
+	public function manage_site_layout() {
+		if ( $this->site_layout_has_sidebar() ) {
+			$this->declare_primary_sidebar();
+		}
 	}
 
 	/**
@@ -205,6 +258,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				} else {
 					$classes[] = 'has-sidebar--right';
 				}
+			} else {
+				if ( $this->is_site_sidebar_left() ) {
+					$classes[] = 'has-sidebar--left';
+				} else {
+					$classes[] = 'has-sidebar--right';
+				}
 			}
 		}
 		return $classes;
@@ -250,6 +309,41 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function action_customize_register_site_layout( WP_Customize_Manager $wp_customize ) {
 
 		$layout_choices = $this->layout_choices;
+
+		$wp_customize->add_section(
+			'site_layout',
+			array(
+				'title'    => __( 'Site Layout', 'wp-rig' ),
+				'priority' => 50,
+			)
+		);
+
+		// Site layout
+		$wp_customize->add_setting(
+			self::SITE_LAYOUT_NAME,
+			array(
+				'default'    => self::SITE_LAYOUT_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $input ) use ( $layout_choices ) : string {
+					if ( array_key_exists( $input, $layout_choices ) ) {
+						return $input;
+					}
+					return '';
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::SITE_LAYOUT_NAME,
+			array(
+				'label'   => __( 'Site layout', 'wp-rig' ),
+				'section' => 'site_layout',
+				'type'    => 'radio',
+				'description' => __( 'Which layout do you want to use for your site?', 'wp-rig' ),
+				'choices' => $layout_choices,
+			)
+		);
 
 		//  Homepage layout
 		$wp_customize->add_setting(
