@@ -62,12 +62,20 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Determines which header, e.g. <h2>,
 	 * to use for post archives.
-	 * 
+	 *
 	 * Uses <h2> by default but allows for
 	 * the level to be changed by using
 	 * wp_rig()->set_entry_title_header().
+	 *
+	 * @var int
 	 */
 	private $default_entry_title_header = 2;
+
+	/**
+	 * Sets which header to use for post archives.
+	 *
+	 * @var int
+	 */
 	protected $entry_title_header = 2;
 
 	/**
@@ -117,8 +125,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Allows you to set/change the header level
 	 * before running a template.
-	 * 
-	 * @param int $header
+	 *
+	 * @param int $header The header level.
 	 * @return  void
 	 */
 	public function set_entry_title_header( int $header ) {
