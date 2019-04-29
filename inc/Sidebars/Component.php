@@ -35,8 +35,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const SITE_LAYOUT_DEFAULT_VALUE = 'sidebar_none';
 
 	const FRONT_PAGE_LAYOUT_NAME = 'front_page_layout';
-	const FRONT_PAGE_VALUE_USE_SITE = 'site';
 	const FRONT_PAGE_LAYOUT_DEFAULT_VALUE = 'site';
+	const FRONT_PAGE_LAYOUT_VALUE_USE_SITE = 'site';
 
 	private $site_layout_choices,
 		$front_page_layout_choices,
@@ -195,7 +195,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		}
 
 		// Get site layout setting.
-		if ( self::FRONT_PAGE_VALUE_USE_SITE == $layout ) {
+		if ( self::FRONT_PAGE_LAYOUT_VALUE_USE_SITE == $layout ) {
 			$layout = $this->get_site_layout();
 		}
 
