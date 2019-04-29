@@ -35,8 +35,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const SITE_LAYOUT_DEFAULT_VALUE = 'sidebar_none';
 
 	const FRONT_PAGE_LAYOUT_NAME = 'front_page_layout';
-	const FRONT_PAGE_DEFAULT_VALUE = 'site';
 	const FRONT_PAGE_VALUE_USE_SITE = 'site';
+	const FRONT_PAGE_LAYOUT_DEFAULT_VALUE = 'site';
 
 	private $site_layout_choices,
 		$front_page_layout_choices,
@@ -191,7 +191,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$layout = get_theme_mod( self::FRONT_PAGE_LAYOUT_NAME );
 		if ( ! array_key_exists( $layout, $this->get_front_page_layout_choices() ) ) {
-			$layout = self::FRONT_PAGE_DEFAULT_VALUE;
+			$layout = self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE;
 		}
 
 		// Get site layout setting.
@@ -365,7 +365,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			)
 		);
 
-		// Site layout
 		$wp_customize->add_setting(
 			self::SITE_LAYOUT_NAME,
 			array(
@@ -392,11 +391,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			)
 		);
 
-		//  Homepage layout
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_LAYOUT_NAME,
 			array(
-				'default'    => self::FRONT_PAGE_DEFAULT_VALUE,
+				'default'    => self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $input ) use ( $front_page_layout_choices ) : string {
