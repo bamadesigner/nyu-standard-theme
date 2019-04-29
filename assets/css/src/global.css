@@ -89,7 +89,7 @@
 }
 
 .has-post-thumbnail .site-main:before {
-	content: '';
+	content: "";
 	background: #fff;
 	position: absolute;
 	left: 0;
@@ -283,11 +283,6 @@ select {
 	color: inherit;
 }
 
-.main-navigation a:hover,
-.main-navigation a:focus {
-	text-decoration: underline;
-}
-
 .main-navigation ul {
 	display: block;
 	list-style: none;
@@ -300,20 +295,26 @@ select {
 	color: #000;
 }
 
+.secondary-navigation a {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+}
+
 .secondary-navigation ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-.secondary-navigation .menu a {
-	color: inherit;
-	text-decoration: none;
+.main-navigation a:hover,
+.main-navigation a:focus {
+	text-decoration: underline;
 }
 
-.secondary-navigation .menu a:hover,
-.secondary-navigation .menu a:focus,
-.secondary-navigation .menu a:active {
+.secondary-navigation a:hover,
+.secondary-navigation a:focus,
+.secondary-navigation a:active {
 	text-decoration: underline;
 }
 
@@ -537,6 +538,16 @@ select {
 		padding: 0.5em 0
 	}
 
+	.nav--toggle-sub ul ul li {
+		margin: 0;
+	}
+
+	.nav--toggle-sub ul ul ul {
+		top: 0;
+		left: 100%;
+		min-height: 100%;
+	}
+
 	.nav--toggle-sub .dropdown,
 	.nav--toggle-sub .dropdown-toggle {
 		display: block;
@@ -639,11 +650,6 @@ select {
 		font-size: 0.95em;
 	}
 
-	.secondary-navigation a {
-		display: block;
-		line-height: var(--nav-secondary-height);
-	}
-
 	.main-navigation > ul > li {
 		margin: 0 0 0 0.5em;
 	}
@@ -652,12 +658,47 @@ select {
 		border-color: #fff;
 	}
 
-	.secondary-navigation .menu li {
+	.main-navigation ul li a {
+		padding: 0.4em 0.5em;
+	}
+
+	.secondary-navigation > ul > li {
 		margin: 0 1.5rem 0 0;
 	}
 
-	.main-navigation ul li a {
-		padding: 0.4em 0.5em;
+	.secondary-navigation ul ul li a {
+		padding: 0.5em 0;
+	}
+
+	.secondary-navigation > ul > li > a {
+		display: block;
+		line-height: var(--nav-secondary-height);
+	}
+
+	.secondary-navigation > ul > li > ul {
+		z-index: 1;
+	}
+
+	.secondary-navigation > ul > li.menu-item-has-children {
+		position: relative;
+	}
+
+	.secondary-navigation > ul > li.menu-item-has-children:before {
+		display: none;
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 10px;
+		background: #6d6d6d;
+		z-index: 0;
+		box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+	}
+	.secondary-navigation > ul > li.menu-item-has-children:hover:before,
+	.secondary-navigation > ul > li.menu-item-has-children:focus:before,
+	.secondary-navigation > ul > li.menu-item-has-children:focus-within:before {
+		display: block;
 	}
 
 	.main-navigation ul ul a {
@@ -668,7 +709,7 @@ select {
 	.main-navigation ul ul li a {
 		width: 218px;
 		background: none;
-		padding: 0.5em 0 0.5em 0;
+		padding: 0.5em 0;
 		border-bottom: 2px solid #c0c0c0;
 	}
 
@@ -680,6 +721,31 @@ select {
 
 	.secondary-navigation li.menu-item--has-toggle a {
 		padding-right: 0.5em;
+	}
+
+	.secondary-navigation.nav--toggle-sub ul ul {
+		width: 180px;
+		padding: 0;
+	}
+
+	.secondary-navigation ul ul .dropdown-toggle {
+		right: 0.75em;
+	}
+
+	.secondary-navigation ul ul ul li {
+		transition: all 200ms ease-out;
+	}
+
+	.secondary-navigation ul ul ul li:hover,
+	.secondary-navigation ul ul ul li:focus,
+	.secondary-navigation.nav--toggle-sub ul ul li.menu-item-has-children:hover,
+	.secondary-navigation.nav--toggle-sub ul ul li.menu-item-has-children:focus,
+	.secondary-navigation.nav--toggle-sub ul ul li.menu-item-has-children:focus-within,
+	.secondary-navigation.secondary-navigation.nav--toggle-sub ul ul li.menu-item--has-toggle:hover,
+	.secondary-navigation.nav--toggle-sub ul ul li.menu-item--has-toggle:focus,
+	.secondary-navigation.nav--toggle-sub ul ul li.menu-item--has-toggle:focus-within,
+	.secondary-navigation.nav--toggle-sub ul ul li.menu-item--toggled-on {
+		border-left: 8px solid #6d6d6d;
 	}
 
 	body.has-nav-secondary {
@@ -695,12 +761,14 @@ select {
 		padding-left: 0.5em;
 		padding-right: 0;
 	}
+
+	.secondary-navigation ul ul li {
+		padding-left: 0.75em;
+		padding-right: 0;
+	}
 	/* stylelint-enable */
 
 	.main-navigation ul ul ul {
-		top: 0;
-		left: 100%;
-		min-height: 100%;
 		font-style: italic;
 	}
 
@@ -912,7 +980,7 @@ select {
 	}
 
 	.site-footer-menu li:not(:first-child):before {
-		content: '\007C';
+		content: "\007C";
 		padding: 0 0.4rem 0 0;
 	}
 
