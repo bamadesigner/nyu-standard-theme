@@ -17,10 +17,22 @@ use WP_Customize_Manager;
  */
 class Component implements Component_Interface, Templating_Component_Interface {
 
-	private $index = 0;
-
 	const FP_MAG_NAME = 'show_front_page_magazine';
 	const FP_MAG_DEFAULT = false;
+
+	/**
+	 * Holds the index for the magazine layout.
+	 *
+	 * @var int
+	 */
+	private $index = 0;
+
+	/**
+	 * Is true if set to use magazine layout.
+	 *
+	 * @var bool
+	 */
+	private $use_magazine_layout;
 
 	/**
 	 * Gets the unique identifier for the theme component.
@@ -36,6 +48,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function initialize() {
 		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
+		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
 		add_action( 'customize_register', array( $this, 'action_customize_register_magazine' ) );
 	}
 
@@ -59,7 +72,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool Whether we want to display the magazine layout.
 	 */
 	public function use_magazine_layout() : bool {
-		return (bool) get_theme_mod( self::FP_MAG_NAME );
+		if ( isset( $this->use_magazine_layout ) ) {
+			return $this->use_magazine_layout;
+		}
+		$this->use_magazine_layout = (bool) get_theme_mod( self::FP_MAG_NAME );
+		return $this->use_magazine_layout;
 	}
 
 	/**
@@ -67,6 +84,19 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function add_image_sizes() {
 		add_image_size( 'wp-rig-magazine', 600, 600, true );
+	}
+
+	/**
+	 * Adds a 'has-magazine' class to the array of body classes.
+	 *
+	 * @param array $classes Classes for the body element.
+	 * @return array Filtered body classes.
+	 */
+	public function filter_body_classes( array $classes ) : array {
+		if ( $this->use_magazine_layout() ) {
+			$classes[] = 'has-magazine';
+		}
+		return $classes;
 	}
 
 	/**
@@ -110,10 +140,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function display_magazine() {
 
-		$magazines = new WP_Query( array(
-			'post_type' => 'post',
-			'posts_per_page' => 4,
-		));
+		$magazines = new WP_Query(
+			array(
+				'post_type' => 'post',
+				'posts_per_page' => 4,
+			)
+		);
 
 		if ( ! $magazines->have_posts() ) {
 			return;
