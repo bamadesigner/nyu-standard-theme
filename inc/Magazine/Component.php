@@ -35,6 +35,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
+		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
 		add_action( 'customize_register', array( $this, 'action_customize_register_magazine' ) );
 	}
 
@@ -59,6 +60,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function use_magazine_layout() : bool {
 		return (bool) get_theme_mod( self::FP_MAG_NAME );
+	}
+
+	/**
+	 * Registers the image size for the magazine layout.
+	 */
+	public function add_image_sizes() {
+		add_image_size( 'wp-rig-magazine', 600, 600, true );
 	}
 
 	/**
