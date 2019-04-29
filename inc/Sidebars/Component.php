@@ -66,6 +66,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	private $front_page_layout_choices;
 
+	/**
+	 * Choices for the individual post layouts.
+	 *
+	 * @var array
+	 */
+	private $post_layout_choices;
+
 
 	/**
 	 * Holds the layout choices that have a sidebar.
@@ -162,6 +169,24 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'site'          => __( 'Use site layout', 'wp-rig' ),
 		);
 		return $this->front_page_layout_choices;
+	}
+
+	/**
+	 * Returns array of individual post layout choices.
+	 *
+	 * @return array
+	 */
+	public function get_post_layout_choices() : array {
+		if ( isset( $this->post_layout_choices ) ) {
+			return $this->post_layout_choices;
+		}
+		$this->post_layout_choices = array(
+			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
+			'sidebar_left'  => __( 'Primary Sidebar, Content', 'wp-rig' ),
+			'sidebar_none'  => __( 'Full width content', 'wp-rig' ),
+			'site'          => __( 'Use site layout', 'wp-rig' ),
+		);
+		return $this->post_layout_choices;
 	}
 
 	/**
