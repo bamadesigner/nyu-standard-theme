@@ -33,9 +33,9 @@ if ( $use_magazine ) {
 			?>
 			<h2><?php esc_html_e( 'Latest posts', 'wp-rig' ); ?></h2>
 			<?php
-		}
 
-		wp_rig()->set_entry_title_header( 3 );
+			wp_rig()->set_entry_title_header( 3 );
+		}
 
 		while ( have_posts() ) {
 			the_post();
