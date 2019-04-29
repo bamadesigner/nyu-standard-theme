@@ -18,3 +18,8 @@
 	src: url(../fonts/Gotham-Bold.otf) format('opentype');
 	font-weight: 600;
 }
+@font-face {
+	font-family: Gotham;
+	src: url(../fonts/Gotham-Light.otf) format('opentype');
+	font-weight: 300;
+}
