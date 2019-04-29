@@ -216,6 +216,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Returns true if post type is allowed to use the post layout.
+	 *
+	 * @param string $post_type The post type.
+	 * @return bool
+	 */
+	public function is_post_layout_post_type( string $post_type ) : bool {
+		return in_array( $post_type, $this->get_post_layout_post_types() );
+	}
+
+	/**
 	 * Returns true if layout is a choice with a sidebar.
 	 *
 	 * @param string - $layout The layout identifer.
