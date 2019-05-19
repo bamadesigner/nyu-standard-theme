@@ -44,6 +44,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const ARCHIVE_DISPLAY_NAME = 'archive_display';
 	const ARCHIVE_DISPLAY_DEFAULT_VALUE = 'excerpt';
 
+	const FRONT_PAGE_ARCHIVE_POST_DATE = 'front_page_archive_post_date';
+	const FRONT_PAGE_ARCHIVE_POST_DATE_DEFAULT_VALUE = true;
+
+	const FRONT_PAGE_ARCHIVE_POST_AUTHOR = 'front_page_archive_post_author';
+	const FRONT_PAGE_ARCHIVE_POST_AUTHOR_DEFAULT_VALUE = true;
+
 	const FRONT_PAGE_ARCHIVE_DISPLAY_NAME = 'front_page_archive_display';
 	const FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE = 'site';
 	const FRONT_PAGE_ARCHIVE_DISPLAY_VALUE_USE_SITE = 'site';
@@ -153,6 +159,20 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	private $front_page_archive_display_thumb;
 
 	/**
+	 * Holds the setting for front page archive display post author.
+	 *
+	 * @var string
+	 */
+	private $front_page_archive_display_post_author;
+
+	/**
+	 * Holds the setting for front page archive display post date.
+	 *
+	 * @var string
+	 */
+	private $front_page_archive_display_post_date;
+
+	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
@@ -189,6 +209,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'front_page_archive_display_excerpt' => array( $this, 'front_page_archive_display_excerpt' ),
 			'archive_display_thumbnail' => array( $this, 'archive_display_thumbnail' ),
 			'front_page_archive_display_thumbnail' => array( $this, 'front_page_archive_display_thumbnail' ),
+			'front_page_archive_display_post_author' => array( $this, 'front_page_archive_display_post_author' ),
+			'front_page_archive_display_post_date' => array( $this, 'front_page_archive_display_post_date' ),
 		);
 	}
 
@@ -571,6 +593,36 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Returns true if front page archive display is set to show the post author.
+	 *
+	 * @return bool
+	 */
+	public function front_page_archive_display_post_author() : bool {
+		if ( isset( $this->front_page_archive_display_post_author ) ) {
+			return $this->front_page_archive_display_post_author;
+		}
+
+		$this->front_page_archive_display_post_author = (bool) get_theme_mod( self::FRONT_PAGE_ARCHIVE_POST_AUTHOR, self::FRONT_PAGE_ARCHIVE_POST_AUTHOR_DEFAULT_VALUE );
+
+		return $this->front_page_archive_display_post_author;
+	}
+
+	/**
+	 * Returns true if front page archive display is set to show the post date.
+	 *
+	 * @return bool
+	 */
+	public function front_page_archive_display_post_date() : bool {
+		if ( isset( $this->front_page_archive_display_post_date ) ) {
+			return $this->front_page_archive_display_post_date;
+		}
+
+		$this->front_page_archive_display_post_date = (bool) get_theme_mod( self::FRONT_PAGE_ARCHIVE_POST_DATE, self::FRONT_PAGE_ARCHIVE_POST_DATE_DEFAULT_VALUE );
+
+		return $this->front_page_archive_display_post_date;
+	}
+
+	/**
 	 * Adds custom classes to indicate whether a sidebar is present to the array of body classes.
 	 *
 	 * @param array $classes Classes for the body element.
@@ -689,10 +741,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$wp_customize->add_control(
 			self::ARCHIVE_THUMB_NAME,
 			array(
-				'label'   => __( 'Display featured image thumbnails', 'wp-rig' ),
+				'label'   => __( 'Display featured image thumbnail', 'wp-rig' ),
 				'section' => self::ARCHIVE_SECTION,
 				'type'    => 'checkbox',
-				'description' => __( "If archive display is set to excerpt, do you want to display the post's featured image as a thumbnail in your post archives?", 'wp-rig' ),
+				'description' => __( "If archive display is set to \"Excerpt\", do you want to display the post's featured image as a thumbnail in your post archives?", 'wp-rig' ),
 			)
 		);
 
@@ -767,10 +819,54 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$wp_customize->add_control(
 			self::FRONT_PAGE_ARCHIVE_THUMB_NAME,
 			array(
-				'label'   => __( 'Display featured image thumbnails', 'wp-rig' ),
+				'label'   => __( 'Display featured image thumbnail', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
-				'description' => __( "If archive display is set to excerpt, do you want to display the post's featured image as a thumbnail in your homepage recent posts?", 'wp-rig' ),
+				'description' => __( "If your homepage display is set to \"Your latest posts\", and your archive display is set to \"Excerpt\", do you want to display the post's featured image as a thumbnail in your homepage recent posts?", 'wp-rig' ),
+			)
+		);
+
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_ARCHIVE_POST_AUTHOR,
+			array(
+				'default'    => self::FRONT_PAGE_ARCHIVE_POST_AUTHOR_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::FRONT_PAGE_ARCHIVE_POST_AUTHOR,
+			array(
+				'label'   => __( 'Display post author', 'wp-rig' ),
+				'section' => self::FRONT_PAGE_SECTION,
+				'type'    => 'checkbox',
+				'description' => __( "If your homepage display is set to \"Your latest posts\", do you want to the show post author?", 'wp-rig' ),
+			)
+		);
+
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_ARCHIVE_POST_DATE,
+			array(
+				'default'    => self::FRONT_PAGE_ARCHIVE_POST_DATE_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::FRONT_PAGE_ARCHIVE_POST_DATE,
+			array(
+				'label'   => __( 'Display post date', 'wp-rig' ),
+				'section' => self::FRONT_PAGE_SECTION,
+				'type'    => 'checkbox',
+				'description' => __( "If your homepage display is set to \"Your latest posts\", do you want to the show post date?", 'wp-rig' ),
 			)
 		);
 	}

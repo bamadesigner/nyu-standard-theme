@@ -7,12 +7,19 @@
 
 namespace WP_Rig\WP_Rig;
 
+$display_post_date = is_home() ? wp_rig()->front_page_archive_display_post_date() : true;
+$display_post_author = is_home() ? wp_rig()->front_page_archive_display_post_author() : true;
+
+if ( ! $display_post_date && ! $display_post_author ) {
+	return;
+}
+
 $post_type_obj = get_post_type_object( get_post_type() );
 
 $time_string = '';
 
 // Show date only when the post type is 'post' or has an archive.
-if ( 'post' === $post_type_obj->name || $post_type_obj->has_archive ) {
+if ( $display_post_date && 'post' === $post_type_obj->name || $post_type_obj->has_archive ) {
 	$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
 	if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
 		$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
@@ -30,7 +37,7 @@ if ( 'post' === $post_type_obj->name || $post_type_obj->has_archive ) {
 $author_string = '';
 
 // Show author only if the post type supports it.
-if ( post_type_supports( $post_type_obj->name, 'author' ) ) {
+if ( $display_post_author && post_type_supports( $post_type_obj->name, 'author' ) ) {
 
 	$author_string = sprintf(
 		'<span class="author vcard"><a class="url fn n" href="%1$s">%2$s</a></span>',
