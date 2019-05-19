@@ -3,7 +3,7 @@
 --------------------------------------------------------------*/
 
 .primary-sidebar {
-	padding: 1rem 0;
+	padding: 0;
 	font-family: var(--highlight-font-family);
 	border-top: var(--highlight-border-width) var(--highlight-border-style) var(--nyu-primary);
 }
@@ -22,19 +22,18 @@
 	margin-bottom: 1em;
 }
 
-.primary-sidebar .widget:first-child {
-	margin-top: 2.5em;
-}
-
 @media (--sidebar-query) {
 
 	.primary-sidebar {
-		padding: 0;
 		border: 0;
 	}
 
 	.primary-sidebar .widget {
 		padding-left: 0;
 		padding-right: 0;
+	}
+
+	.primary-sidebar .widget:first-child {
+		margin-top: 2.5em;
 	}
 }
