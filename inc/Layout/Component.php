@@ -48,6 +48,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE = 'site';
 	const FRONT_PAGE_ARCHIVE_DISPLAY_VALUE_USE_SITE = 'site';
 
+	const ARCHIVE_THUMB_NAME = 'archive_thumb';
+	const ARCHIVE_THUMB_DEFAULT_VALUE = true;
+
+	const FRONT_PAGE_ARCHIVE_THUMB_NAME = 'front_page_archive_thumb';
+	const FRONT_PAGE_ARCHIVE_THUMB_DEFAULT_VALUE = true;
+
 	/**
 	 * Holds the selected identifier for the global site layout.
 	 *
@@ -133,6 +139,20 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	private $front_page_archive_display_choices;
 
 	/**
+	 * Holds the setting for archive display thumbnail.
+	 *
+	 * @var string
+	 */
+	private $archive_display_thumb;
+
+	/**
+	 * Holds the setting for front page archive display thumbnail.
+	 *
+	 * @var string
+	 */
+	private $front_page_archive_display_thumb;
+
+	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
@@ -167,6 +187,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'manage_layout'           => array( $this, 'manage_layout' ),
 			'archive_display_excerpt' => array( $this, 'archive_display_excerpt' ),
 			'front_page_archive_display_excerpt' => array( $this, 'front_page_archive_display_excerpt' ),
+			'archive_display_thumbnail' => array( $this, 'archive_display_thumbnail' ),
+			'front_page_archive_display_thumbnail' => array( $this, 'front_page_archive_display_thumbnail' ),
 		);
 	}
 
@@ -509,6 +531,36 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Returns true if archive display is set to show the thumbnail.
+	 *
+	 * @return bool
+	 */
+	public function archive_display_thumbnail() : bool {
+		if ( isset( $this->archive_display_thumb ) ) {
+			return $this->archive_display_thumb;
+		}
+
+		$this->archive_display_thumb = (bool) get_theme_mod( self::ARCHIVE_THUMB_NAME, self::ARCHIVE_THUMB_DEFAULT_VALUE );
+
+		return $this->archive_display_thumb;
+	}
+
+	/**
+	 * Returns true if front page archive display is set to show the thumbnail.
+	 *
+	 * @return bool
+	 */
+	public function front_page_archive_display_thumbnail() : bool {
+		if ( isset( $this->front_page_archive_display_thumb ) ) {
+			return $this->front_page_archive_display_thumb;
+		}
+
+		$this->front_page_archive_display_thumb = (bool) get_theme_mod( self::FRONT_PAGE_ARCHIVE_THUMB_NAME, self::FRONT_PAGE_ARCHIVE_THUMB_DEFAULT_VALUE );
+
+		return $this->front_page_archive_display_thumb;
+	}
+
+	/**
 	 * Adds custom classes to indicate whether a sidebar is present to the array of body classes.
 	 *
 	 * @param array $classes Classes for the body element.
@@ -594,6 +646,28 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'choices'     => $archive_display_choices,
 		) );
 
+		$wp_customize->add_setting(
+			self::ARCHIVE_THUMB_NAME,
+			array(
+				'default'    => self::ARCHIVE_THUMB_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::ARCHIVE_THUMB_NAME,
+			array(
+				'label'   => __( 'Display featured image thumbnails', 'wp-rig' ),
+				'section' => self::ARCHIVE_SECTION,
+				'type'    => 'checkbox',
+				'description' => __( "Do you want to display the post's featured image as a thumbnail in your post archives?", 'wp-rig' ),
+			)
+		);
+
 		$wp_customize->add_setting( self::FRONT_PAGE_LAYOUT_NAME, array(
 				'default'           => self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
@@ -637,6 +711,28 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'description' => __( 'If your homepage display is set to "Your latest posts", how do you want to display the content?', 'wp-rig' ),
 			'choices'     => $front_page_archive_display_choices,
 		) );
+
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_ARCHIVE_THUMB_NAME,
+			array(
+				'default'    => self::FRONT_PAGE_ARCHIVE_THUMB_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::FRONT_PAGE_ARCHIVE_THUMB_NAME,
+			array(
+				'label'   => __( 'Display featured image thumbnails', 'wp-rig' ),
+				'section' => self::FRONT_PAGE_SECTION,
+				'type'    => 'checkbox',
+				'description' => __( "Do you want to display the post's featured image as a thumbnail in your homepage recent posts?", 'wp-rig' ),
+			)
+		);
 	}
 
 	/**
