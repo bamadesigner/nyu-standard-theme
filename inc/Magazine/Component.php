@@ -75,7 +75,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->use_magazine_layout ) ) {
 			return $this->use_magazine_layout;
 		}
-		$this->use_magazine_layout = (bool) get_theme_mod( self::FP_MAG_NAME );
+		$this->use_magazine_layout = (bool) get_theme_mod( self::FP_MAG_NAME, self::FP_MAG_DEFAULT );
 		return $this->use_magazine_layout;
 	}
 

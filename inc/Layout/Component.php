@@ -358,10 +358,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->site_layout ) ) {
 			return $this->site_layout;
 		}
-		$layout = get_theme_mod( self::SITE_LAYOUT_NAME );
+
+		$layout = get_theme_mod( self::SITE_LAYOUT_NAME, self::SITE_LAYOUT_DEFAULT_VALUE );
+
 		if ( ! array_key_exists( $layout, $this->get_site_layout_choices() ) ) {
 			$layout = self::SITE_LAYOUT_DEFAULT_VALUE;
 		}
+
 		$this->site_layout = $layout;
 
 		return $this->site_layout;
@@ -377,7 +380,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return $this->front_page_layout;
 		}
 
-		$layout = get_theme_mod( self::FRONT_PAGE_LAYOUT_NAME );
+		$layout = get_theme_mod( self::FRONT_PAGE_LAYOUT_NAME, self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE );
+
 		if ( ! array_key_exists( $layout, $this->get_front_page_layout_choices() ) ) {
 			$layout = self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE;
 		}
@@ -479,10 +483,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->archive_display ) ) {
 			return $this->archive_display;
 		}
-		$display = get_theme_mod( self::ARCHIVE_DISPLAY_NAME );
+		$display = get_theme_mod( self::ARCHIVE_DISPLAY_NAME, self::ARCHIVE_DISPLAY_DEFAULT_VALUE );
+
 		if ( ! array_key_exists( $display, $this->get_archive_display_choices() ) ) {
 			$display = self::ARCHIVE_DISPLAY_DEFAULT_VALUE;
 		}
+
 		$this->archive_display = $display;
 
 		return $this->archive_display;
@@ -497,7 +503,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->front_page_archive_display ) ) {
 			return $this->front_page_archive_display;
 		}
-		$display = get_theme_mod( self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME );
+
+		$display = get_theme_mod( self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME, self::FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE );
+
 		if ( ! array_key_exists( $display, $this->get_front_page_archive_display_choices() ) ) {
 			$display = self::FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE;
 		}
