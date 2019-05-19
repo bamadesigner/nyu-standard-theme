@@ -221,6 +221,9 @@ function toggleSubMenu( parentMenuItem, forceToggle ) {
 		subMenu.classList.add( 'toggle-show' );
 		toggleButton.setAttribute( 'aria-label', wpRigScreenReaderText.collapse );
 
+		// Give focus to first element.
+		subMenu.querySelector( '* > li > a' ).focus();
+
 	}
 }
 
