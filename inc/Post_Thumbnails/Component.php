@@ -38,6 +38,17 @@ class Component implements Component_Interface {
 	 * Adds support for post thumbnails.
 	 */
 	public function action_add_post_thumbnail_support() {
+
 		add_theme_support( 'post-thumbnails' );
+
+		/*
+		 * Set post thumbnail size.
+		 * Get the default thumbnail settings.
+		 */
+		$thumb_width  = intval( get_option( 'thumbnail_size_w' ) );
+		$thumb_height = intval( get_option( 'thumbnail_size_h' ) );
+
+		set_post_thumbnail_size( $thumb_width, $thumb_height, true );
+
 	}
 }
