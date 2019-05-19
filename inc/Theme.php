@@ -143,6 +143,7 @@ class Theme {
 			new Lazyload\Component(),
 			new Comments\Component(),
 			new Nav_Menus\Component(),
+			new Layout\Component(),
 			new Sidebars\Component(),
 			new Custom_Logo\Component(),
 			new Post_Thumbnails\Component(),
