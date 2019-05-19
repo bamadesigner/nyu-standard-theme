@@ -21,6 +21,7 @@ use WP_Customize_Manager;
 class Component implements Component_Interface, Templating_Component_Interface {
 
 	const SITE_LAYOUT_SECTION = 'site_layout';
+
 	const SITE_LAYOUT_NAME = 'site_layout';
 	const SITE_LAYOUT_DEFAULT_VALUE = 'sidebar_none';
 
@@ -37,6 +38,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const POST_LAYOUT_MB_NAME = 'wp_rig_post_layout';
 	const POST_LAYOUT_MB_NONCE = 'custom_nonce';
 	const POST_LAYOUT_MB_NONCE_ACTION = 'custom_nonce_action';
+
+	const ARCHIVE_SECTION = 'archive_settings';
+
+	const ARCHIVE_DISPLAY_NAME = 'archive_display';
+	const ARCHIVE_DISPLAY_DEFAULT_VALUE = 'excerpt';
+
+	const FRONT_PAGE_ARCHIVE_DISPLAY_NAME = 'front_page_archive_display';
+	const FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE = 'site';
+	const FRONT_PAGE_ARCHIVE_DISPLAY_VALUE_USE_SITE = 'site';
 
 	/**
 	 * Holds the selected identifier for the global site layout.
@@ -95,6 +105,34 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	private $current_layout;
 
 	/**
+	 * Holds the selected identifier for the archive display.
+	 *
+	 * @var string
+	 */
+	private $archive_display;
+
+	/**
+	 * Choices for the archive display.
+	 *
+	 * @var array
+	 */
+	private $archive_display_choices;
+
+	/**
+	 * Holds the selected identifier for the front page archive display.
+	 *
+	 * @var string
+	 */
+	private $front_page_archive_display;
+
+	/**
+	 * Choices for the front page archive display.
+	 *
+	 * @var array
+	 */
+	private $front_page_archive_display_choices;
+
+	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
@@ -126,7 +164,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function template_tags() : array {
 		return array(
-			'manage_layout' => array( $this, 'manage_layout' ),
+			'manage_layout'           => array( $this, 'manage_layout' ),
+			'archive_display_excerpt' => array( $this, 'archive_display_excerpt' ),
+			'front_page_archive_display_excerpt' => array( $this, 'front_page_archive_display_excerpt' ),
 		);
 	}
 
@@ -202,6 +242,41 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		) );
 
 		return $this->post_layout_post_types;
+	}
+
+	/**
+	 * Return array of archive display choices.
+	 *
+	 * @return array
+	 */
+	public function get_archive_display_choices() : array {
+		if ( isset( $this->archive_display_choices ) ) {
+			return $this->archive_display_choices;
+		}
+		$this->archive_display_choices = array(
+			'excerpt' => __( 'Excerpt', 'wp-rig' ),
+			'full'    => __( 'Full text', 'wp-rig' ),
+		);
+
+		return $this->archive_display_choices;
+	}
+
+	/**
+	 * Return array of front page archive display choices.
+	 *
+	 * @return array
+	 */
+	public function get_front_page_archive_display_choices() : array {
+		if ( isset( $this->front_page_archive_display_choices ) ) {
+			return $this->front_page_archive_display_choices;
+		}
+		$this->front_page_archive_display_choices = array(
+			'excerpt' => __( 'Excerpt', 'wp-rig' ),
+			'full'    => __( 'Full text', 'wp-rig' ),
+			'site'    => __( 'Use site archive setting', 'wp-rig' ),
+		);
+
+		return $this->front_page_archive_display_choices;
 	}
 
 	/**
@@ -374,6 +449,66 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Returns string identifier for site layout.
+	 *
+	 * @return string
+	 */
+	public function get_archive_display() : string {
+		if ( isset( $this->archive_display ) ) {
+			return $this->archive_display;
+		}
+		$display = get_theme_mod( self::ARCHIVE_DISPLAY_NAME );
+		if ( ! array_key_exists( $display, $this->get_archive_display_choices() ) ) {
+			$display = self::ARCHIVE_DISPLAY_DEFAULT_VALUE;
+		}
+		$this->archive_display = $display;
+
+		return $this->archive_display;
+	}
+
+	/**
+	 * Returns string identifier for site layout.
+	 *
+	 * @return string
+	 */
+	public function get_front_page_archive_display() : string {
+		if ( isset( $this->front_page_archive_display ) ) {
+			return $this->front_page_archive_display;
+		}
+		$display = get_theme_mod( self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME );
+		if ( ! array_key_exists( $display, $this->get_front_page_archive_display_choices() ) ) {
+			$display = self::FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE;
+		}
+
+		// Get archive display setting.
+		if ( self::FRONT_PAGE_ARCHIVE_DISPLAY_VALUE_USE_SITE == $display ) {
+			$display = $this->get_archive_display();
+		}
+
+		$this->front_page_archive_display = $display;
+
+		return $this->front_page_archive_display;
+	}
+
+	/**
+	 * Returns true if archive display is set to "excerpt".
+	 *
+	 * @return bool
+	 */
+	public function archive_display_excerpt() : bool {
+		return 'excerpt' === $this->get_archive_display();
+	}
+
+	/**
+	 * Returns true if front page archive display is set to "excerpt".
+	 *
+	 * @return bool
+	 */
+	public function front_page_archive_display_excerpt() : bool {
+		return 'excerpt' === $this->get_front_page_archive_display();
+	}
+
+	/**
 	 * Adds custom classes to indicate whether a sidebar is present to the array of body classes.
 	 *
 	 * @param array $classes Classes for the body element.
@@ -431,6 +566,34 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'choices'     => $site_layout_choices,
 			) );
 
+		$archive_display_choices = $this->get_archive_display_choices();
+
+		$wp_customize->add_section( self::ARCHIVE_SECTION, array(
+				'title'    => __( 'Archive Settings', 'wp-rig' ),
+				'priority' => 110,
+			) );
+
+		$wp_customize->add_setting( self::ARCHIVE_DISPLAY_NAME, array(
+				'default'           => self::ARCHIVE_DISPLAY_DEFAULT_VALUE,
+				'capability'        => 'manage_options',
+				'type'              => 'theme_mod',
+				'sanitize_callback' => function ( $input ) use ( $archive_display_choices ) : string {
+					if ( array_key_exists( $input, $archive_display_choices ) ) {
+						return $input;
+					}
+
+					return '';
+				},
+			) );
+
+		$wp_customize->add_control( self::ARCHIVE_DISPLAY_NAME, array(
+			'label'       => __( 'Archive display', 'wp-rig' ),
+			'section'     => self::ARCHIVE_SECTION,
+			'type'        => 'radio',
+			'description' => __( 'How do you want to display content in your post archives?', 'wp-rig' ),
+			'choices'     => $archive_display_choices,
+		) );
+
 		$wp_customize->add_setting( self::FRONT_PAGE_LAYOUT_NAME, array(
 				'default'           => self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
@@ -451,6 +614,29 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'description' => __( 'Which layout do you want to use on your homepage?', 'wp-rig' ),
 				'choices'     => $front_page_layout_choices,
 			) );
+
+		$front_page_archive_display_choices = $this->get_front_page_archive_display_choices();
+
+		$wp_customize->add_setting( self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME, array(
+			'default'           => self::FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE,
+			'capability'        => 'manage_options',
+			'type'              => 'theme_mod',
+			'sanitize_callback' => function ( $input ) use ( $front_page_archive_display_choices ) : string {
+				if ( array_key_exists( $input, $front_page_archive_display_choices ) ) {
+					return $input;
+				}
+
+				return '';
+			},
+		) );
+
+		$wp_customize->add_control( self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME, array(
+			'label'       => __( 'Archive display', 'wp-rig' ),
+			'section'     => self::FRONT_PAGE_SECTION,
+			'type'        => 'radio',
+			'description' => __( 'If your homepage display is set to "Your latest posts", how do you want to display the content?', 'wp-rig' ),
+			'choices'     => $front_page_archive_display_choices,
+		) );
 	}
 
 	/**

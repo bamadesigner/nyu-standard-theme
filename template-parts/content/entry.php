@@ -15,6 +15,20 @@ namespace WP_Rig\WP_Rig;
 
 	if ( is_search() ) {
 		get_template_part( 'template-parts/content/entry_summary', get_post_type() );
+	} elseif ( is_front_page() ) {
+
+		if ( wp_rig()->front_page_archive_display_excerpt() ) {
+			get_template_part( 'template-parts/content/entry_summary', get_post_type() );
+		} else {
+			get_template_part( 'template-parts/content/entry_content', get_post_type() );
+		}
+	} elseif ( is_archive() ) {
+
+		if ( wp_rig()->archive_display_excerpt() ) {
+			get_template_part( 'template-parts/content/entry_summary', get_post_type() );
+		} else {
+			get_template_part( 'template-parts/content/entry_content', get_post_type() );
+		}
 	} else {
 		get_template_part( 'template-parts/content/entry_content', get_post_type() );
 	}
