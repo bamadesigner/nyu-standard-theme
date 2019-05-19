@@ -18,12 +18,12 @@ namespace WP_Rig\WP_Rig;
 
 	if ( is_home() ) {
 
-		if ( wp_rig()->front_page_archive_display_thumbnail() ) {
+		if ( wp_rig()->front_page_archive_display_excerpt() && wp_rig()->front_page_archive_display_thumbnail() ) {
 			get_template_part( 'template-parts/content/entry_thumbnail', get_post_type() );
 		}
 	} elseif ( is_archive() ) {
 
-		if ( wp_rig()->archive_display_thumbnail() ) {
+		if ( wp_rig()->archive_display_excerpt() && wp_rig()->archive_display_thumbnail() ) {
 			get_template_part( 'template-parts/content/entry_thumbnail', get_post_type() );
 		}
 	}

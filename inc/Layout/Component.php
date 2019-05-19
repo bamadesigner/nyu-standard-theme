@@ -692,7 +692,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'label'   => __( 'Display featured image thumbnails', 'wp-rig' ),
 				'section' => self::ARCHIVE_SECTION,
 				'type'    => 'checkbox',
-				'description' => __( "Do you want to display the post's featured image as a thumbnail in your post archives?", 'wp-rig' ),
+				'description' => __( "If archive display is set to excerpt, do you want to display the post's featured image as a thumbnail in your post archives?", 'wp-rig' ),
 			)
 		);
 
@@ -770,7 +770,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'label'   => __( 'Display featured image thumbnails', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
-				'description' => __( "Do you want to display the post's featured image as a thumbnail in your homepage recent posts?", 'wp-rig' ),
+				'description' => __( "If archive display is set to excerpt, do you want to display the post's featured image as a thumbnail in your homepage recent posts?", 'wp-rig' ),
 			)
 		);
 	}
