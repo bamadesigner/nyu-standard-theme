@@ -237,25 +237,45 @@ function getDropdownButton() {
 }
 
 /**
- * Returns true if element is the
- * first focusable element in the container.
+ * Returns first focusable element inside a container.
  */
-function isfirstFocusableElement( container, element, focusSelector ) {
+function getFirstFocusableElement( container, focusSelector ) {
 	const focusableElements = container.querySelectorAll( focusSelector );
 	if ( 0 < focusableElements.length ) {
-		return element === focusableElements[0];
+		return focusableElements[0];
+	}
+	return null;
+}
+
+/**
+ * Returns last focusable element inside a container.
+ */
+function getLastFocusableElement( container, focusSelector ) {
+	const focusableElements = container.querySelectorAll( focusSelector );
+	if ( 0 < focusableElements.length ) {
+		return focusableElements[focusableElements.length - 1];
+	}
+	return null;
+}
+
+/**
+ * Returns true if element is the first focusable element in the container.
+ */
+function isfirstFocusableElement( container, element, focusSelector ) {
+	const firstFocusableElement = getFirstFocusableElement( container, focusSelector );
+	if ( firstFocusableElement ) {
+		return element === firstFocusableElement;
 	}
 	return false;
 }
 
 /**
- * Returns true if element is the
- * last focusable element in the container.
+ * Returns true if element is the last focusable element in the container.
  */
 function islastFocusableElement( container, element, focusSelector ) {
-	const focusableElements = container.querySelectorAll( focusSelector );
-	if ( 0 < focusableElements.length ) {
-		return element === focusableElements[focusableElements.length - 1];
+	const lastFocusableElement = getLastFocusableElement( container, focusSelector );
+	if ( lastFocusableElement ) {
+		return element === lastFocusableElement;
 	}
 	return false;
 }
