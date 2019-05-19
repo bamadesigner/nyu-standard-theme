@@ -258,10 +258,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return $this->post_layout_post_types;
 		}
 
-		$this->post_layout_post_types = get_post_types( array(
-			'show_ui' => true,
-			'public'  => true,
-		) );
+		$this->post_layout_post_types = get_post_types(
+			array(
+				'show_ui' => true,
+				'public'  => true,
+			)
+		);
 
 		return $this->post_layout_post_types;
 	}
@@ -600,12 +602,17 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$site_layout_choices       = $this->get_site_layout_choices();
 		$front_page_layout_choices = $this->get_front_page_layout_choices();
 
-		$wp_customize->add_section( self::SITE_LAYOUT_SECTION, array(
+		$wp_customize->add_section(
+			self::SITE_LAYOUT_SECTION,
+			array(
 				'title'    => __( 'Site Layout', 'wp-rig' ),
 				'priority' => 50,
-			) );
+			)
+		);
 
-		$wp_customize->add_setting( self::SITE_LAYOUT_NAME, array(
+		$wp_customize->add_setting(
+			self::SITE_LAYOUT_NAME,
+			array(
 				'default'           => self::SITE_LAYOUT_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
@@ -616,24 +623,33 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					return '';
 				},
-			) );
+			)
+		);
 
-		$wp_customize->add_control( self::SITE_LAYOUT_NAME, array(
+		$wp_customize->add_control(
+			self::SITE_LAYOUT_NAME,
+			array(
 				'label'       => __( 'Site layout', 'wp-rig' ),
 				'section'     => self::SITE_LAYOUT_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'Which layout do you want to use for your site?', 'wp-rig' ),
 				'choices'     => $site_layout_choices,
-			) );
+			)
+		);
 
 		$archive_display_choices = $this->get_archive_display_choices();
 
-		$wp_customize->add_section( self::ARCHIVE_SECTION, array(
+		$wp_customize->add_section(
+			self::ARCHIVE_SECTION,
+			array(
 				'title'    => __( 'Archive Settings', 'wp-rig' ),
 				'priority' => 110,
-			) );
+			)
+		);
 
-		$wp_customize->add_setting( self::ARCHIVE_DISPLAY_NAME, array(
+		$wp_customize->add_setting(
+			self::ARCHIVE_DISPLAY_NAME,
+			array(
 				'default'           => self::ARCHIVE_DISPLAY_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
@@ -644,15 +660,19 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					return '';
 				},
-			) );
+			)
+		);
 
-		$wp_customize->add_control( self::ARCHIVE_DISPLAY_NAME, array(
-			'label'       => __( 'Archive display', 'wp-rig' ),
-			'section'     => self::ARCHIVE_SECTION,
-			'type'        => 'radio',
-			'description' => __( 'How do you want to display content in your post archives?', 'wp-rig' ),
-			'choices'     => $archive_display_choices,
-		) );
+		$wp_customize->add_control(
+			self::ARCHIVE_DISPLAY_NAME,
+			array(
+				'label'       => __( 'Archive display', 'wp-rig' ),
+				'section'     => self::ARCHIVE_SECTION,
+				'type'        => 'radio',
+				'description' => __( 'How do you want to display content in your post archives?', 'wp-rig' ),
+				'choices'     => $archive_display_choices,
+			)
+		);
 
 		$wp_customize->add_setting(
 			self::ARCHIVE_THUMB_NAME,
@@ -676,7 +696,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			)
 		);
 
-		$wp_customize->add_setting( self::FRONT_PAGE_LAYOUT_NAME, array(
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_LAYOUT_NAME,
+			array(
 				'default'           => self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
@@ -687,38 +709,48 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					return '';
 				},
-			) );
+			)
+		);
 
-		$wp_customize->add_control( self::FRONT_PAGE_LAYOUT_NAME, array(
+		$wp_customize->add_control(
+			self::FRONT_PAGE_LAYOUT_NAME,
+			array(
 				'label'       => __( 'Homepage layout', 'wp-rig' ),
 				'section'     => self::FRONT_PAGE_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'Which layout do you want to use on your homepage?', 'wp-rig' ),
 				'choices'     => $front_page_layout_choices,
-			) );
+			)
+		);
 
 		$front_page_archive_display_choices = $this->get_front_page_archive_display_choices();
 
-		$wp_customize->add_setting( self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME, array(
-			'default'           => self::FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE,
-			'capability'        => 'manage_options',
-			'type'              => 'theme_mod',
-			'sanitize_callback' => function ( $input ) use ( $front_page_archive_display_choices ) : string {
-				if ( array_key_exists( $input, $front_page_archive_display_choices ) ) {
-					return $input;
-				}
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME,
+			array(
+				'default'           => self::FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE,
+				'capability'        => 'manage_options',
+				'type'              => 'theme_mod',
+				'sanitize_callback' => function ( $input ) use ( $front_page_archive_display_choices ) : string {
+					if ( array_key_exists( $input, $front_page_archive_display_choices ) ) {
+						return $input;
+					}
 
-				return '';
-			},
-		) );
+					return '';
+				},
+			)
+		);
 
-		$wp_customize->add_control( self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME, array(
-			'label'       => __( 'Archive display', 'wp-rig' ),
-			'section'     => self::FRONT_PAGE_SECTION,
-			'type'        => 'radio',
-			'description' => __( 'If your homepage display is set to "Your latest posts", how do you want to display the content?', 'wp-rig' ),
-			'choices'     => $front_page_archive_display_choices,
-		) );
+		$wp_customize->add_control(
+			self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME,
+			array(
+				'label'       => __( 'Archive display', 'wp-rig' ),
+				'section'     => self::FRONT_PAGE_SECTION,
+				'type'        => 'radio',
+				'description' => __( 'If your homepage display is set to "Your latest posts", how do you want to display the content?', 'wp-rig' ),
+				'choices'     => $front_page_archive_display_choices,
+			)
+		);
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_ARCHIVE_THUMB_NAME,
@@ -746,7 +778,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Adds the meta boxes for our theme options.
 	 *
-	 * @param string $post_type The post type.
+	 * @param string  $post_type The post type.
 	 * @param WP_Post $post The post object.
 	 */
 	public function add_meta_boxes( string $post_type, WP_Post $post ) {
@@ -761,19 +793,27 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return;
 		}
 
-		add_meta_box( 'wp-rig-layout', __( 'Theme Options', 'wp-rig' ), array(
+		add_meta_box(
+			'wp-rig-layout',
+			__( 'Theme Options', 'wp-rig' ),
+			array(
 				$this,
-				'print_meta_box_theme_options'
-			), $post_type, 'side', 'default', array(
+				'print_meta_box_theme_options',
+			),
+			$post_type,
+			'side',
+			'default',
+			array(
 				'post_layout_choices' => $post_layout_choices,
-			) );
+			)
+		);
 	}
 
 	/**
 	 * Prints the meta box for our theme options.
 	 *
 	 * @param WP_Post $post The post object.
-	 * @param array $metabox The meta box information.
+	 * @param array   $metabox The meta box information.
 	 */
 	public function print_meta_box_theme_options( WP_Post $post, array $metabox ) {
 		if ( ! empty( $metabox['args'] ) ) {
@@ -815,7 +855,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @TODO:
 	 * - Check if user has permissions to save data?
 	 *
-	 * @param int $post_id The post ID.
+	 * @param int     $post_id The post ID.
 	 * @param WP_Post $post The post object.
 	 */
 	public function save_meta_box_theme_options( $post_id, $post ) {
