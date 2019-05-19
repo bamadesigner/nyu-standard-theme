@@ -6,7 +6,8 @@
  */
 
 const KEYMAP = {
-		TAB: 9
+		TAB: 9,
+		ESC: 27
 	};
 
 if ( 'loading' === document.readyState ) {
@@ -126,6 +127,13 @@ function initEachNavToggleSubmenu( nav ) {
 						toggleSubMenu( this.parentNode, false );
 					}
 				}
+			} else if ( KEYMAP.ESC === event.keyCode ) {
+
+				toggleSubMenu( this.parentNode, false );
+
+				// Give focus to first element.
+				this.parentNode.querySelector( '* > a' ).focus();
+
 			}
 		});
 
