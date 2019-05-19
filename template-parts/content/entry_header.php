@@ -16,7 +16,7 @@ namespace WP_Rig\WP_Rig;
 
 	get_template_part( 'template-parts/content/entry_meta', get_post_type() );
 
-	if ( is_front_page() ) {
+	if ( is_home() ) {
 
 		if ( wp_rig()->front_page_archive_display_thumbnail() ) {
 			get_template_part( 'template-parts/content/entry_thumbnail', get_post_type() );

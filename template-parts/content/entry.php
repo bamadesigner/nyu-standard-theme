@@ -15,7 +15,7 @@ namespace WP_Rig\WP_Rig;
 
 	if ( is_search() ) {
 		get_template_part( 'template-parts/content/entry_summary', get_post_type() );
-	} elseif ( is_front_page() ) {
+	} elseif ( is_home() ) {
 
 		if ( wp_rig()->front_page_archive_display_excerpt() ) {
 			get_template_part( 'template-parts/content/entry_summary', get_post_type() );
