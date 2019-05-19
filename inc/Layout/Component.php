@@ -106,8 +106,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function initialize() {
 
-		$this->layout_choices_with_sidebar = array( 'sidebar_right', 'sidebar_left' );
-
 		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
@@ -216,6 +214,21 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Returns list of layout choices that have a sidebar.
+	 *
+	 * @return array
+	 */
+	private function get_layout_choices_with_sidebar() : array {
+		if ( isset( $this->layout_choices_with_sidebar ) ) {
+			return $this->layout_choices_with_sidebar;
+		}
+
+		$this->layout_choices_with_sidebar = array( 'sidebar_right', 'sidebar_left' );
+
+		return $this->layout_choices_with_sidebar;
+	}
+
+	/**
 	 * Returns true if layout is a choice with a sidebar.
 	 *
 	 * @param string $layout The layout identifer.
@@ -223,7 +236,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool
 	 */
 	private function layout_has_sidebar( string $layout ) : bool {
-		return in_array( $layout, $this->layout_choices_with_sidebar );
+		return in_array( $layout, $this->get_layout_choices_with_sidebar() );
 	}
 
 	/**
