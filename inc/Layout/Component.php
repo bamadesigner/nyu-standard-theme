@@ -24,6 +24,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const SITE_LAYOUT_NAME = 'site_layout';
 	const SITE_LAYOUT_DEFAULT_VALUE = 'sidebar_none';
 
+	const FRONT_PAGE_SECTION = 'static_front_page';
+
 	const FRONT_PAGE_LAYOUT_NAME = 'front_page_layout';
 	const FRONT_PAGE_LAYOUT_DEFAULT_VALUE = 'site';
 	const FRONT_PAGE_LAYOUT_VALUE_USE_SITE = 'site';
@@ -444,7 +446,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$wp_customize->add_control( self::FRONT_PAGE_LAYOUT_NAME, array(
 				'label'       => __( 'Homepage layout', 'wp-rig' ),
-				'section'     => 'static_front_page',
+				'section'     => self::FRONT_PAGE_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'Which layout do you want to use on your homepage?', 'wp-rig' ),
 				'choices'     => $front_page_layout_choices,
