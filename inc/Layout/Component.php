@@ -20,6 +20,7 @@ use WP_Customize_Manager;
  */
 class Component implements Component_Interface, Templating_Component_Interface {
 
+	const SITE_LAYOUT_SECTION = 'site_layout';
 	const SITE_LAYOUT_NAME = 'site_layout';
 	const SITE_LAYOUT_DEFAULT_VALUE = 'sidebar_none';
 
@@ -389,7 +390,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$site_layout_choices       = $this->get_site_layout_choices();
 		$front_page_layout_choices = $this->get_front_page_layout_choices();
 
-		$wp_customize->add_section( 'site_layout', array(
+		$wp_customize->add_section( self::SITE_LAYOUT_SECTION, array(
 				'title'    => __( 'Site Layout', 'wp-rig' ),
 				'priority' => 50,
 			) );
@@ -409,7 +410,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$wp_customize->add_control( self::SITE_LAYOUT_NAME, array(
 				'label'       => __( 'Site layout', 'wp-rig' ),
-				'section'     => 'site_layout',
+				'section'     => self::SITE_LAYOUT_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'Which layout do you want to use for your site?', 'wp-rig' ),
 				'choices'     => $site_layout_choices,
