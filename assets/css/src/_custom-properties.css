@@ -55,6 +55,9 @@
 	--grid-side-margin-small: 2rem;
 	--grid-gap: 3rem;
 
+	--nav-toggle-width: 25px;
+	--nav-toggle-height: 24px;
+
 	--nav-secondary-height: 50px;
 
 	--highlight-border-width: 5px;

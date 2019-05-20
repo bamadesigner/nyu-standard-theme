@@ -33,6 +33,20 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const SECONDARY_NAV_MENU_DEPTH = 3;
 
 	/**
+	 * Stores whether or not the secondary nav menu is active.
+	 *
+	 * @var bool
+	 */
+	private $secondary_nav_menu_active;
+
+	/**
+	 * Holds the markup for the secondary nav menu.
+	 *
+	 * @var string
+	 */
+	private $secondary_nav_menu;
+
+	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
@@ -63,7 +77,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'is_primary_nav_menu_active'   => array( $this, 'is_primary_nav_menu_active' ),
 			'display_primary_nav_menu'     => array( $this, 'display_primary_nav_menu' ),
 			'is_secondary_nav_menu_active' => array( $this, 'is_secondary_nav_menu_active' ),
-			'display_secondary_nav_menu'   => array( $this, 'display_secondary_nav_menu' ),
+			'get_secondary_nav_menu'       => array( $this, 'get_secondary_nav_menu' ),
+			'display_secondary_nav'        => array( $this, 'display_secondary_nav' ),
 		);
 	}
 
@@ -73,7 +88,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function action_register_nav_menus() {
 		register_nav_menus(
 			array(
-				static::PRIMARY_NAV_MENU_SLUG => esc_html__( 'Primary', 'wp-rig' ),
+				static::PRIMARY_NAV_MENU_SLUG   => esc_html__( 'Primary', 'wp-rig' ),
 				static::SECONDARY_NAV_MENU_SLUG => __( 'Secondary', 'wp-rig' ),
 			)
 		);
@@ -94,9 +109,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *   Create a ticket to add to core?
 	 *
 	 * @param string  $item_output The menu item's starting HTML output.
-	 * @param WP_Post $item        Menu item data object.
-	 * @param int     $depth       Depth of menu item. Used for padding.
-	 * @param object  $args        An object of wp_nav_menu() arguments.
+	 * @param WP_Post $item Menu item data object.
+	 * @param int     $depth Depth of menu item. Used for padding.
+	 * @param object  $args An object of wp_nav_menu() arguments.
+	 *
 	 * @return string Modified nav menu HTML.
 	 */
 	public function filter_primary_nav_menu_dropdown_symbol( string $item_output, WP_Post $item, int $depth, $args ) : string {
@@ -129,7 +145,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return bool True if the secondary navigation menu is active, false otherwise.
 	 */
 	public function is_secondary_nav_menu_active() : bool {
-		return (bool) has_nav_menu( static::SECONDARY_NAV_MENU_SLUG );
+		if ( isset( $this->secondary_nav_menu_active ) ) {
+			return $this->secondary_nav_menu_active;
+		}
+		$this->secondary_nav_menu_active = (bool) has_nav_menu( static::SECONDARY_NAV_MENU_SLUG );
+		return $this->secondary_nav_menu_active;
 	}
 
 	/**
@@ -143,26 +163,54 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$args['container'] = 'ul';
 		}
 
-		$args['depth'] = static::PRIMARY_NAV_MENU_DEPTH;
+		$args['depth']          = static::PRIMARY_NAV_MENU_DEPTH;
 		$args['theme_location'] = static::PRIMARY_NAV_MENU_SLUG;
 
 		wp_nav_menu( $args );
 	}
 
 	/**
-	 * Displays the secondary navigation menu.
+	 * Returns the markup for the secondary navigation menu.
 	 *
-	 * @param array $args Optional. Array of arguments. See `wp_nav_menu()` documentation for a list of supported
-	 *                    arguments.
+	 * @return string
 	 */
-	public function display_secondary_nav_menu( array $args = array() ) {
-		if ( ! isset( $args['container'] ) ) {
-			$args['container'] = 'ul';
+	public function get_secondary_nav_menu() : string {
+		if ( isset( $this->secondary_nav_menu ) ) {
+			return $this->secondary_nav_menu;
 		}
 
-		$args['depth'] = static::SECONDARY_NAV_MENU_DEPTH;
-		$args['theme_location'] = static::SECONDARY_NAV_MENU_SLUG;
+		$args = [
+			'menu_id'        => 'secondary-menu',
+			'container'      => 'ul',
+			'depth'          => static::SECONDARY_NAV_MENU_DEPTH,
+			'theme_location' => static::SECONDARY_NAV_MENU_SLUG,
+			'echo'           => false,
+		];
 
-		wp_nav_menu( $args );
+		$this->secondary_nav_menu = wp_nav_menu( $args );
+
+		return $this->secondary_nav_menu;
+	}
+
+	/**
+	 * Displays the secondary navigation element.
+	 */
+	public function display_secondary_nav() {
+
+		if ( ! $this->is_secondary_nav_menu_active() ) {
+			return;
+		}
+
+		$secondary_nav_menu = $this->get_secondary_nav_menu();
+
+		if ( empty( $secondary_nav_menu ) ) {
+			return;
+		}
+
+		?>
+		<nav id="navigation-secondary" class="secondary-navigation nav--toggle-sub" aria-label="<?php esc_attr_e( 'Secondary menu', 'wp-rig' ); ?>">
+			<?php echo $secondary_nav_menu; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		</nav>
+		<?php
 	}
 }

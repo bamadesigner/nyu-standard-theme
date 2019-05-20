@@ -23,7 +23,7 @@ if ( 'loading' === document.readyState ) {
 // Initiate the menus when the DOM loads.
 function initNavigation() {
 	initNavToggleSubmenus();
-	initNavToggleSmall();
+	initMainNavToggleSmall();
 }
 
 /**
@@ -143,44 +143,103 @@ function initEachNavToggleSubmenu( nav ) {
 }
 
 /**
- * Initiate the script to process all
- * navigation menus with small toggle enabled.
+ * Initiate opening the small toggle for the main nav.
  */
-function initNavToggleSmall() {
-
-	const navTOGGLE = document.querySelectorAll( '.nav--toggle-small' );
-
-	// No point if no navs.
-	if ( ! navTOGGLE.length ) {
-		return;
-	}
-
-	navTOGGLE.forEach( function( nav ) {
-		initEachNavToggleSmall( nav );
-	});
+function openMainNavToggleSmall() {
+	const siteHEADER = document.querySelector( '.site-header' );
+	const navTOGGLE = document.querySelector( '.main-navigation__toggle--small' );
+	siteHEADER.addEventListener( 'keydown', processOpenMainNavFocus );
+	siteHEADER.addEventListener( 'keydown', processCloseMainNavToggleSmall );
+	document.body.classList.add( 'nav-main--toggled-on' );
+	siteHEADER.classList.add( 'nav--toggled-on' );
+	navTOGGLE.setAttribute( 'aria-expanded', 'true' );
 }
 
 /**
- * Initiate the script to process small
- * navigation toggle for a specific navigation menu.
+ * Initiate closing the small toggle for the main nav.
  */
-function initEachNavToggleSmall( nav ) {
+function closeMainNavToggleSmall() {
+	const siteHEADER = document.querySelector( '.site-header' );
+	const navTOGGLE = document.querySelector( '.main-navigation__toggle--small' );
+	siteHEADER.removeEventListener( 'keydown', processOpenMainNavFocus );
+	siteHEADER.removeEventListener( 'keydown', processCloseMainNavToggleSmall );
+	document.body.classList.remove( 'nav-main--toggled-on' );
+	siteHEADER.classList.remove( 'nav--toggled-on' );
+	navTOGGLE.setAttribute( 'aria-expanded', 'false' );
+	navTOGGLE.focus();
+}
 
-	const menuTOGGLE = nav.querySelector( '.menu-toggle' );
+/**
+ * Process closing the small toggle for the main nav
+ */
+function processCloseMainNavToggleSmall( event ) {
+	if ( KEYMAP.ESC !== event.keyCode ) {
+		return;
+	}
+	closeMainNavToggleSmall();
+}
 
-	// Return early if MENUTOGGLE is missing.
-	if ( ! menuTOGGLE ) {
+/**
+ * Process to keep the focus inside the main nav.
+ */
+function processOpenMainNavFocus( event ) {
+	if ( KEYMAP.TAB !== event.keyCode ) {
+		return;
+	}
+
+	const siteHEADER = document.querySelector( '.site-header' );
+	const focusSelector = 'a, button';
+
+	if ( event.shiftKey ) {
+
+		if ( isfirstFocusableElement( siteHEADER, event.target, focusSelector ) ) {
+
+			var lastElement = getLastFocusableElement( siteHEADER, focusSelector );
+			if ( lastElement ) {
+				lastElement.focus();
+				event.preventDefault();
+			}
+		}
+	} else {
+
+		if ( islastFocusableElement( siteHEADER, event.target, focusSelector ) ) {
+
+			var firstElement = getFirstFocusableElement( siteHEADER, focusSelector );
+			if ( firstElement ) {
+				firstElement.focus();
+				event.preventDefault();
+			}
+		}
+	}
+}
+
+/**
+ * Initiate the script to process the main nav small toggle.
+ */
+function initMainNavToggleSmall() {
+
+	const navTOGGLE = document.querySelector( '.main-navigation__toggle--small' );
+
+	if ( ! navTOGGLE ) {
+		return;
+	}
+
+	const siteHEADER = document.querySelector( '.site-header' );
+
+	if ( ! siteHEADER ) {
 		return;
 	}
 
 	// Add an initial values for the attribute.
-	menuTOGGLE.setAttribute( 'aria-expanded', 'false' );
+	navTOGGLE.setAttribute( 'aria-expanded', 'false' );
 
-	menuTOGGLE.addEventListener( 'click', function() {
-		nav.classList.toggle( 'nav--toggled-on' );
-		nav.parentNode.parentNode.classList.toggle( 'nav--toggled-on' );
-		document.body.classList.toggle( 'nav-' + nav.id + '--toggled-on' );
-		this.setAttribute( 'aria-expanded', 'false' === this.getAttribute( 'aria-expanded' ) ? 'true' : 'false' );
+	navTOGGLE.addEventListener( 'click', function() {
+
+		if ( siteHEADER.classList.contains( 'nav--toggled-on' ) ) {
+			closeMainNavToggleSmall();
+		} else {
+			openMainNavToggleSmall();
+		}
 	}, false );
 }
 
