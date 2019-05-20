@@ -60,7 +60,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function display_hero() {
 		?>
-		<aside class="site-hero">
+		<aside class="site-hero" aria-label="<?php esc_attr_e( 'Featured image for the content', 'wp-rig' ); ?>">
 			<?php the_post_thumbnail( array( 2000, 675 ) ); ?>
 		</aside>
 		<?php
