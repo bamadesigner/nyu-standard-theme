@@ -120,6 +120,7 @@ button:focus {
 		display: grid;
 		grid-template-columns: var(--grid-side-margin) 3fr var(--grid-gap) 1fr var(--grid-side-margin);
 		grid-template-areas:
+			"banner banner banner banner banner"
 			"header header header header header"
 			". magazine magazine magazine ."
 			"hero hero hero hero hero"
@@ -138,16 +139,20 @@ button:focus {
 			"footer footer footer footer footer";
 	}
 
+	.has-sidebar .secondary-navigation {
+		grid-area: banner;
+	}
+
+	.has-sidebar .site-header {
+		grid-area: header;
+	}
+
 	.has-sidebar .site-hero {
 		grid-area: hero;
 	}
 
 	.has-sidebar .site-magazine {
 		grid-area: magazine;
-	}
-
-	.has-sidebar .site-header {
-		grid-area: header;
 	}
 
 	.has-sidebar .site-main {
@@ -641,11 +646,6 @@ select {
 
 	.secondary-navigation {
 		display: block;
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: var(--nav-secondary-height);
 		padding: 0 var(--grid-side-margin);
 		font-size: 0.95em;
 	}
@@ -746,14 +746,6 @@ select {
 	.secondary-navigation.nav--toggle-sub ul ul li.menu-item--has-toggle:focus-within,
 	.secondary-navigation.nav--toggle-sub ul ul li.menu-item--toggled-on {
 		border-left: 8px solid #6d6d6d;
-	}
-
-	body.has-nav-secondary {
-		padding-top: var(--nav-secondary-height);
-	}
-
-	body.has-nav-secondary.admin-bar .secondary-navigation {
-		top: var(--wp-admin-bar-height);
 	}
 
 	/* stylelint-disable */

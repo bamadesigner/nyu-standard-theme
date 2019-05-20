@@ -45,9 +45,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
+
 		add_action( 'after_setup_theme', array( $this, 'action_register_nav_menus' ) );
 		add_filter( 'walker_nav_menu_start_el', array( $this, 'filter_primary_nav_menu_dropdown_symbol' ), 10, 4 );
-		add_filter( 'body_class', array( $this, 'filter_body_classes_add_nav' ) );
+
 	}
 
 	/**
@@ -111,21 +112,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		}
 
 		return $item_output;
-	}
-
-	/**
-	 * Adds a 'has-nav-secondary' class to the array of body classes
-	 * if secondary menu is active.
-	 *
-	 * @param array $classes Classes for the body element.
-	 * @return array Filtered body classes.
-	 */
-	public function filter_body_classes_add_nav( array $classes ) : array {
-		if ( $this->is_secondary_nav_menu_active() ) {
-			$classes[] = 'has-nav-secondary';
-		}
-
-		return $classes;
 	}
 
 	/**

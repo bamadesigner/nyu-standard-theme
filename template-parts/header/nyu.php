@@ -7,10 +7,13 @@
 
 namespace WP_Rig\WP_Rig;
 
-/*
- * @TODO:
- *  - Optimize printing menus.
- */
+if ( wp_rig()->is_secondary_nav_menu_active() ) :
+	?>
+	<nav id="navigation-secondary" class="secondary-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Secondary menu', 'wp-rig' ); ?>">
+		<?php wp_rig()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) ); ?>
+	</nav>
+	<?php
+endif;
 
 ?>
 <header id="masthead" class="site-header">
@@ -53,14 +56,6 @@ namespace WP_Rig\WP_Rig;
 					</div>
 				</button>
 				<?php wp_rig()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) ); ?>
-			</nav>
-			<?php
-		endif;
-
-		if ( wp_rig()->is_secondary_nav_menu_active() ) :
-			?>
-			<nav id="navigation-secondary" class="secondary-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Secondary menu', 'wp-rig' ); ?>">
-				<?php wp_rig()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) ); ?>
 			</nav>
 			<?php
 		endif;
