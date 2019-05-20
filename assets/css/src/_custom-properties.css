@@ -16,7 +16,7 @@
 	--dropdown-symbol-width: 0.7em;
 
 	/* NYU colors */
-	--nyu-primary: #58068c;
+	--nyu-primary: #57068c;
 
 	/* Custom editor colors */
 	--color-theme-primary: #e36d60;
@@ -31,9 +31,9 @@
 	--color-custom-daylight: #97c0b7;
 	--color-custom-sun: #eee9d1;
 
-	--color-link: #57068c;
-	--color-link-visited: #57068c;
-	--color-link-active: #57068c;
+	--color-link: var(--nyu-primary);
+	--color-link-visited: var(--nyu-primary);
+	--color-link-active: var(--nyu-primary);
 
 	--color-footer-bg: #220336;
 
