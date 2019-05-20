@@ -73,6 +73,11 @@
 	grid-template-rows: auto;
 }
 
+.site-magazine .entry:focus-within,
+.site-magazine .entry:first-child {
+	z-index: 1;
+}
+
 .site-magazine .entry:first-child .entry-header {
 	width: 90%;
 	position: absolute;
