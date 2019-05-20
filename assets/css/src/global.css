@@ -679,11 +679,11 @@ select {
 		z-index: 1;
 	}
 
-	.secondary-navigation > ul > li.menu-item-has-children {
+	.secondary-navigation > ul > li.menu-item-has-children > a {
 		position: relative;
 	}
 
-	.secondary-navigation > ul > li.menu-item-has-children:before {
+	.secondary-navigation > ul > li.menu-item-has-children > a:before {
 		display: none;
 		content: "";
 		position: absolute;
@@ -695,9 +695,8 @@ select {
 		z-index: 0;
 		box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 	}
-	.secondary-navigation > ul > li.menu-item-has-children:hover:before,
-	.secondary-navigation > ul > li.menu-item-has-children:focus:before,
-	.secondary-navigation > ul > li.menu-item-has-children:focus-within:before {
+	.secondary-navigation > ul > li.menu-item-has-children > a:hover:before,
+	.secondary-navigation > ul > li.menu-item-has-children > a:focus:before {
 		display: block;
 	}
 
