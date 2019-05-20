@@ -8,7 +8,7 @@
 namespace WP_Rig\WP_Rig;
 
 ?>
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
+<article id="post-<?php the_ID(); ?>-magazine" <?php post_class( 'entry' ); ?>>
 	<a class="post-entry--link" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( get_the_title() ); ?>">
 		<?php
 
