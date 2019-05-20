@@ -1,5 +1,5 @@
 .home-title--latest {
-	background: #111;
+	background: var(--nyu-purple-dark);
 	color: #fff;
 	font-size: 1.5rem;
 }
@@ -78,7 +78,7 @@
 	position: absolute;
 	left: 5%;
 	bottom: 5%;
-	background: #111;
+	background: var(--nyu-purple-dark);
 	color: #fff;
 	text-align: center;
 	z-index: 1;
