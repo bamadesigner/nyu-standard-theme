@@ -29,7 +29,7 @@ if ( $use_magazine ) {
 }
 
 ?>
-	<main id="primary" class="<?php echo $main_class; ?>">
+	<main id="primary" class="<?php echo esc_attr( $main_class ); ?>">
 		<?php
 
 		if ( $use_magazine && is_home() ) {

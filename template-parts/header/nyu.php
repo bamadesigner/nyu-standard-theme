@@ -33,8 +33,7 @@ namespace WP_Rig\WP_Rig;
 				$site_description = wp_rig()->get_site_description();
 
 				if ( ! empty( $site_description ) ) :
-					?>
-					<p class="site-description"><?php echo $site_description; ?><?php
+					printf( '<p class="site-description">%s</p>', $site_description ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				endif;
 
 			endif;
