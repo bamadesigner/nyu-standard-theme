@@ -49,7 +49,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function initialize() {
 		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
 		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
-		add_action( 'customize_register', array( $this, 'action_customize_register_magazine' ) );
+		add_action( 'customize_register', array( $this, 'action_customize_register' ) );
 	}
 
 	/**
@@ -104,7 +104,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @param WP_Customize_Manager $wp_customize Customizer manager instance.
 	 */
-	public function action_customize_register_magazine( WP_Customize_Manager $wp_customize ) {
+	public function action_customize_register( WP_Customize_Manager $wp_customize ) {
 
 		$wp_customize->add_setting(
 			self::FP_MAG_NAME,

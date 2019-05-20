@@ -147,28 +147,28 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Holds the setting for archive display thumbnail.
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	private $archive_display_thumb;
 
 	/**
 	 * Holds the setting for front page archive display thumbnail.
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	private $front_page_archive_display_thumb;
 
 	/**
 	 * Holds the setting for front page archive display post author.
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	private $front_page_archive_display_post_author;
 
 	/**
 	 * Holds the setting for front page archive display post date.
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	private $front_page_archive_display_post_date;
 
@@ -191,7 +191,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'save_meta_box_theme_options' ), 10, 2 );
 
-		add_action( 'customize_register', array( $this, 'action_customize_register_site_layout' ) );
+		add_action( 'customize_register', array( $this, 'action_customize_register' ) );
 
 	}
 
@@ -645,11 +645,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
-	 * Adds a setting and control for setting the site layout.
+	 * Adds settings and controls for the customizer.
 	 *
 	 * @param WP_Customize_Manager $wp_customize Customizer manager instance.
 	 */
-	public function action_customize_register_site_layout( WP_Customize_Manager $wp_customize ) {
+	public function action_customize_register( WP_Customize_Manager $wp_customize ) {
 
 		$site_layout_choices       = $this->get_site_layout_choices();
 		$front_page_layout_choices = $this->get_front_page_layout_choices();
@@ -844,7 +844,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'label'   => __( 'Display post author', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
-				'description' => __( "If your homepage display is set to \"Your latest posts\", do you want to the show post author?", 'wp-rig' ),
+				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post author?', 'wp-rig' ),
 			)
 		);
 
@@ -866,7 +866,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'label'   => __( 'Display post date', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
-				'description' => __( "If your homepage display is set to \"Your latest posts\", do you want to the show post date?", 'wp-rig' ),
+				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post date?', 'wp-rig' ),
 			)
 		);
 	}
