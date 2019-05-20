@@ -154,7 +154,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$this->index = 0;
 
 		?>
-		<section class="site-magazine">
+		<aside class="site-magazine" aria-label="<?php esc_attr_e( 'Featured posts', 'wp-rig' ); ?>">
 			<?php
 
 			while ( $magazines->have_posts() ) {
@@ -166,7 +166,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			}
 
 			?>
-		</section>
+		</aside>
 		<?php
 
 		wp_reset_postdata();
