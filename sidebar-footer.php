@@ -14,6 +14,6 @@ if ( ! wp_rig()->is_footer_sidebar_active() ) {
 wp_rig()->print_styles( 'wp-rig-widgets' );
 
 ?>
-<aside id="footer" class="footer-sidebar widget-area">
+<div id="footer" class="footer-sidebar widget-area">
 	<?php wp_rig()->display_footer_sidebar(); ?>
-</aside><!-- #footer -->
+</div><!-- #footer -->
