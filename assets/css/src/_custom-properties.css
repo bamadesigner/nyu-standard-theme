@@ -17,6 +17,7 @@
 
 	/* NYU colors */
 	--nyu-primary: #57068c;
+	--nyu-purple-dark: #220336;
 
 	/* Custom editor colors */
 	--color-theme-primary: #e36d60;
@@ -35,7 +36,7 @@
 	--color-link-visited: var(--nyu-primary);
 	--color-link-active: var(--nyu-primary);
 
-	--color-footer-bg: #220336;
+	--color-footer-bg: var(--nyu-purple-dark);
 
 	--color-quote-border: #000;
 	--color-quote-citation: #6c7781;
