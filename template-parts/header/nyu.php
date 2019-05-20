@@ -28,6 +28,17 @@ namespace WP_Rig\WP_Rig;
 				<?php
 			endif;
 
+			if ( wp_rig()->display_tagline_header() ) :
+
+				$site_description = wp_rig()->get_site_description();
+
+				if ( ! empty( $site_description ) ) :
+					?>
+					<p class="site-description"><?php echo $site_description; ?><?php
+				endif;
+
+			endif;
+
 			?>
 		</div>
 		<?php

@@ -369,13 +369,11 @@ select {
 }
 
 .site-description {
-	margin: 0.4375em 0 0;
+	margin: 0.5em 0 0;
 	font-family: var(--highlight-font-family);
-	font-size: 17px;
-	font-weight: inherit;
+	font-size: 1rem;
 	line-height: 1.4;
 	word-wrap: break-word;
-	color: #757575;
 }
 
 @media (--narrow-menu-query) {
