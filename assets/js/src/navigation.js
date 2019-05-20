@@ -194,7 +194,7 @@ function processOpenMainNavFocus( event ) {
 
 		if ( isfirstFocusableElement( siteHEADER, event.target, focusSelector ) ) {
 
-			var lastElement = getLastFocusableElement( siteHEADER, focusSelector );
+			const lastElement = getLastFocusableElement( siteHEADER, focusSelector );
 			if ( lastElement ) {
 				lastElement.focus();
 				event.preventDefault();
@@ -204,7 +204,7 @@ function processOpenMainNavFocus( event ) {
 
 		if ( islastFocusableElement( siteHEADER, event.target, focusSelector ) ) {
 
-			var firstElement = getFirstFocusableElement( siteHEADER, focusSelector );
+			const firstElement = getFirstFocusableElement( siteHEADER, focusSelector );
 			if ( firstElement ) {
 				firstElement.focus();
 				event.preventDefault();
