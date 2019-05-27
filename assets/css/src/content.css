@@ -133,8 +133,6 @@
 	clear: both;
 	font-family: var(--highlight-font-family);
 	font-size: 80%;
-	padding: 1.5em 0 0;
-	border-top: 1px solid #111;
 	margin-bottom: 0;
 }
 
@@ -149,6 +147,11 @@
 
 .page .entry-footer {
 	border-top: 0;
+}
+
+.entry-footer > *:first-child {
+	padding: 1.5em 0 0;
+	border-top: 1px solid #111;
 }
 
 @media (--content-query) {
