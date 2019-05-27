@@ -138,7 +138,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			self::FP_MAG_SECTION,
 			array(
 				'title'    => __( '"Magazine" Settings', 'wp-rig' ),
-				'priority' => 111,
+				'priority' => 121,
 			)
 		);
 
