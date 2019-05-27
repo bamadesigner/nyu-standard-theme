@@ -11,22 +11,19 @@ $post_type_obj = get_post_type_object( get_post_type() );
 
 $time_string = '';
 
-// Show date only when the post type is 'post' or has an archive.
-if ( 'post' === $post_type_obj->name || $post_type_obj->has_archive ) {
+if ( wp_rig()->magazine_display_post_date() ) {
 
-	$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+	// Show date only when the post type is 'post' or has an archive.
+	if ( 'post' === $post_type_obj->name || $post_type_obj->has_archive ) {
 
-	if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-		$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+		$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+
+		if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
+			$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+		}
+
+		$time_string = sprintf( $time_string, esc_attr( get_the_date( 'c' ) ), esc_html( get_the_date() ), esc_attr( get_the_modified_date( 'c' ) ), esc_html( get_the_modified_date() ) );
 	}
-
-	$time_string = sprintf(
-		$time_string,
-		esc_attr( get_the_date( 'c' ) ),
-		esc_html( get_the_date() ),
-		esc_attr( get_the_modified_date( 'c' ) ),
-		esc_html( get_the_modified_date() )
-	);
 }
 
 $author_string = '';

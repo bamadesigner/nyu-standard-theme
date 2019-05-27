@@ -22,6 +22,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const FP_MAG_NAME = 'show_front_page_magazine';
 	const FP_MAG_DEFAULT = false;
 
+	const FP_MAG_POST_DATE = 'front_page_magazine_post_date';
+	const FP_MAG_POST_DATE_DEFAULT_VALUE = true;
+
 	/**
 	 * Holds the index for the magazine layout.
 	 *
@@ -35,6 +38,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @var bool
 	 */
 	private $use_magazine_layout;
+
+	/**
+	 * Holds the setting for magazine display post date.
+	 *
+	 * @var bool
+	 */
+	private $display_post_date;
 
 	/**
 	 * Gets the unique identifier for the theme component.
@@ -65,6 +75,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		return array(
 			'use_magazine_layout' => array( $this, 'use_magazine_layout' ),
 			'display_magazine'    => array( $this, 'display_magazine' ),
+			'magazine_display_post_date' => array( $this, 'magazine_display_post_date' ),
 		);
 	}
 
@@ -86,6 +97,21 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function add_image_sizes() {
 		add_image_size( 'wp-rig-magazine', 600, 600, true );
+	}
+
+	/**
+	 * Returns true if magazine display is set to show the post date.
+	 *
+	 * @return bool
+	 */
+	public function magazine_display_post_date() : bool {
+		if ( isset( $this->display_post_date ) ) {
+			return $this->display_post_date;
+		}
+
+		$this->display_post_date = (bool) get_theme_mod( self::FP_MAG_POST_DATE, self::FP_MAG_POST_DATE_DEFAULT_VALUE );
+
+		return $this->display_post_date;
 	}
 
 	/**
@@ -135,6 +161,28 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'section' => self::FP_MAG_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'Do you want to display the "Magazine" layout of recent posts on your homepage?', 'wp-rig' ),
+			)
+		);
+
+		$wp_customize->add_setting(
+			self::FP_MAG_POST_DATE,
+			array(
+				'default'    => self::FP_MAG_POST_DATE_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::FP_MAG_POST_DATE,
+			array(
+				'label'   => __( 'Display post date', 'wp-rig' ),
+				'section' => self::FP_MAG_SECTION,
+				'type'    => 'checkbox',
+				'description' => __( 'Do you want to the show the post date in the magazine layout?', 'wp-rig' ),
 			)
 		);
 	}
