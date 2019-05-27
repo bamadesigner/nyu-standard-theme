@@ -17,6 +17,8 @@ use WP_Customize_Manager;
  */
 class Component implements Component_Interface, Templating_Component_Interface {
 
+	const FP_MAG_SECTION = 'front_page_magazine_settings';
+
 	const FP_MAG_NAME = 'show_front_page_magazine';
 	const FP_MAG_DEFAULT = false;
 
@@ -106,6 +108,14 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function action_customize_register( WP_Customize_Manager $wp_customize ) {
 
+		$wp_customize->add_section(
+			self::FP_MAG_SECTION,
+			array(
+				'title'    => __( '"Magazine" Settings', 'wp-rig' ),
+				'priority' => 111,
+			)
+		);
+
 		$wp_customize->add_setting(
 			self::FP_MAG_NAME,
 			array(
@@ -122,7 +132,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			self::FP_MAG_NAME,
 			array(
 				'label'   => __( 'Display "Magazine" on homepage', 'wp-rig' ),
-				'section' => 'static_front_page',
+				'section' => self::FP_MAG_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'Do you want to display the "Magazine" layout of recent posts on your homepage?', 'wp-rig' ),
 			)
