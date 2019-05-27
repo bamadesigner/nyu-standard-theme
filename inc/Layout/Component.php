@@ -50,6 +50,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const FRONT_PAGE_ARCHIVE_POST_AUTHOR = 'front_page_archive_post_author';
 	const FRONT_PAGE_ARCHIVE_POST_AUTHOR_DEFAULT_VALUE = true;
 
+	const FRONT_PAGE_ARCHIVE_CATEGORY = 'front_page_archive_post_categories';
+	const FRONT_PAGE_ARCHIVE_CATEGORY_DEFAULT_VALUE = true;
+
+	const FRONT_PAGE_ARCHIVE_TAG = 'front_page_archive_post_tag';
+	const FRONT_PAGE_ARCHIVE_TAG_DEFAULT_VALUE = true;
+
 	const FRONT_PAGE_ARCHIVE_DISPLAY_NAME = 'front_page_archive_display';
 	const FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE = 'site';
 	const FRONT_PAGE_ARCHIVE_DISPLAY_VALUE_USE_SITE = 'site';
@@ -173,6 +179,20 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	private $front_page_archive_display_post_date;
 
 	/**
+	 * Holds the setting for front page archive display post categories.
+	 *
+	 * @var bool
+	 */
+	private $front_page_archive_display_post_categories;
+
+	/**
+	 * Holds the setting for front page archive display post tags.
+	 *
+	 * @var bool
+	 */
+	private $front_page_archive_display_post_tags;
+
+	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
@@ -211,6 +231,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'front_page_archive_display_thumbnail' => array( $this, 'front_page_archive_display_thumbnail' ),
 			'front_page_archive_display_post_author' => array( $this, 'front_page_archive_display_post_author' ),
 			'front_page_archive_display_post_date' => array( $this, 'front_page_archive_display_post_date' ),
+			'front_page_archive_display_post_categories' => array( $this, 'front_page_archive_display_post_categories' ),
+			'front_page_archive_display_post_tags' => array( $this, 'front_page_archive_display_post_tags' ),
 		);
 	}
 
@@ -623,6 +645,36 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Returns true if front page archive display is set to show the post categories.
+	 *
+	 * @return bool
+	 */
+	public function front_page_archive_display_post_categories() : bool {
+		if ( isset( $this->front_page_archive_display_post_categories ) ) {
+			return $this->front_page_archive_display_post_categories;
+		}
+
+		$this->front_page_archive_display_post_categories = (bool) get_theme_mod( self::FRONT_PAGE_ARCHIVE_CATEGORY, self::FRONT_PAGE_ARCHIVE_CATEGORY_DEFAULT_VALUE );
+
+		return $this->front_page_archive_display_post_categories;
+	}
+
+	/**
+	 * Returns true if front page archive display is set to show the post tags.
+	 *
+	 * @return bool
+	 */
+	public function front_page_archive_display_post_tags() : bool {
+		if ( isset( $this->front_page_archive_display_post_tags ) ) {
+			return $this->front_page_archive_display_post_tags;
+		}
+
+		$this->front_page_archive_display_post_tags = (bool) get_theme_mod( self::FRONT_PAGE_ARCHIVE_TAG, self::FRONT_PAGE_ARCHIVE_TAG_DEFAULT_VALUE );
+
+		return $this->front_page_archive_display_post_tags;
+	}
+
+	/**
 	 * Adds custom classes to indicate whether a sidebar is present to the array of body classes.
 	 *
 	 * @param array $classes Classes for the body element.
@@ -867,6 +919,50 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post date?', 'wp-rig' ),
+			)
+		);
+
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_ARCHIVE_CATEGORY,
+			array(
+				'default'    => self::FRONT_PAGE_ARCHIVE_CATEGORY_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::FRONT_PAGE_ARCHIVE_CATEGORY,
+			array(
+				'label'   => __( 'Display post categories', 'wp-rig' ),
+				'section' => self::FRONT_PAGE_SECTION,
+				'type'    => 'checkbox',
+				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post categories?', 'wp-rig' ),
+			)
+		);
+
+		$wp_customize->add_setting(
+			self::FRONT_PAGE_ARCHIVE_TAG,
+			array(
+				'default'    => self::FRONT_PAGE_ARCHIVE_TAG_DEFAULT_VALUE,
+				'capability' => 'manage_options',
+				'type'       => 'theme_mod',
+				'sanitize_callback' => function ( $checked ) : bool {
+					return ( ( isset( $checked ) && true == $checked ) ? true : false );
+				},
+			)
+		);
+
+		$wp_customize->add_control(
+			self::FRONT_PAGE_ARCHIVE_TAG,
+			array(
+				'label'   => __( 'Display post tags', 'wp-rig' ),
+				'section' => self::FRONT_PAGE_SECTION,
+				'type'    => 'checkbox',
+				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post tags?', 'wp-rig' ),
 			)
 		);
 	}
