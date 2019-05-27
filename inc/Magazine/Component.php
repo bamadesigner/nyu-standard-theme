@@ -9,6 +9,7 @@ namespace WP_Rig\WP_Rig\Magazine;
 
 use WP_Rig\WP_Rig\Component_Interface;
 use WP_Rig\WP_Rig\Templating_Component_Interface;
+use WP_Post;
 use WP_Query;
 use WP_Customize_Manager;
 
@@ -17,6 +18,8 @@ use WP_Customize_Manager;
  */
 class Component implements Component_Interface, Templating_Component_Interface {
 
+	const FP_MAG_POST_TYPE = 'post';
+
 	const FP_MAG_SECTION = 'front_page_magazine_settings';
 
 	const FP_MAG_NAME = 'show_front_page_magazine';
@@ -24,6 +27,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 	const FP_MAG_POST_DATE = 'front_page_magazine_post_date';
 	const FP_MAG_POST_DATE_DEFAULT_VALUE = true;
+
+	const FP_MAG_FEATURED_NAME = 'front_page_magazine_featured';
+
+	const FP_MAG_FEATURED_MB_NAME = 'wp_rig_magazine_featured';
+	const FP_MAG_FEATURED_MB_NONCE = 'wp_rig_magazine_featured_nonce';
+	const FP_MAG_FEATURED_MB_NONCE_ACTION = 'wp_rig_magazine_featured_action';
 
 	/**
 	 * Holds the index for the magazine layout.
@@ -59,9 +68,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
+
 		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
 		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
+
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
+		add_action( 'save_post', array( $this, 'save_meta_box_magazine_options' ), 10, 2 );
+
 		add_action( 'customize_register', array( $this, 'action_customize_register' ) );
+
+		add_filter( 'posts_clauses', array( $this, 'filter_posts_clauses' ), 100, 2 );
 	}
 
 	/**
@@ -204,8 +220,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$magazines = new WP_Query(
 			array(
-				'post_type' => 'post',
+				'post_type' => self::FP_MAG_POST_TYPE,
 				'posts_per_page' => 4,
+				'is_magazine' => true,
 			)
 		);
 
@@ -234,5 +251,141 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		wp_reset_postdata();
 
 		return true;
+	}
+
+	/**
+	 * Returns true if post is a featured magazine post.
+	 *
+	 * @param WP_Post $post the post object.
+	 *
+	 * @return string
+	 */
+	public function is_magazine_featured_post( WP_Post $post ) : string {
+		return (bool) ( self::FP_MAG_POST_TYPE == $post->post_type && (bool) $post->__get( self::FP_MAG_FEATURED_NAME ) );
+	}
+
+	/**
+	 * Adds the meta boxes for our magazine options.
+	 *
+	 * @param string  $post_type The post type.
+	 * @param WP_Post $post The post object.
+	 */
+	public function add_meta_boxes( string $post_type, WP_Post $post ) {
+
+		if ( self::FP_MAG_POST_TYPE != $post_type ) {
+			return;
+		}
+
+		if ( $this->use_magazine_layout() ) {
+
+			add_meta_box(
+				'wp-rig-magazine',
+				__( 'Magazine Options', 'wp-rig' ),
+				array(
+					$this,
+					'print_meta_box_magazine_options',
+				),
+				$post_type,
+				'side',
+				'default'
+			);
+		}
+	}
+
+	/**
+	 * Prints the meta box for our Magazine options.
+	 *
+	 * @param WP_Post $post The post object.
+	 * @param array   $metabox The meta box information.
+	 */
+	public function print_meta_box_magazine_options( WP_Post $post, array $metabox ) {
+
+		if ( self::FP_MAG_POST_TYPE != $post->post_type ) {
+			return;
+		}
+
+		// Ensures security when we save the post meta.
+		wp_nonce_field( self::FP_MAG_FEATURED_MB_NONCE_ACTION, self::FP_MAG_FEATURED_MB_NONCE );
+
+		$featured = $this->is_magazine_featured_post( $post );
+
+		?>
+		<p><?php _e( 'The "Magazine" layout is used on the home page.', 'wp-rig' ); //phpcs:ignore WordPress.Security.EscapeOutput.UnsafePrintingFunction ?></p>
+		<label for="wp-rig-post-featured" class="components-base-control__label" style="display:block;">
+			<input id="wp-rig-post-featured" type="checkbox" name="<?php echo esc_attr( self::FP_MAG_FEATURED_MB_NAME ); ?>" class="components-select-control__input"<?php checked( $featured ); ?>> <?php esc_html_e( 'Feature this post in the magazine layout', 'wp-rig' ); ?>
+		</label>
+		<?php
+	}
+
+	/**
+	 * Manages saving the magazine options meta box.
+	 *
+	 * @TODO:
+	 * - Check if user has permissions to save data?
+	 *
+	 * @param int     $post_id The post ID.
+	 * @param WP_Post $post The post object.
+	 */
+	public function save_meta_box_magazine_options( $post_id, $post ) {
+
+		if ( self::FP_MAG_POST_TYPE != $post->post_type ) {
+			return;
+		}
+
+		if ( empty( $_POST[ self::FP_MAG_FEATURED_MB_NONCE ] ) ) {
+			return;
+		}
+
+		// Check if nonce is valid.
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ self::FP_MAG_FEATURED_MB_NONCE ] ) ), self::FP_MAG_FEATURED_MB_NONCE_ACTION ) ) {
+			return;
+		}
+
+		// Check if not an autosave.
+		if ( wp_is_post_autosave( $post_id ) ) {
+			return;
+		}
+
+		// Check if not a revision.
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		$featured = ! empty( $_POST[ self::FP_MAG_FEATURED_MB_NAME ] );
+
+		update_post_meta( $post_id, self::FP_MAG_FEATURED_NAME, $featured );
+
+	}
+
+	/**
+	 * If querying for the magazine layout, we adjust the query
+	 * to orderby "if the post is featured".
+	 *
+	 * @param string[] $clauses Associative array of the clauses for the query.
+	 * @param WP_Query $query    The WP_Query instance (passed by reference).
+	 *
+	 * @return array
+	 */
+	public function filter_posts_clauses( $clauses, $query ) {
+		global $wpdb;
+
+		// Only for the magazine query.
+		if ( ! $query->get( 'is_magazine' ) ) {
+			return $clauses;
+		}
+
+		$order = $query->get( 'order' );
+
+		if ( ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ) ) ) {
+			$order = 'DESC';
+		}
+
+		// Join to get magazine featured.
+		$clauses['join'] .= $wpdb->prepare( " LEFT JOIN {$wpdb->postmeta} fp_mag_featured ON fp_mag_featured.post_id = {$wpdb->posts}.ID AND fp_mag_featured.meta_key = %s", self::FP_MAG_FEATURED_NAME );
+
+		// Order by featured posts first.
+		$clauses['orderby'] = "IF ( fp_mag_featured.meta_value IS NOT NULL AND fp_mag_featured.meta_value != '', 1, 0 ) {$order}, {$wpdb->posts}.post_date {$order}";
+
+		return $clauses;
 	}
 }
