@@ -56,6 +56,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	private $display_post_date;
 
 	/**
+	 * Holds known magazine post IDs.
+	 *
+	 * @var array
+	 */
+	private $magazine_post_ids;
+
+	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
@@ -77,6 +84,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		add_action( 'customize_register', array( $this, 'action_customize_register' ) );
 
+		add_action( 'pre_get_posts', array( $this, 'modify_pre_get_posts' ) );
 		add_filter( 'posts_clauses', array( $this, 'filter_posts_clauses' ), 100, 2 );
 	}
 
@@ -218,13 +226,19 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return false;
 		}
 
-		$magazines = new WP_Query(
-			array(
-				'post_type' => self::FP_MAG_POST_TYPE,
-				'posts_per_page' => 4,
-				'is_magazine' => true,
-			)
+		$magazine_query = array(
+			'post_type' => self::FP_MAG_POST_TYPE,
+			'posts_per_page' => 4,
+			'is_magazine' => true,
 		);
+
+		$magazine_post_ids = $this->get_magazine_post_ids();
+
+		if ( ! empty( $magazine_post_ids ) ) {
+			$magazine_query['post__in'] = $this->get_magazine_post_ids();
+		}
+
+		$magazines = new WP_Query( $magazine_query );
 
 		if ( ! $magazines->have_posts() ) {
 			return;
@@ -358,6 +372,74 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Store known magazine featured post IDs.
+	 *
+	 * @param array $post_ids post IDs.
+	 *
+	 * @return void;
+	 */
+	private function set_magazine_post_ids( $post_ids ) {
+		$this->magazine_post_ids = $post_ids;
+	}
+
+	/**
+	 * Get known magazine featured post IDs.
+	 *
+	 * @return array - post IDs
+	 */
+	private function get_magazine_post_ids() {
+		return $this->magazine_post_ids;
+	}
+
+	/**
+	 * If we're displaying the magazine layout, modify the main
+	 * query so it doesn't show posts displayed in the "magazine".
+	 *
+	 * @param WP_Query $query The WP_Query instance (passed by reference).
+	 *
+	 * @return void
+	 */
+	public function modify_pre_get_posts( $query ) {
+
+		if ( ! $query->is_home() ) {
+			return;
+		}
+
+		if ( ! $query->is_main_query() ) {
+			return;
+		}
+
+		if ( ! $this->use_magazine_layout() ) {
+			return;
+		}
+
+		$magazine_posts = get_posts(
+			array(
+				'post_type' => self::FP_MAG_POST_TYPE,
+				'posts_per_page' => 4,
+				'is_magazine' => true,
+				'suppress_filters' => false,
+			)
+		);
+
+		if ( empty( $magazine_posts ) ) {
+			return;
+		}
+
+		$magazine_post_ids = wp_list_pluck( $magazine_posts, 'ID' );
+
+		if ( empty( $magazine_post_ids ) ) {
+			return;
+		}
+
+		$this->set_magazine_post_ids( $magazine_post_ids );
+
+		// Make sure magazine posts aren't in main query.
+		$query->set( 'post__not_in', $magazine_post_ids );
+
+	}
+
+	/**
 	 * If querying for the magazine layout, we adjust the query
 	 * to orderby "if the post is featured".
 	 *
@@ -371,6 +453,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		// Only for the magazine query.
 		if ( ! $query->get( 'is_magazine' ) ) {
+			return $clauses;
+		}
+
+		if ( ! $this->use_magazine_layout() ) {
 			return $clauses;
 		}
 
