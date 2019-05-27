@@ -194,9 +194,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *  - Don't run if magazine isnt enabled
 	 *  - Setup magazine query
 	 *
-	 * @return  void
+	 * @return  bool - true if magazine is printed.
 	 */
 	public function display_magazine() {
+
+		if ( ! $this->use_magazine_layout() ) {
+			return false;
+		}
 
 		$magazines = new WP_Query(
 			array(
@@ -229,5 +233,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		wp_reset_postdata();
 
+		return true;
 	}
 }
