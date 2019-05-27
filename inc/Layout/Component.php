@@ -36,8 +36,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	const POST_LAYOUT_VALUE_USE_SITE = 'site';
 
 	const POST_LAYOUT_MB_NAME = 'wp_rig_post_layout';
-	const POST_LAYOUT_MB_NONCE = 'custom_nonce';
-	const POST_LAYOUT_MB_NONCE_ACTION = 'custom_nonce_action';
+	const POST_LAYOUT_MB_NONCE = 'wp_rig_post_layout_nonce';
+	const POST_LAYOUT_MB_NONCE_ACTION = 'wp_rig_post_layout_nonce_action';
 
 	const ARCHIVE_SECTION = 'archive_settings';
 
@@ -1026,7 +1026,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		wp_nonce_field( self::POST_LAYOUT_MB_NONCE_ACTION, self::POST_LAYOUT_MB_NONCE );
 
 		?>
-		<label for="wp-rig-post-layout" class="components-base-control__label" style="display:block;width:100%;margin-bottom:5px;"><?php esc_html_e( 'Layout for this page?', 'wp-rig' ); ?></label>
+		<label for="wp-rig-post-layout" class="components-base-control__label" style="display:block;width:100%;margin-bottom:5px;font-weight:bold;"><?php esc_html_e( 'Layout for this page', 'wp-rig' ); ?></label>
 		<select id="wp-rig-post-layout" name="<?php echo esc_attr( self::POST_LAYOUT_MB_NAME ); ?>" class="components-select-control__input" style="width:100%;">
 			<?php
 
