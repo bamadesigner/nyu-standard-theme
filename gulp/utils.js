@@ -1,7 +1,9 @@
 /* eslint-env es6 */
 'use strict';
 
-// External dependencies
+/**
+ * External dependencies
+ */
 import importFresh from 'import-fresh';
 import log from 'fancy-log';
 import colors from 'ansi-colors';
@@ -10,7 +12,9 @@ import mkdirp from 'mkdirp';
 import fs from 'fs';
 import { pipeline } from 'mississippi';
 
-// Internal dependencies
+/**
+ * Internal dependencies
+ */
 import {
 	gulpPlugins,
 	nameFieldDefaults,
@@ -119,7 +123,13 @@ export function gulpRelativeDest( file ) {
 }
 
 export function backslashToForwardSlash(path) {
-	return path.replace(/\\/g, '/');
+	let replace_fn = ( p => p.replace(/\\/g, '/') );
+	if ( Array.isArray(path) ) {
+		let paths = [];
+		path.forEach( p => paths.push( replace_fn(p) ) );
+		return paths;
+	}
+	return replace_fn(path);
 }
 
 /**
