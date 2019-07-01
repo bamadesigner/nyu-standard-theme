@@ -52,10 +52,10 @@ class Component_Tests extends Unit_Test_Case {
 	public function test_initialize() {
 		$this->component->initialize();
 
-		$this->assertTrue( has_action( 'wp_enqueue_scripts', array( $this->component, 'action_enqueue_navigation_script' ) ) );
-		$this->assertTrue( has_action( 'wp_print_footer_scripts', array( $this->component, 'action_print_skip_link_focus_fix' ) ) );
-		$this->assertTrue( has_filter( 'nav_menu_link_attributes', array( $this->component, 'filter_nav_menu_link_attributes_aria_current' ) ) );
-		$this->assertTrue( has_filter( 'page_menu_link_attributes', array( $this->component, 'filter_nav_menu_link_attributes_aria_current' ) ) );
+		$this->assertTrue( has_action( 'wp_enqueue_scripts', [ $this->component, 'action_enqueue_navigation_script' ] ) );
+		$this->assertTrue( has_action( 'wp_print_footer_scripts', [ $this->component, 'action_print_skip_link_focus_fix' ] ) );
+		$this->assertTrue( has_filter( 'nav_menu_link_attributes', [ $this->component, 'filter_nav_menu_link_attributes_aria_current' ] ) );
+		$this->assertTrue( has_filter( 'page_menu_link_attributes', [ $this->component, 'filter_nav_menu_link_attributes_aria_current' ] ) );
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Component_Tests extends Unit_Test_Case {
 	 * @covers Component::action_enqueue_navigation_script()
 	 */
 	public function test_action_enqueue_navigation_script() {
-		$template_tags = $this->mockTemplateTags( array( 'get_asset_version' ) );
+		$template_tags = $this->mockTemplateTags( [ 'get_asset_version' ] );
 
 		$template_tags->expects( $this->once() )
 			->method( 'get_asset_version' )
@@ -107,7 +107,7 @@ class Component_Tests extends Unit_Test_Case {
 	 * @covers Component::filter_nav_menu_link_attributes_aria_current()
 	 */
 	public function test_filter_nav_menu_link_attributes_aria_current() {
-		$atts = array();
+		$atts = [];
 		$item = $this->getMockBuilder( 'WP_Post' )->getMock();
 
 		$atts = $this->component->filter_nav_menu_link_attributes_aria_current( $atts, $item );
@@ -120,7 +120,7 @@ class Component_Tests extends Unit_Test_Case {
 	 * @covers Component::filter_nav_menu_link_attributes_aria_current()
 	 */
 	public function test_filter_nav_menu_link_attributes_aria_current_with_current_item() {
-		$atts          = array();
+		$atts          = [];
 		$item          = $this->getMockBuilder( 'WP_Post' )->getMock();
 		$item->current = true;
 
@@ -134,7 +134,7 @@ class Component_Tests extends Unit_Test_Case {
 	 * @covers Component::filter_nav_menu_link_attributes_aria_current()
 	 */
 	public function test_filter_nav_menu_link_attributes_aria_current_with_current_post() {
-		$atts     = array();
+		$atts     = [];
 		$item     = $this->getMockBuilder( 'WP_Post' )->getMock();
 		$item->ID = 1;
 
