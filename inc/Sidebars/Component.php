@@ -48,7 +48,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function initialize() {
 
-		add_action( 'widgets_init', array( $this, 'action_register_sidebars' ) );
+		add_action( 'widgets_init', [ $this, 'action_register_sidebars' ] );
 
 	}
 
@@ -60,14 +60,14 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               adding support for further arguments in the future.
 	 */
 	public function template_tags() : array {
-		return array(
-			'declare_primary_sidebar'   => array( $this, 'declare_primary_sidebar' ),
-			'has_primary_sidebar'       => array( $this, 'has_primary_sidebar' ),
-			'is_primary_sidebar_active' => array( $this, 'is_primary_sidebar_active' ),
-			'display_primary_sidebar'   => array( $this, 'display_primary_sidebar' ),
-			'is_footer_sidebar_active'  => array( $this, 'is_footer_sidebar_active' ),
-			'display_footer_sidebar'    => array( $this, 'display_footer_sidebar' ),
-		);
+		return [
+			'declare_primary_sidebar'   => [ $this, 'declare_primary_sidebar' ],
+			'has_primary_sidebar'       => [ $this, 'has_primary_sidebar' ],
+			'is_primary_sidebar_active' => [ $this, 'is_primary_sidebar_active' ],
+			'display_primary_sidebar'   => [ $this, 'display_primary_sidebar' ],
+			'is_footer_sidebar_active'  => [ $this, 'is_footer_sidebar_active' ],
+			'display_footer_sidebar'    => [ $this, 'display_footer_sidebar' ],
+		];
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function action_register_sidebars() {
 
 		register_sidebar(
-			array(
+			[
 				'name'          => esc_html__( 'Primary', 'wp-rig' ),
 				'id'            => static::PRIMARY_SIDEBAR_SLUG,
 				'description'   => esc_html__( 'Add widgets here for the primary sidebar.', 'wp-rig' ),
@@ -103,11 +103,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'after_widget'  => '</section>',
 				'before_title'  => '<h2 class="widget-title">',
 				'after_title'   => '</h2>',
-			)
+			]
 		);
 
 		register_sidebar(
-			array(
+			[
 				'name'          => esc_html__( 'Footer', 'wp-rig' ),
 				'id'            => static::FOOTER_SIDEBAR_SLUG,
 				'description'   => esc_html__( 'Add widgets for the footer area.', 'wp-rig' ),
@@ -115,7 +115,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'after_widget'  => '</section>',
 				'before_title'  => '<h2 class="widget-title">',
 				'after_title'   => '</h2>',
-			)
+			]
 		);
 	}
 

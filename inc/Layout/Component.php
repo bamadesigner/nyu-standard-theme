@@ -206,12 +206,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function initialize() {
 
-		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
+		add_filter( 'body_class', [ $this, 'filter_body_classes' ] );
 
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
-		add_action( 'save_post', array( $this, 'save_meta_box_theme_options' ), 10, 2 );
+		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ], 10, 2 );
+		add_action( 'save_post', [ $this, 'save_meta_box_theme_options' ], 10, 2 );
 
-		add_action( 'customize_register', array( $this, 'action_customize_register' ) );
+		add_action( 'customize_register', [ $this, 'action_customize_register' ] );
 
 	}
 
@@ -223,17 +223,17 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               adding support for further arguments in the future.
 	 */
 	public function template_tags() : array {
-		return array(
-			'manage_layout'           => array( $this, 'manage_layout' ),
-			'archive_display_excerpt' => array( $this, 'archive_display_excerpt' ),
-			'front_page_archive_display_excerpt' => array( $this, 'front_page_archive_display_excerpt' ),
-			'archive_display_thumbnail' => array( $this, 'archive_display_thumbnail' ),
-			'front_page_archive_display_thumbnail' => array( $this, 'front_page_archive_display_thumbnail' ),
-			'front_page_archive_display_post_author' => array( $this, 'front_page_archive_display_post_author' ),
-			'front_page_archive_display_post_date' => array( $this, 'front_page_archive_display_post_date' ),
-			'front_page_archive_display_post_categories' => array( $this, 'front_page_archive_display_post_categories' ),
-			'front_page_archive_display_post_tags' => array( $this, 'front_page_archive_display_post_tags' ),
-		);
+		return [
+			'manage_layout'           => [ $this, 'manage_layout' ],
+			'archive_display_excerpt' => [ $this, 'archive_display_excerpt' ],
+			'front_page_archive_display_excerpt' => [ $this, 'front_page_archive_display_excerpt' ],
+			'archive_display_thumbnail' => [ $this, 'archive_display_thumbnail' ],
+			'front_page_archive_display_thumbnail' => [ $this, 'front_page_archive_display_thumbnail' ],
+			'front_page_archive_display_post_author' => [ $this, 'front_page_archive_display_post_author' ],
+			'front_page_archive_display_post_date' => [ $this, 'front_page_archive_display_post_date' ],
+			'front_page_archive_display_post_categories' => [ $this, 'front_page_archive_display_post_categories' ],
+			'front_page_archive_display_post_tags' => [ $this, 'front_page_archive_display_post_tags' ],
+		];
 	}
 
 	/**
@@ -245,11 +245,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->site_layout_choices ) ) {
 			return $this->site_layout_choices;
 		}
-		$this->site_layout_choices = array(
+		$this->site_layout_choices = [
 			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
 			'sidebar_left'  => __( 'Primary Sidebar, Content', 'wp-rig' ),
 			'sidebar_none'  => __( 'Full width content', 'wp-rig' ),
-		);
+		];
 
 		return $this->site_layout_choices;
 	}
@@ -263,12 +263,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->front_page_layout_choices ) ) {
 			return $this->front_page_layout_choices;
 		}
-		$this->front_page_layout_choices = array(
+		$this->front_page_layout_choices = [
 			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
 			'sidebar_left'  => __( 'Primary Sidebar, Content', 'wp-rig' ),
 			'sidebar_none'  => __( 'Full width content', 'wp-rig' ),
 			'site'          => __( 'Use site layout', 'wp-rig' ),
-		);
+		];
 
 		return $this->front_page_layout_choices;
 	}
@@ -282,12 +282,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->post_layout_choices ) ) {
 			return $this->post_layout_choices;
 		}
-		$this->post_layout_choices = array(
+		$this->post_layout_choices = [
 			'sidebar_right' => __( 'Content, Primary sidebar', 'wp-rig' ),
 			'sidebar_left'  => __( 'Primary Sidebar, Content', 'wp-rig' ),
 			'sidebar_none'  => __( 'Full width content', 'wp-rig' ),
 			'site'          => __( 'Use site layout', 'wp-rig' ),
-		);
+		];
 
 		return $this->post_layout_choices;
 	}
@@ -303,10 +303,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		}
 
 		$this->post_layout_post_types = get_post_types(
-			array(
+			[
 				'show_ui' => true,
 				'public'  => true,
-			)
+			]
 		);
 
 		return $this->post_layout_post_types;
@@ -321,10 +321,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->archive_display_choices ) ) {
 			return $this->archive_display_choices;
 		}
-		$this->archive_display_choices = array(
+		$this->archive_display_choices = [
 			'excerpt' => __( 'Excerpt', 'wp-rig' ),
 			'full'    => __( 'Full text', 'wp-rig' ),
-		);
+		];
 
 		return $this->archive_display_choices;
 	}
@@ -338,11 +338,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $this->front_page_archive_display_choices ) ) {
 			return $this->front_page_archive_display_choices;
 		}
-		$this->front_page_archive_display_choices = array(
+		$this->front_page_archive_display_choices = [
 			'excerpt' => __( 'Excerpt', 'wp-rig' ),
 			'full'    => __( 'Full text', 'wp-rig' ),
 			'site'    => __( 'Use site archive setting', 'wp-rig' ),
-		);
+		];
 
 		return $this->front_page_archive_display_choices;
 	}
@@ -368,7 +368,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return $this->layout_choices_with_sidebar;
 		}
 
-		$this->layout_choices_with_sidebar = array( 'sidebar_right', 'sidebar_left' );
+		$this->layout_choices_with_sidebar = [ 'sidebar_right', 'sidebar_left' ];
 
 		return $this->layout_choices_with_sidebar;
 	}
@@ -708,15 +708,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$wp_customize->add_section(
 			self::SITE_LAYOUT_SECTION,
-			array(
+			[
 				'title'    => __( 'Site Layout', 'wp-rig' ),
 				'priority' => 50,
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::SITE_LAYOUT_NAME,
-			array(
+			[
 				'default'           => self::SITE_LAYOUT_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
@@ -727,33 +727,33 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					return '';
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::SITE_LAYOUT_NAME,
-			array(
+			[
 				'label'       => __( 'Site layout', 'wp-rig' ),
 				'section'     => self::SITE_LAYOUT_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'Which layout do you want to use for your site?', 'wp-rig' ),
 				'choices'     => $site_layout_choices,
-			)
+			]
 		);
 
 		$archive_display_choices = $this->get_archive_display_choices();
 
 		$wp_customize->add_section(
 			self::ARCHIVE_SECTION,
-			array(
+			[
 				'title'    => __( 'Archive Settings', 'wp-rig' ),
 				'priority' => 110,
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::ARCHIVE_DISPLAY_NAME,
-			array(
+			[
 				'default'           => self::ARCHIVE_DISPLAY_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
@@ -764,45 +764,45 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					return '';
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::ARCHIVE_DISPLAY_NAME,
-			array(
+			[
 				'label'       => __( 'Archive display', 'wp-rig' ),
 				'section'     => self::ARCHIVE_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'How do you want to display content in your post archives?', 'wp-rig' ),
 				'choices'     => $archive_display_choices,
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::ARCHIVE_THUMB_NAME,
-			array(
+			[
 				'default'    => self::ARCHIVE_THUMB_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::ARCHIVE_THUMB_NAME,
-			array(
+			[
 				'label'   => __( 'Display featured image thumbnail', 'wp-rig' ),
 				'section' => self::ARCHIVE_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( "If archive display is set to \"Excerpt\", do you want to display the post's featured image as a thumbnail in your post archives?", 'wp-rig' ),
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_LAYOUT_NAME,
-			array(
+			[
 				'default'           => self::FRONT_PAGE_LAYOUT_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
@@ -813,25 +813,25 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					return '';
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FRONT_PAGE_LAYOUT_NAME,
-			array(
+			[
 				'label'       => __( 'Homepage layout', 'wp-rig' ),
 				'section'     => self::FRONT_PAGE_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'Which layout do you want to use on your homepage?', 'wp-rig' ),
 				'choices'     => $front_page_layout_choices,
-			)
+			]
 		);
 
 		$front_page_archive_display_choices = $this->get_front_page_archive_display_choices();
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME,
-			array(
+			[
 				'default'           => self::FRONT_PAGE_ARCHIVE_DISPLAY_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
@@ -842,128 +842,128 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					return '';
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FRONT_PAGE_ARCHIVE_DISPLAY_NAME,
-			array(
+			[
 				'label'       => __( 'Archive display', 'wp-rig' ),
 				'section'     => self::FRONT_PAGE_SECTION,
 				'type'        => 'radio',
 				'description' => __( 'If your homepage display is set to "Your latest posts", how do you want to display the content?', 'wp-rig' ),
 				'choices'     => $front_page_archive_display_choices,
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_ARCHIVE_THUMB_NAME,
-			array(
+			[
 				'default'    => self::FRONT_PAGE_ARCHIVE_THUMB_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FRONT_PAGE_ARCHIVE_THUMB_NAME,
-			array(
+			[
 				'label'   => __( 'Display featured image thumbnail', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( "If your homepage display is set to \"Your latest posts\", and your archive display is set to \"Excerpt\", do you want to display the post's featured image as a thumbnail in your homepage recent posts?", 'wp-rig' ),
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_ARCHIVE_POST_AUTHOR,
-			array(
+			[
 				'default'    => self::FRONT_PAGE_ARCHIVE_POST_AUTHOR_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FRONT_PAGE_ARCHIVE_POST_AUTHOR,
-			array(
+			[
 				'label'   => __( 'Display post author', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post author?', 'wp-rig' ),
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_ARCHIVE_POST_DATE,
-			array(
+			[
 				'default'    => self::FRONT_PAGE_ARCHIVE_POST_DATE_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FRONT_PAGE_ARCHIVE_POST_DATE,
-			array(
+			[
 				'label'   => __( 'Display post date', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post date?', 'wp-rig' ),
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_ARCHIVE_CATEGORY,
-			array(
+			[
 				'default'    => self::FRONT_PAGE_ARCHIVE_CATEGORY_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FRONT_PAGE_ARCHIVE_CATEGORY,
-			array(
+			[
 				'label'   => __( 'Display post categories', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post categories?', 'wp-rig' ),
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FRONT_PAGE_ARCHIVE_TAG,
-			array(
+			[
 				'default'    => self::FRONT_PAGE_ARCHIVE_TAG_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FRONT_PAGE_ARCHIVE_TAG,
-			array(
+			[
 				'label'   => __( 'Display post tags', 'wp-rig' ),
 				'section' => self::FRONT_PAGE_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'If your homepage display is set to "Your latest posts", do you want to the show post tags?', 'wp-rig' ),
-			)
+			]
 		);
 	}
 
@@ -988,16 +988,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		add_meta_box(
 			'wp-rig-layout',
 			__( 'Theme Options', 'wp-rig' ),
-			array(
+			[
 				$this,
 				'print_meta_box_theme_options',
-			),
+			],
 			$post_type,
 			'side',
 			'default',
-			array(
+			[
 				'post_layout_choices' => $post_layout_choices,
-			)
+			]
 		);
 	}
 
@@ -1011,13 +1011,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( ! empty( $metabox['args'] ) ) {
 			$args = $metabox['args'];
 		} else {
-			$args = array();
+			$args = [];
 		}
 
 		if ( ! empty( $args['post_layout_choices'] ) ) {
 			$post_layout_choices = $args['post_layout_choices'];
 		} else {
-			$post_layout_choices = array();
+			$post_layout_choices = [];
 		}
 
 		$selected_layout = $this->get_post_layout_setting( $post );

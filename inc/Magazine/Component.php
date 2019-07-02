@@ -76,16 +76,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function initialize() {
 
-		add_action( 'after_setup_theme', array( $this, 'add_image_sizes' ) );
-		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
+		add_action( 'after_setup_theme', [ $this, 'add_image_sizes' ] );
+		add_filter( 'body_class', [ $this, 'filter_body_classes' ] );
 
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
-		add_action( 'save_post', array( $this, 'save_meta_box_magazine_options' ), 10, 2 );
+		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ], 10, 2 );
+		add_action( 'save_post', [ $this, 'save_meta_box_magazine_options' ], 10, 2 );
 
-		add_action( 'customize_register', array( $this, 'action_customize_register' ) );
+		add_action( 'customize_register', [ $this, 'action_customize_register' ] );
 
-		add_action( 'pre_get_posts', array( $this, 'modify_pre_get_posts' ) );
-		add_filter( 'posts_clauses', array( $this, 'filter_posts_clauses' ), 100, 2 );
+		add_action( 'pre_get_posts', [ $this, 'modify_pre_get_posts' ] );
+		add_filter( 'posts_clauses', [ $this, 'filter_posts_clauses' ], 100, 2 );
 	}
 
 	/**
@@ -96,11 +96,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               adding support for further arguments in the future.
 	 */
 	public function template_tags() : array {
-		return array(
-			'use_magazine_layout' => array( $this, 'use_magazine_layout' ),
-			'display_magazine'    => array( $this, 'display_magazine' ),
-			'magazine_display_post_date' => array( $this, 'magazine_display_post_date' ),
-		);
+		return [
+			'use_magazine_layout' => [ $this, 'use_magazine_layout' ],
+			'display_magazine'    => [ $this, 'display_magazine' ],
+			'magazine_display_post_date' => [ $this, 'magazine_display_post_date' ],
+		];
 	}
 
 	/**
@@ -160,54 +160,54 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$wp_customize->add_section(
 			self::FP_MAG_SECTION,
-			array(
+			[
 				'title'    => __( '"Magazine" Settings', 'wp-rig' ),
 				'priority' => 121,
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FP_MAG_NAME,
-			array(
+			[
 				'default'    => self::FP_MAG_DEFAULT,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FP_MAG_NAME,
-			array(
+			[
 				'label'   => __( 'Display "Magazine" on homepage', 'wp-rig' ),
 				'section' => self::FP_MAG_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'Do you want to display the "Magazine" layout of recent posts on your homepage?', 'wp-rig' ),
-			)
+			]
 		);
 
 		$wp_customize->add_setting(
 			self::FP_MAG_POST_DATE,
-			array(
+			[
 				'default'    => self::FP_MAG_POST_DATE_DEFAULT_VALUE,
 				'capability' => 'manage_options',
 				'type'       => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::FP_MAG_POST_DATE,
-			array(
+			[
 				'label'   => __( 'Display post date', 'wp-rig' ),
 				'section' => self::FP_MAG_SECTION,
 				'type'    => 'checkbox',
 				'description' => __( 'Do you want to the show the post date in the magazine layout?', 'wp-rig' ),
-			)
+			]
 		);
 	}
 
@@ -226,11 +226,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return false;
 		}
 
-		$magazine_query = array(
+		$magazine_query = [
 			'post_type' => self::FP_MAG_POST_TYPE,
 			'posts_per_page' => 4,
 			'is_magazine' => true,
-		);
+		];
 
 		$magazine_post_ids = $this->get_magazine_post_ids();
 
@@ -295,10 +295,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			add_meta_box(
 				'wp-rig-magazine',
 				__( 'Magazine Options', 'wp-rig' ),
-				array(
+				[
 					$this,
 					'print_meta_box_magazine_options',
-				),
+				],
 				$post_type,
 				'side',
 				'default'
@@ -414,12 +414,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		}
 
 		$magazine_posts = get_posts(
-			array(
+			[
 				'post_type' => self::FP_MAG_POST_TYPE,
 				'posts_per_page' => 4,
 				'is_magazine' => true,
 				'suppress_filters' => false,
-			)
+			]
 		);
 
 		if ( empty( $magazine_posts ) ) {
@@ -462,7 +462,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$order = $query->get( 'order' );
 
-		if ( ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ) ) ) {
+		if ( ! in_array( strtoupper( $order ), [ 'ASC', 'DESC' ] ) ) {
 			$order = 'DESC';
 		}
 

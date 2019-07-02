@@ -29,7 +29,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'body_class', array( $this, 'filter_body_classes_add_thumbnails' ) );
+		add_filter( 'body_class', [ $this, 'filter_body_classes_add_thumbnails' ] );
 	}
 
 	/**
@@ -40,10 +40,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               adding support for further arguments in the future.
 	 */
 	public function template_tags() : array {
-		return array(
-			'can_display_hero' => array( $this, 'can_display_hero' ),
-			'display_hero'     => array( $this, 'display_hero' ),
-		);
+		return [
+			'can_display_hero' => [ $this, 'can_display_hero' ],
+			'display_hero'     => [ $this, 'display_hero' ],
+		];
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function display_hero() {
 		?>
 		<aside class="site-hero" aria-label="<?php esc_attr_e( 'Featured image for the content', 'wp-rig' ); ?>">
-			<?php the_post_thumbnail( array( 2000, 675 ) ); ?>
+			<?php the_post_thumbnail( [ 2000, 675 ] ); ?>
 		</aside>
 		<?php
 	}

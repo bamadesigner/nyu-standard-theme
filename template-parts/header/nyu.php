@@ -60,7 +60,7 @@ wp_rig()->display_secondary_nav();
 		if ( $is_primary_nav_active ) :
 			?>
 			<nav id="site-navigation" class="main-navigation nav--toggle-sub" aria-label="<?php esc_attr_e( 'Main menu', 'wp-rig' ); ?>">
-				<?php wp_rig()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) ); ?>
+				<?php wp_rig()->display_primary_nav_menu( [ 'menu_id' => 'primary-menu' ] ); ?>
 			</nav>
 			<?php
 		endif;

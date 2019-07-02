@@ -90,7 +90,7 @@ button:focus {
 	padding: 2em;
 }
 
-.has-post-thumbnail .site-main:before {
+.has-post-thumbnail .site-main::before {
 	content: "";
 	background: #fff;
 	position: absolute;
@@ -177,9 +177,7 @@ button:focus {
 textarea {
 	width: 100%;
 }
-/* stylelint-enable */
 
-/* stylelint-disable */
 button,
 input[type="button"],
 input[type="reset"],
@@ -194,7 +192,6 @@ input[type="submit"] {
 	padding: 0.6em 1em 0.4em;
 	cursor: pointer;
 }
-/* stylelint-enable */
 
 button:hover,
 input[type="button"]:hover,
@@ -258,6 +255,7 @@ textarea:focus {
 select {
 	border: 1px solid #ccc;
 }
+/* stylelint-enable */
 
 .site-title {
 	margin: 0;
@@ -484,6 +482,7 @@ select {
 		overflow: hidden;
 	}
 
+	/* stylelint-disable */
 	body.nav-main--toggled-on .secondary-navigation,
 	body.nav-main--toggled-on .secondary-navigation .menu {
 		display: block;
@@ -519,6 +518,7 @@ select {
 	.site-header.nav--toggled-on .main-navigation {
 		padding: 0.5rem 0 1.5rem var(--grid-side-margin-small);
 	}
+	/* stylelint-enable */
 }
 
 .nav--toggle-sub .dropdown,
@@ -554,7 +554,7 @@ select {
 		margin-left: 0;
 		box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 		z-index: 1;
-		padding: 0.5em 0
+		padding: 0.5em 0;
 	}
 
 	.nav--toggle-sub ul ul li {
@@ -629,11 +629,23 @@ select {
 
 	.nav--toggle-sub ul ul li.menu-item-has-children:hover,
 	.nav--toggle-sub ul ul li.menu-item-has-children:focus,
-	.nav--toggle-sub ul ul li.menu-item-has-children:focus-within,
 	.nav--toggle-sub ul ul li.menu-item--has-toggle:hover,
 	.nav--toggle-sub ul ul li.menu-item--has-toggle:focus,
-	.nav--toggle-sub ul ul li.menu-item--has-toggle:focus-within,
 	.nav--toggle-sub ul ul li.menu-item--toggled-on {
+		border-left: 5px solid #c0c0c0;
+	}
+
+	/*
+	 * This selector needs to stay separated to work for some reason.
+	 */
+	.nav--toggle-sub ul ul li.menu-item-has-children:focus-within {
+		border-left: 5px solid #c0c0c0;
+	}
+
+	/*
+	 * This selector needs to stay separated to work for some reason.
+	 */
+	.nav--toggle-sub ul ul li.menu-item--has-toggle:focus-within {
 		border-left: 5px solid #c0c0c0;
 	}
 
@@ -647,7 +659,13 @@ select {
 	 */
 	.nav--toggle-sub li:hover > ul,
 	.nav--toggle-sub li.menu-item--toggled-on > ul,
-	.nav--toggle-sub li:not(.menu-item--has-toggle):focus > ul,
+	.nav--toggle-sub li:not(.menu-item--has-toggle):focus > ul {
+		display: block;
+	}
+
+	/*
+	 * This selector needs to stay separated to work for some reason.
+	 */
 	.nav--toggle-sub li:not(.menu-item--has-toggle):focus-within > ul {
 		display: block;
 	}
@@ -658,6 +676,7 @@ select {
 		line-height: 1;
 	}
 
+	/* stylelint-disable */
 	.secondary-navigation {
 		display: block;
 		padding: 0 var(--grid-side-margin);
@@ -761,7 +780,6 @@ select {
 		border-left: 8px solid #6d6d6d;
 	}
 
-	/* stylelint-disable */
 	.main-navigation ul ul li {
 		padding-left: 0.5em;
 		padding-right: 0;
@@ -771,13 +789,13 @@ select {
 		padding-left: 0.75em;
 		padding-right: 0;
 	}
-	/* stylelint-enable */
 
 	.main-navigation .menu {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-end;
 	}
+	/* stylelint-enable */
 }
 
 .site-hero {
@@ -850,9 +868,11 @@ select {
 	display: inline-block;
 }
 
+/* stylelint-disable */
 .site-main .pagination {
 	margin-bottom: 1.5em;
 }
+/* stylelint-enable */
 
 .pagination .nav-links {
 	justify-content: center;
@@ -917,6 +937,7 @@ select {
 	overflow: hidden;
 }
 
+/* stylelint-disable */
 .site-footer *,
 .site-footer a {
 	color: inherit;
@@ -941,6 +962,7 @@ select {
 	margin: 0.5rem 0;
 	line-height: 1.5;
 }
+/* stylelint-enable */
 
 .footer-sidebar {
 	margin: 1em var(--grid-side-margin-small) 0;
@@ -980,7 +1002,7 @@ select {
 		margin: 0;
 	}
 
-	.site-footer-menu li:not(:first-child):before {
+	.site-footer-menu li:not(:first-child)::before {
 		content: "\007C";
 		padding: 0 0.4rem 0 0;
 	}
@@ -999,6 +1021,7 @@ select {
 --------------------------------------------------------------*/
 
 /* Globally hidden elements when Infinite Scroll is supported and in use. */
+/* stylelint-disable */
 .infinite-scroll .posts-navigation,
 .infinite-scroll .pagination,
 .infinite-scroll.neverending .site-footer {
@@ -1006,6 +1029,7 @@ select {
 	/* Theme Footer (when set to scrolling) */
 	display: none;
 }
+/* stylelint-enable */
 
 /* When Infinite Scroll has reached its end we need to re-display elements that
 were hidden (via .neverending) before. */

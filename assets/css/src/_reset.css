@@ -90,9 +90,7 @@ a {
 abbr[title] {
 	border-bottom: none; /* 1 */
 	text-decoration: underline; /* 2 */
-	/* stylelint-disable */
 	text-decoration: underline dotted; /* 2 */  /* phpcs:ignore */
-	/* stylelint-enable */
 }
 
 /**
@@ -164,6 +162,7 @@ img {
  * 2. Remove the margin in Firefox and Safari.
  */
 
+/* stylelint-disable */
 button,
 input,
 optgroup,
@@ -174,42 +173,50 @@ textarea {
 	line-height: 1.15; /* 1 */
 	margin: 0; /* 2 */
 }
+/* stylelint-enable */
 
 /**
  * Show the overflow in IE.
  * 1. Show the overflow in Edge.
  */
 
+/* stylelint-disable */
 button,
 input {
 	overflow: visible; /* 1 */
 }
+/* stylelint-enable */
 
 /**
  * Remove the inheritance of text transform in Edge, Firefox, and IE.
  * 1. Remove the inheritance of text transform in Firefox.
  */
 
+/* stylelint-disable */
 button,
 select {
 	text-transform: none; /* 1 */
 }
+/* stylelint-enable */
 
 /**
  * Correct the inability to style clickable types in iOS and Safari.
  */
 
+/* stylelint-disable */
 button,
 [type="button"],
 [type="reset"],
 [type="submit"] {
 	-webkit-appearance: button;
 }
+/* stylelint-enable */
 
 /**
  * Remove the inner border and padding in Firefox.
  */
 
+/* stylelint-disable */
 button::-moz-focus-inner,
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
@@ -217,17 +224,20 @@ button::-moz-focus-inner,
 	border-style: none;
 	padding: 0;
 }
+/* stylelint-enable */
 
 /**
  * Restore the focus styles unset by the previous rule.
  */
 
+/* stylelint-disable */
 button:-moz-focusring,
 [type="button"]:-moz-focusring,
 [type="reset"]:-moz-focusring,
 [type="submit"]:-moz-focusring {
 	outline: 1px dotted ButtonText;
 }
+/* stylelint-enable */
 
 /**
  * Correct the padding in Firefox.

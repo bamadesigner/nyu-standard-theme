@@ -11,30 +11,30 @@ namespace WP_Rig\WP_Rig;
 $taxonomies = [ 'category', 'post_tag' ];
 
 // Store display info for each taxonomy.
-$taxonomies_display = array();
+$taxonomies_display = [];
 
-foreach ( $taxonomies as $taxonomy_name ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+foreach ( $taxonomies as $this_taxonomy_name ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 	// Use customizer settings to control what's displayed on the home page.
 	if ( is_home() ) {
 
-		if ( 'category' == $taxonomy_name && ! wp_rig()->front_page_archive_display_post_categories() ) {
+		if ( 'category' == $this_taxonomy_name && ! wp_rig()->front_page_archive_display_post_categories() ) {
 			continue;
-		} elseif ( 'post_tag' == $taxonomy_name && ! wp_rig()->front_page_archive_display_post_tags() ) {
+		} elseif ( 'post_tag' == $this_taxonomy_name && ! wp_rig()->front_page_archive_display_post_tags() ) {
 			continue;
 		}
 	}
 
-	$taxonomy = get_taxonomy( $taxonomy_name );
+	$this_taxonomy = get_taxonomy( $this_taxonomy_name );
 
-	if ( empty( $taxonomy->name ) || $taxonomy->name != $taxonomy_name ) {
+	if ( empty( $this_taxonomy->name ) || $this_taxonomy->name != $this_taxonomy_name ) {
 		continue;
 	}
 
 	/* translators: separator between taxonomy terms */
 	$separator = _x( ', ', 'list item separator', 'wp-rig' );
 
-	switch ( $taxonomy->name ) {
+	switch ( $this_taxonomy->name ) {
 		case 'category':
 			$class = 'category-links term-links';
 			$list  = get_the_category_list( esc_html( $separator ), '', $post->ID );
@@ -44,8 +44,8 @@ foreach ( $taxonomies as $taxonomy_name ) { // phpcs:ignore WordPress.WP.GlobalV
 			$list  = get_the_tag_list( '', esc_html( $separator ), '', $post->ID );
 			break;
 		default:
-			$class = str_replace( '_', '-', $taxonomy->name ) . '-links term-links';
-			$list  = get_the_term_list( $post->ID, $taxonomy->name, '', esc_html( $separator ), '' );
+			$class = str_replace( '_', '-', $this_taxonomy->name ) . '-links term-links';
+			$list  = get_the_term_list( $post->ID, $this_taxonomy->name, '', esc_html( $separator ), '' );
 			break;
 	}
 
@@ -53,7 +53,7 @@ foreach ( $taxonomies as $taxonomy_name ) { // phpcs:ignore WordPress.WP.GlobalV
 		continue;
 	}
 
-	if ( $taxonomy->hierarchical ) {
+	if ( $this_taxonomy->hierarchical ) {
 		/* translators: %s: list of taxonomy terms */
 		$placeholder_text = __( 'Categories: %s', 'wp-rig' );
 	} else {
@@ -61,7 +61,7 @@ foreach ( $taxonomies as $taxonomy_name ) { // phpcs:ignore WordPress.WP.GlobalV
 		$placeholder_text = __( 'Tags: %s', 'wp-rig' );
 	}
 
-	$taxonomies_display[ $taxonomy->name ] = [
+	$taxonomies_display[ $this_taxonomy->name ] = [
 		'class'       => $class,
 		'list'        => $list,
 		'placeholder' => $placeholder_text,
@@ -77,15 +77,15 @@ if ( empty( $taxonomies_display ) ) {
 	<?php
 
 	// Show terms for all taxonomies associated with the post.
-	foreach ( $taxonomies_display as $taxonomy ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+	foreach ( $taxonomies_display as $this_taxonomy ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		?>
-		<span class="<?php echo esc_attr( $taxonomy['class'] ); ?>">
+		<span class="<?php echo esc_attr( $this_taxonomy['class'] ); ?>">
 			<?php
 
 			printf(
-				esc_html( $taxonomy['placeholder' ]),
-				$taxonomy['list'] // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				esc_html( $this_taxonomy['placeholder'] ),
+				$this_taxonomy['list'] // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 
 			?>

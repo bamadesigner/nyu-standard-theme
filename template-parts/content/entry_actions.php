@@ -28,11 +28,11 @@ if ( ! $show_comments && ! $edit_post_link ) {
 					wp_kses(
 						/* translators: %s: post title */
 						__( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'wp-rig' ),
-						array(
-							'span' => array(
-								'class' => array(),
-							),
-						)
+						[
+							'span' => [
+								'class' => [],
+							],
+						]
 					),
 					get_the_title()
 				)
@@ -49,8 +49,16 @@ if ( ! $show_comments && ! $edit_post_link ) {
 				<?php
 
 				printf(
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'wp-rig' ),
-					get_the_title()
+					wp_kses(
+						/* translators: %s: post title */
+						__( 'Edit <span class="screen-reader-text">%s</span>', 'wp-rig' ),
+						[
+							'span' => [
+								'class' => [],
+							],
+						]
+					),
+					get_the_title() //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				);
 
 				?>

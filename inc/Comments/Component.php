@@ -27,7 +27,7 @@ use function esc_html_e;
  * Class for managing comments UI.
  *
  * Exposes template tags:
- * * `wp_rig()->the_comments( array $args = array() )`
+ * * `wp_rig()->the_comments( array $args = [] )`
  */
 class Component implements Component_Interface, Templating_Component_Interface {
 
@@ -44,7 +44,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_comment_reply_script' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'action_enqueue_comment_reply_script' ] );
 	}
 
 	/**
@@ -55,9 +55,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               adding support for further arguments in the future.
 	 */
 	public function template_tags() : array {
-		return array(
-			'the_comments' => array( $this, 'the_comments' ),
-		);
+		return [
+			'the_comments' => [ $this, 'the_comments' ],
+		];
 	}
 
 	/**
@@ -77,13 +77,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $args Optional. Array of arguments. See `wp_list_comments()` documentation for a list of supported
 	 *                    arguments.
 	 */
-	public function the_comments( array $args = array() ) {
+	public function the_comments( array $args = [] ) {
 		$args = array_merge(
 			$args,
-			array(
+			[
 				'style'      => 'ol',
 				'short_ping' => true,
-			)
+			]
 		);
 
 		?>

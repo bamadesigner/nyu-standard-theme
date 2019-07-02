@@ -51,7 +51,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function initialize() {
 
-		add_action( 'customize_register', array( $this, 'action_customize_register' ) );
+		add_action( 'customize_register', [ $this, 'action_customize_register' ] );
 
 	}
 
@@ -63,10 +63,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               adding support for further arguments in the future.
 	 */
 	public function template_tags() : array {
-		return array(
-			'get_site_description'   => array( $this, 'get_site_description' ),
-			'display_tagline_header' => array( $this, 'display_tagline_header' ),
-		);
+		return [
+			'get_site_description'   => [ $this, 'get_site_description' ],
+			'display_tagline_header' => [ $this, 'display_tagline_header' ],
+		];
 	}
 
 	/**
@@ -108,24 +108,24 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$wp_customize->add_setting(
 			self::DISPLAY_TAGLINE_HEADER_NAME,
-			array(
+			[
 				'default'           => self::DISPLAY_TAGLINE_HEADER_DEFAULT_VALUE,
 				'capability'        => 'manage_options',
 				'type'              => 'theme_mod',
 				'sanitize_callback' => function ( $checked ) : bool {
 					return ( ( isset( $checked ) && true == $checked ) ? true : false );
 				},
-			)
+			]
 		);
 
 		$wp_customize->add_control(
 			self::DISPLAY_TAGLINE_HEADER_NAME,
-			array(
+			[
 				'label'       => __( 'Display tagline in header', 'wp-rig' ),
 				'section'     => self::TITLE_TAGLINE_SECTION,
 				'type'        => 'checkbox',
 				'description' => __( 'If checked, will display the tagline below the site title in the header.', 'wp-rig' ),
-			)
+			]
 		);
 
 	}

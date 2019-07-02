@@ -24,7 +24,7 @@ if ( post_password_required() || ! post_type_supports( $support_slug, 'thumbnail
 if ( is_singular( get_post_type() ) ) {
 	?>
 	<div class="post-thumbnail">
-		<?php the_post_thumbnail( 'full', array( 'class' => 'skip-lazy' ) ); ?>
+		<?php the_post_thumbnail( 'full', [ 'class' => 'skip-lazy' ] ); ?>
 	</div><!-- .post-thumbnail -->
 	<?php
 } else {
@@ -34,13 +34,13 @@ if ( is_singular( get_post_type() ) ) {
 
 		the_post_thumbnail(
 			'post-thumbnail',
-			array(
+			[
 				'alt' => the_title_attribute(
-					array(
+					[
 						'echo' => false,
-					)
+					]
 				),
-			)
+			]
 		);
 
 		?>
